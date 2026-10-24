@@ -1,0 +1,29 @@
+{
+  "name": "ai-web-50-local-stores",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@11.25.0",
+  "description": "50 independent Next.js landing pages for local retail stores around Ha Noi",
+  "workspaces": [
+    "sites/*"
+  ],
+  "scripts": {
+    "generate": "node scripts/generate-sites.mjs",
+    "validate": "node scripts/validate-sites.mjs",
+    "build:all": "node scripts/build-all.mjs"
+  },
+  "dependencies": {
+    "next": "^16.4.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "typescript": "^5.9.0"
+  },
+  "engines": {
+    "node": ">=20.9.0"
+  }
+}

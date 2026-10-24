@@ -1,0 +1,452 @@
+[
+  {
+    "index": 1,
+    "folder": "01-dtdd-luxury-mobile-vinh",
+    "name": "Cửa Hàng ĐTDĐ Luxury Mobile",
+    "category": "Điện thoại",
+    "area": "Vĩnh Phúc (khu vực cũ)",
+    "theme": "tech",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=C%E1%BB%ADa%20H%C3%A0ng%20%C4%90TD%C4%90%20Luxury%20Mobile%201%20Ch%C3%B9a%20H%C3%A0%2C%20x%C3%B3m%20V%E1%BA%BDn%2C%20V%C4%A9nh%20Ph%C3%BAc%2C%20Ph%C3%BA%20Th%E1%BB%8D%2C%20Vi%E1%BB%87t%20Nam"
+  },
+  {
+    "index": 2,
+    "folder": "02-dtdd-hoang-long-smart-phone-vinh",
+    "name": "Cửa Hàng ĐTDĐ Hoàng Long Smart Phone",
+    "category": "Điện thoại",
+    "area": "Vĩnh Phúc (khu vực cũ)",
+    "theme": "tech",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=C%E1%BB%ADa%20H%C3%A0ng%20%C4%90TD%C4%90%20Ho%C3%A0ng%20Long%20Smart%20Phone%20116C%20T%C3%B4n%20%C4%90%E1%BB%A9c%20Th%E1%BA%AFng%2C%20V%C4%A9nh%20Ph%C3%BAc%2C%20Ph%C3%BA%20Th%E1%BB%8D%2C%20Vi%E1%BB%87t%20Nam"
+  },
+  {
+    "index": 3,
+    "folder": "03-click-phone-vinh-yen-vinh",
+    "name": "Click Phone - Vĩnh Yên",
+    "category": "Điện thoại",
+    "area": "Vĩnh Phúc (khu vực cũ)",
+    "theme": "tech",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Click%20Phone%20-%20V%C4%A9nh%20Y%C3%AAn%2016B%20Vinaconex%2C%20V%C4%A9nh%20Ph%C3%BAc%2C%20Ph%C3%BA%20Th%E1%BB%8D%2C%20Vi%E1%BB%87t%20Nam"
+  },
+  {
+    "index": 4,
+    "folder": "04-ha-tu-mobile-hung",
+    "name": "Hà Tú Mobile",
+    "category": "Điện thoại",
+    "area": "Hưng Yên",
+    "theme": "tech",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=H%C3%A0%20T%C3%BA%20Mobile%20Th%C6%B0%20Th%E1%BB%8B%2C%20Y%C3%AAn%20M%E1%BB%B9%2C%20H%C6%B0ng%20Y%C3%AAn%2C%20Vi%E1%BB%87t%20Nam"
+  },
+  {
+    "index": 5,
+    "folder": "05-seven-store-thoi-trang-nam-basic-bac",
+    "name": "SEVEN STORE - Thời Trang Nam Basic",
+    "category": "Thời trang nam",
+    "area": "Bắc Ninh",
+    "theme": "fashion",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=SEVEN%20STORE%20-%20Th%E1%BB%9Di%20Trang%20Nam%20Basic%2019%20Tr%E1%BA%A7n%20H%C6%B0ng%20%C4%90%E1%BA%A1o%2C%20Kinh%20B%E1%BA%AFc%2C%20B%E1%BA%AFc%20Ninh%2C%20Vi%E1%BB%87t%20Nam"
+  },
+  {
+    "index": 6,
+    "folder": "06-tan-con-shop-thoi-trang-nam-bac",
+    "name": "Tấn Con Shop Thời Trang Nam",
+    "category": "Thời trang nam",
+    "area": "Bắc Ninh",
+    "theme": "fashion",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=T%E1%BA%A5n%20Con%20Shop%20Th%E1%BB%9Di%20Trang%20Nam%20Long%20Kh%C3%A1m%2C%20Li%C3%AAn%20B%C3%A3o%2C%20B%E1%BA%AFc%20Ninh%2C%20Vi%E1%BB%87t%20Nam"
+  },
+  {
+    "index": 7,
+    "folder": "07-giay-dep-nguyen-xuyen-hung",
+    "name": "Cửa Hàng Giày Dép Nguyện Xuyến",
+    "category": "Giày dép",
+    "area": "Hưng Yên",
+    "theme": "fashion",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=C%E1%BB%ADa%20H%C3%A0ng%20Gi%C3%A0y%20D%C3%A9p%20Nguy%E1%BB%87n%20Xuy%E1%BA%BFn%20%C4%90T454%2C%20Th%C6%B0%20V%C5%A9%2C%20H%C6%B0ng%20Y%C3%AAn%2C%20Vi%E1%BB%87t%20Nam"
+  },
+  {
+    "index": 8,
+    "folder": "08-tong-kho-piano-ha-noi-nhac-cu-minh-duc-ha",
+    "name": "Tổng Kho Piano Hà Nội - Nhạc Cụ Minh Đức",
+    "category": "Nhạc cụ",
+    "area": "Hà Nội",
+    "theme": "creative",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=T%E1%BB%95ng%20Kho%20Piano%20H%C3%A0%20N%E1%BB%99i%20-%20Nh%E1%BA%A1c%20C%E1%BB%A5%20Minh%20%C4%90%E1%BB%A9c%204%20H%E1%BA%BBm%2064%2F33%2F2%20Nguy%E1%BB%85n%20L%C6%B0%C6%A1ng%20B%E1%BA%B1ng%2C%20%C4%90%E1%BB%91ng%20%C4%90a%2C%20H%C3%A0%20N%E1%BB%99i%2C%20Vi%E1%BB%87t%20Nam"
+  },
+  {
+    "index": 9,
+    "folder": "09-do-choi-xe-tu-decal-bac-ninh-bac",
+    "name": "Đồ chơi xe Tự Decal Bắc Ninh",
+    "category": "Phụ kiện ô tô/xe máy",
+    "area": "Bắc Ninh",
+    "theme": "home",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=%C4%90%E1%BB%93%20ch%C6%A1i%20xe%20T%E1%BB%B1%20Decal%20B%E1%BA%AFc%20Ninh%20Khu%20d%C3%A2n%20c%C6%B0%20%C4%90%E1%BA%A1i%20S%C6%A1n%2C%20%C4%90%E1%BA%A1i%20%C4%90%E1%BB%93ng%2C%20B%E1%BA%AFc%20Ninh%2C%20Vi%E1%BB%87t%20Nam"
+  },
+  {
+    "index": 10,
+    "folder": "10-do-choi-tre-em-hieu-khanh-bac",
+    "name": "Cửa Hàng Đồ Chơi Trẻ Em Hiểu Khánh",
+    "category": "Đồ chơi trẻ em",
+    "area": "Bắc Ninh",
+    "theme": "lifestyle",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=C%E1%BB%ADa%20H%C3%A0ng%20%C4%90%E1%BB%93%20Ch%C6%A1i%20Tr%E1%BA%BB%20Em%20Hi%E1%BB%83u%20Kh%C3%A1nh%2010%20V%C5%A9%20Ki%E1%BB%87t%2C%20Kinh%20B%E1%BA%AFc%2C%20B%E1%BA%AFc%20Ninh%2C%20Vi%E1%BB%87t%20Nam"
+  },
+  {
+    "index": 11,
+    "folder": "11-the-gioi-do-choi-thai-thanh-bac",
+    "name": "Cửa Hàng Thế Giới Đồ Chơi Thái Thành",
+    "category": "Đồ chơi trẻ em",
+    "area": "Bắc Ninh",
+    "theme": "lifestyle",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=C%E1%BB%ADa%20H%C3%A0ng%20Th%E1%BA%BF%20Gi%E1%BB%9Bi%20%C4%90%E1%BB%93%20Ch%C6%A1i%20Th%C3%A1i%20Th%C3%A0nh%20569%20Ng%C3%B4%20Gia%20T%E1%BB%B1%2C%20Kinh%20B%E1%BA%AFc%2C%20B%E1%BA%AFc%20Ninh%2C%20Vi%E1%BB%87t%20Nam"
+  },
+  {
+    "index": 12,
+    "folder": "12-dien-hoa-tiem-hoa-tuoi-vinh-yen-vinh",
+    "name": "Điện hoa - Tiệm hoa tươi Vĩnh Yên",
+    "category": "Hoa tươi",
+    "area": "Vĩnh Phúc (khu vực cũ)",
+    "theme": "lifestyle",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=%C4%90i%E1%BB%87n%20hoa%20-%20Ti%E1%BB%87m%20hoa%20t%C6%B0%C6%A1i%20V%C4%A9nh%20Y%C3%AAn%20Chung%20c%C6%B0%20VCI%2C%20V%C4%A9nh%20Ph%C3%BAc%2C%20Ph%C3%BA%20Th%E1%BB%8D%2C%20Vi%E1%BB%87t%20Nam"
+  },
+  {
+    "index": 13,
+    "folder": "13-dc-mobile-store-bac-ninh-sua-dien-thoai-bac",
+    "name": "DC Mobile Store Bắc Ninh - Sửa điện thoại",
+    "category": "Điện thoại & sửa chữa",
+    "area": "Bắc Ninh",
+    "theme": "tech",
+    "mapUrl": "https://www.google.com/maps/place/DC+Mobile+Store+B%E1%BA%AFc+Ninh+-+S%E1%BB%ADa+%C4%91i%E1%BB%87n+tho%E1%BA%A1i/data=!4m7!3m6!1s0x31350d7e0fac4cb7:0xcc5653312a304aca!8m2!3d21.1933411!4d106.086796!16s%2Fg%2F11zdcql9rx"
+  },
+  {
+    "index": 14,
+    "folder": "14-ken-mobile-bac",
+    "name": "Ken Mobile",
+    "category": "Điện thoại",
+    "area": "Bắc Ninh",
+    "theme": "tech",
+    "mapUrl": "https://www.google.com/maps/place/Ken+Mobile/data=!4m7!3m6!1s0x31350f143fa51139:0xd260df3de4be101f!8m2!3d21.20603!4d105.9979894!16s%2Fg%2F11c57dhfq6"
+  },
+  {
+    "index": 15,
+    "folder": "15-dien-thoai-di-dong-doai-apple-hung",
+    "name": "Cửa Hàng Điện Thoại Di Động Đoài Apple",
+    "category": "Điện thoại",
+    "area": "Hưng Yên",
+    "theme": "tech",
+    "mapUrl": "https://www.google.com/maps/place/C%E1%BB%ADa+H%C3%A0ng+%C4%90i%E1%BB%87n+Tho%E1%BA%A1i+Di+%C4%90%E1%BB%99ng+%C4%90o%C3%A0i+Apple/data=!4m7!3m6!1s0x3135e900239155c1:0xd89f621da555a1f0!8m2!3d20.5951064!4d106.2257291!16s%2Fg%2F11zkd8j1qx"
+  },
+  {
+    "index": 16,
+    "folder": "16-giay-dep-minh-hieu-hung",
+    "name": "GIẦY DÉP MINH HIẾU",
+    "category": "Giày dép",
+    "area": "Hưng Yên",
+    "theme": "fashion",
+    "mapUrl": "https://www.google.com/maps/place/GI%E1%BA%A6Y+D%C3%89P+MINH+HI%E1%BA%BEU/data=!4m7!3m6!1s0x3135a51891400999:0x6868e1064fd99c0f!8m2!3d20.9323133!4d106.0573671!16s%2Fg%2F11h3sqccmh"
+  },
+  {
+    "index": 17,
+    "folder": "17-rem-cua-thanh-thai-vinh",
+    "name": "Cửa Hàng Rèm Cửa Thành Thái",
+    "category": "Rèm cửa",
+    "area": "Vĩnh Phúc (khu vực cũ)",
+    "theme": "home",
+    "mapUrl": "https://www.google.com/maps/place/C%E1%BB%ADa+H%C3%A0ng+R%C3%A8m+C%E1%BB%ADa+Th%C3%A0nh+Th%C3%A1i/data=!4m7!3m6!1s0x3134e5c260ede115:0x8d526e7e3dc6b59a!8m2!3d21.3099611!4d105.6150277!16s%2Fg%2F11fpjm87px"
+  },
+  {
+    "index": 18,
+    "folder": "18-hoa-pham-hoang-quan-ha",
+    "name": "Họa Phẩm Hoàng Quân",
+    "category": "Họa phẩm",
+    "area": "Hà Nội",
+    "theme": "creative",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=H%E1%BB%8Da%20Ph%E1%BA%A9m%20Ho%C3%A0ng%20Qu%C3%A2n%2025%20P.%20Ch%C3%B9a%20Qu%E1%BB%B3nh%2C%20B%E1%BA%A1ch%20Mai%2C%20H%C3%A0%20N%E1%BB%99i%20100000%2C%20Vi%E1%BB%87t%20Nam"
+  },
+  {
+    "index": 19,
+    "folder": "19-hoa-cu-hana-art-shop-ha",
+    "name": "Họa cụ Hana art shop",
+    "category": "Họa phẩm",
+    "area": "Hà Nội",
+    "theme": "creative",
+    "mapUrl": "https://www.google.com/maps/place/H%E1%BB%8Da+c%E1%BB%A5+Hana+art+shop/@21.0378158,105.8117062,17z/data=!3m1!4b1!4m6!3m5!1s0x3135abd0169c579f:0xdd88aa9a88602d94!8m2!3d21.0378158!4d105.8117062!16s%2Fg%2F11hzkf2sfz"
+  },
+  {
+    "index": 20,
+    "folder": "20-hoa-pham-thanh-van-ha",
+    "name": "Họa Phẩm Thanh Vân",
+    "category": "Họa phẩm",
+    "area": "Hà Nội",
+    "theme": "creative",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=H%E1%BB%8Da%20Ph%E1%BA%A9m%20Thanh%20V%C3%A2n%204%20Ngh.%20360%2F4%20La%20Th%C3%A0nh%2C%20%C3%94%20Ch%E1%BB%A3%20D%E1%BB%ABa%2C%20H%C3%A0%20N%E1%BB%99i%2C%20Vi%E1%BB%87t%20Nam"
+  },
+  {
+    "index": 21,
+    "folder": "21-sa-da-audio-ha",
+    "name": "SA ĐÀ AUDIO",
+    "category": "Thiết bị âm thanh",
+    "area": "Hà Nội",
+    "theme": "tech",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=SA%20%C4%90%C3%80%20AUDIO%20T%E1%BA%A7ng%202%2C%20Th%E1%BB%91ng%20Nh%E1%BA%A5t%20Innovation%20Hub%2C%20C%C3%B4ng%20Vi%C3%AAn%20Th%E1%BB%91ng%20Nh%E1%BA%A5t%2C%20H%C3%A0%20N%E1%BB%99i%2C%20Vi%E1%BB%87t%20Nam"
+  },
+  {
+    "index": 22,
+    "folder": "22-gia-dung-phuong-chuc-vinh",
+    "name": "Cửa Hàng Gia Dụng Phượng Chúc",
+    "category": "Đồ gia dụng",
+    "area": "Vĩnh Phúc (khu vực cũ)",
+    "theme": "home",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=C%E1%BB%ADa%20H%C3%A0ng%20Gia%20D%E1%BB%A5ng%20Ph%C6%B0%E1%BB%A3ng%20Ch%C3%BAc%20TDP%20M%E1%BA%ADu%20Th%C3%B4ng%2C%20V%C4%A9nh%20Ph%C3%BAc%2C%20Ph%C3%BA%20Th%E1%BB%8D%2015115%2C%20Vi%E1%BB%87t%20Nam"
+  },
+  {
+    "index": 23,
+    "folder": "23-giay-dep-minh-phat-thom-bau-hung",
+    "name": "Giầy Dép Minh Phát (Thơm Báu)",
+    "category": "Giày dép",
+    "area": "Hưng Yên",
+    "theme": "fashion",
+    "mapUrl": "https://www.google.com/maps/place/Gi%E1%BA%A7y+D%C3%A9p+Minh+Ph%C3%A1t(Th%C6%A1m+B%C3%A1u)/@20.8263132,105.9817138,17z/data=!4m8!3m7!1s0x3135ba11e240cdc9:0x442d3e8e79670de!8m2!3d20.8263132!4d105.9817138!9m1!1b1!16s%2Fg%2F11d_9c6c1b"
+  },
+  {
+    "index": 24,
+    "folder": "24-bghome-chi-nhanh-hung-yen-hung",
+    "name": "Công ty TNHH BGHOME Chi nhánh Hưng Yên",
+    "category": "Nội thất",
+    "area": "Hưng Yên",
+    "theme": "home",
+    "mapUrl": "https://www.google.com/maps/place/C%C3%B4ng+ty+TNHH+BGHOME+Chi+nh%C3%A1nh+H%C6%B0ng+Y%C3%AAn/data=!4m7!3m6!1s0x3135c7515ced95d1:0x73ed82a9d300fa07!8m2!3d20.9417181!4d105.9768362!16s%2Fg%2F11rhnrgrfv"
+  },
+  {
+    "index": 25,
+    "folder": "25-nu-art-shop-the-gioi-hoa-cu-moi-ha",
+    "name": "Nu-Art Shop - Thế giới họa cụ mới",
+    "category": "Họa phẩm",
+    "area": "Hà Nội",
+    "theme": "creative",
+    "mapUrl": "https://www.google.com/maps/place/Nu-Art+Shop+-+Th%E1%BA%BF+gi%E1%BB%9Bi+h%E1%BB%8Da+c%E1%BB%A5+m%E1%BB%9Bi/data=!4m7!3m6!1s0x3135ab1f69402a47:0x768ac66ab3b86704!8m2!3d21.0158487!4d105.8330318!16s%2Fg%2F11y8cg_wpl"
+  },
+  {
+    "index": 26,
+    "folder": "26-gumi-pet-shop-bac",
+    "name": "Gumi Pet Shop",
+    "category": "Thú cưng",
+    "area": "Bắc Ninh",
+    "theme": "lifestyle",
+    "mapUrl": "https://www.google.com/maps/place/Gumi+Pet+Shop+%EA%B5%AC%EB%AF%B8%ED%8E%AB+-+%E5%AE%A0%E7%89%A9%E5%BA%97/data=!4m7!3m6!1s0x31350f66d3400309:0x64412352fd76a632!8m2!3d21.172212!4d106.0587376!16s%2Fg%2F11n07n1qdh"
+  },
+  {
+    "index": 27,
+    "folder": "27-yeu-thu-cung-bac",
+    "name": "Yêu Thú Cưng",
+    "category": "Thú cưng",
+    "area": "Bắc Ninh",
+    "theme": "lifestyle",
+    "mapUrl": "https://www.google.com/maps/place/Y%C3%AAu+Th%C3%BA+C%C6%B0ng/data=!4m7!3m6!1s0x31356d0b1d521b0b:0xc12f0fe8dd35c75a!8m2!3d21.2823433!4d106.2012809!16s%2Fg%2F11v56l7r_q"
+  },
+  {
+    "index": 28,
+    "folder": "28-thu-cung-petty-bell-bac",
+    "name": "Cửa Hàng Thú Cưng Petty Bell",
+    "category": "Thú cưng",
+    "area": "Bắc Ninh",
+    "theme": "lifestyle",
+    "mapUrl": "https://www.google.com/maps/place/C%E1%BB%ADa+H%C3%A0ng+Th%C3%BA+C%C6%B0ng+Petty+Bell/data=!4m7!3m6!1s0x31350f00460380cf:0xe670129f7f2a5e0f!8m2!3d21.1757326!4d106.054909!16s%2Fg%2F11p1rg90rd"
+  },
+  {
+    "index": 29,
+    "folder": "29-xe-dien-nhat-minh-bac",
+    "name": "Xe Điện Nhật Minh",
+    "category": "Xe đạp/xe điện",
+    "area": "Bắc Ninh",
+    "theme": "tech",
+    "mapUrl": "https://www.google.com/maps/place/Xe+%C4%90i%E1%BB%87n+Nh%E1%BA%ADt+Minh/data=!4m7!3m6!1s0x31350f3e0d785c7b:0x43f32f1f8c34bcfe!8m2!3d21.1746179!4d106.0552583!16s%2Fg%2F11h1hn8l84"
+  },
+  {
+    "index": 30,
+    "folder": "30-dai-ly-xe-dap-thong-nhat-anh-nghia-bac",
+    "name": "Đại Lý Xe Đạp Thống Nhất Anh Nghĩa",
+    "category": "Xe đạp",
+    "area": "Bắc Ninh",
+    "theme": "tech",
+    "mapUrl": "https://www.google.com/maps/place/%C4%90%E1%BA%A1i+L%C3%BD+Xe+%C4%90%E1%BA%A1p+Th%C3%B4ng+Nh%E1%BA%A5t+Anh+Ngh%C4%A9a/data=!4m7!3m6!1s0x313507d9a23cf8f1:0x70d7c8608449f705!8m2!3d21.1214301!4d105.9656865!16s%2Fg%2F11sd8rz6rs"
+  },
+  {
+    "index": 31,
+    "folder": "31-shop-trang-phuc-the-thao-nam-sport-bac",
+    "name": "Shop Trang Phục Thể Thao Nam Sport",
+    "category": "Thể thao",
+    "area": "Bắc Ninh",
+    "theme": "fashion",
+    "mapUrl": "https://www.google.com/maps/place/Shop+Trang+Ph%E1%BB%A5c+Th%E1%BB%83+Thao+Nam+Sport/data=!4m7!3m6!1s0x31350eab72d5a9df:0xe123eea7330f1b7e!8m2!3d21.1750841!4d106.0598289!16s%2Fg%2F1jkw3z7qg"
+  },
+  {
+    "index": 32,
+    "folder": "32-tiem-hoa-nha-moc-hoa-tuoi-yen-my-hung",
+    "name": "Tiệm hoa nhà mốc - Hoa Tươi Yên Mỹ",
+    "category": "Hoa tươi",
+    "area": "Hưng Yên",
+    "theme": "lifestyle",
+    "mapUrl": "https://www.google.com/maps/place/Ti%E1%BB%87m+hoa+nh%C3%A0+m%E1%BB%91c+-+Hoa+T%C6%B0%C6%A1i+Y%C3%AAn+M%E1%BB%B9/data=!4m7!3m6!1s0x3135bb220ac7e8c1:0xc1760aa35da57a35!8m2!3d20.8694455!4d106.0308676!16s%2Fg%2F11zb7sh7p4"
+  },
+  {
+    "index": 33,
+    "folder": "33-shop-hoa-tuoi-hong-hanh-flower-hung",
+    "name": "Shop Hoa Tươi Hồng Hạnh Flower",
+    "category": "Hoa tươi",
+    "area": "Hưng Yên",
+    "theme": "lifestyle",
+    "mapUrl": "https://www.google.com/maps/place/Shop+Hoa+T%C6%B0%C6%A1i+H%E1%BB%93ng+H%E1%BA%A1nh+Flower/data=!4m7!3m6!1s0x3135a526ba83a5c5:0x992466cf70e7fb53!8m2!3d20.9842443!4d105.9790504!16s%2Fg%2F11yzq2tbtd"
+  },
+  {
+    "index": 34,
+    "folder": "34-chan-ga-goi-dem-yen-duc-hung",
+    "name": "Cửa hàng Chăn, ga, gối, đệm Yến Đức",
+    "category": "Chăn ga gối đệm",
+    "area": "Hưng Yên",
+    "theme": "home",
+    "mapUrl": "https://www.google.com/maps/place/C%E1%BB%ADa+h%C3%A0ng+Ch%C4%83n,+ga,+g%E1%BB%91i,+%C4%91%E1%BB%87m+Y%E1%BA%BFn+%C4%90%E1%BB%A9c/data=!4m7!3m6!1s0x3135a50023e9e681:0x5ecc80417693553f!8m2!3d20.9384278!4d106.0592058!16s%2Fg%2F11zcs9zjl9"
+  },
+  {
+    "index": 35,
+    "folder": "35-chan-ga-goi-dem-toi-van-hung",
+    "name": "Chăn ga gối đệm Tới Vân",
+    "category": "Chăn ga gối đệm",
+    "area": "Hưng Yên",
+    "theme": "home",
+    "mapUrl": "https://www.google.com/maps/place/Ch%C4%83n+ga+g%E1%BB%91i+%C4%91%E1%BB%87m+T%E1%BB%9Bi+V%C3%A2n/data=!4m7!3m6!1s0x3135bb00071a89d5:0xb6173359eb2c6622!8m2!3d20.8801561!4d105.989036!16s%2Fg%2F11z4zr3k54"
+  },
+  {
+    "index": 36,
+    "folder": "36-laptop-bac-giang-cua-hang-ban-le-laptop-bac",
+    "name": "Laptop Bắc Giang - Cửa hàng bán lẻ LAPTOP CŨ uy tín tại Bắc Giang - Store 24/7",
+    "category": "máy tính",
+    "area": "Bắc Ninh",
+    "theme": "tech",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Laptop%20B%E1%BA%AFc%20Giang%20-%20C%E1%BB%ADa%20h%C3%A0ng%20b%C3%A1n%20l%E1%BA%BB%20LAPTOP%20C%C5%A8%20uy%20t%C3%ADn%20t%E1%BA%A1i%20B%E1%BA%AFc%20Giang%20-%20Store%2024%2F7%20136%20H%C3%B9ng%20V%C6%B0%C6%A1ng%2C%20B%E1%BA%AFc%20Giang%2C%20B%E1%BA%AFc%20Ninh%2C%20Vi%E1%BB%87t%20Nam"
+  },
+  {
+    "index": 37,
+    "folder": "37-better-shoes-cua-hang-giay-dep-va-phu-ki-ha",
+    "name": "Better Shoes - Cửa hàng giày dép và phụ kiện",
+    "category": "giày dép",
+    "area": "Hà Nội",
+    "theme": "fashion",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Better%20Shoes%20-%20C%E1%BB%ADa%20h%C3%A0ng%20gi%C3%A0y%20d%C3%A9p%20v%C3%A0%20ph%E1%BB%A5%20ki%E1%BB%87n%20129%20B%C3%A0%20Tri%E1%BB%87u%2C%20Hai%20B%C3%A0%20Tr%C6%B0ng%2C%20H%C3%A0%20N%E1%BB%99i%2C%20Vi%E1%BB%87t%20Nam"
+  },
+  {
+    "index": 38,
+    "folder": "38-bluebirds-nest-ha",
+    "name": "Bluebirds' Nest",
+    "category": "quà tặng",
+    "area": "Hà Nội",
+    "theme": "creative",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Bluebirds'%20Nest%2027%20%C4%90%E1%BA%B7ng%20Dung%20Ng%C3%B5%2027%2C%20P.%20%C4%90%E1%BA%B7ng%20Dung%2F20%20Ng.%20Y%C3%AAn%20Th%C3%A0nh%2C%20%C4%91%E1%BB%91i%20di%E1%BB%87n%2C%20Ba%20%C4%90%C3%ACnh%2C%20H%C3%A0%20N%E1%BB%99i%2C%20Vietnam"
+  },
+  {
+    "index": 39,
+    "folder": "39-hoa-binh-ha",
+    "name": "Công Ty TNHH Hòa Bình",
+    "category": "bán dụng cụ đóng gói",
+    "area": "Hà Nội",
+    "theme": "home",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=C%C3%B4ng%20Ty%20TNHH%20H%C3%B2a%20B%C3%ACnh%20Khu%20C%C3%B4ng%20Nghi%E1%BB%87p%2C%20B%E1%BA%A1ch%20Mai%2C%20H%C3%A0%20N%E1%BB%99i%2C%20Vi%E1%BB%87t%20Nam"
+  },
+  {
+    "index": 40,
+    "folder": "40-giay-dep-phong-thuy-ha",
+    "name": "Cửa Hàng Giày Dép Phong Thúy",
+    "category": "giày dép",
+    "area": "Hà Nội",
+    "theme": "fashion",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=C%E1%BB%ADa%20H%C3%A0ng%20Gi%C3%A0y%20D%C3%A9p%20Phong%20Th%C3%BAy%2039%20P.%20Kh%C3%A2m%20Thi%C3%AAn%2C%20V%C4%83n%20Mi%E1%BA%BFu%20-%20Qu%E1%BB%91c%20T%E1%BB%AD%20Gi%C3%A1m%2C%20H%C3%A0%20N%E1%BB%99i%20100000%2C%20Vi%E1%BB%87t%20Nam"
+  },
+  {
+    "index": 41,
+    "folder": "41-hoa-pham-ha",
+    "name": "Cửa Hàng Họa Phẩm",
+    "category": "họa phẩm",
+    "area": "Hà Nội",
+    "theme": "creative",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=C%E1%BB%ADa%20H%C3%A0ng%20H%E1%BB%8Da%20Ph%E1%BA%A9m%2040%20P.%20Y%E1%BA%BFt%20Ki%C3%AAu%2C%20C%E1%BB%ADa%20Nam%2C%20H%C3%A0%20N%E1%BB%99i%2C%20Vi%E1%BB%87t%20Nam"
+  },
+  {
+    "index": 42,
+    "folder": "42-gau-bong-online-ha-noi-994-duong-lang-ha",
+    "name": "Gấu Bông Online Hà Nội 994 Đường Láng",
+    "category": "quà tặng",
+    "area": "Hà Nội",
+    "theme": "creative",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=G%E1%BA%A5u%20B%C3%B4ng%20Online%20H%C3%A0%20N%E1%BB%99i%20994%20%C4%90%C6%B0%E1%BB%9Dng%20L%C3%A1ng%20994%20%C4%90.%20L%C3%A1ng%2C%20L%C3%A1ng%2C%20H%C3%A0%20N%E1%BB%99i%2C%20Vietnam"
+  },
+  {
+    "index": 43,
+    "folder": "43-max-istore-dien-thoai-thong-minh-ha",
+    "name": "Max iStore ( Điện Thoại Thông Minh )",
+    "category": "điện thoại di động",
+    "area": "Hà Nội",
+    "theme": "tech",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Max%20iStore%20(%20%C4%90i%E1%BB%87n%20Tho%E1%BA%A1i%20Th%C3%B4ng%20Minh%20)%20Ng.%20Th%C3%B4ng%20Phong%2F6%20Qu%E1%BB%91c%20T%E1%BB%AD%20Gi%C3%A1m%2C%20V%C4%83n%20Mi%E1%BA%BFu%20-%20Qu%E1%BB%91c%20T%E1%BB%AD%20Gi%C3%A1m%2C%20H%C3%A0%20N%E1%BB%99i%2C%20Vi%E1%BB%87t%20Nam"
+  },
+  {
+    "index": 44,
+    "folder": "44-sea-phone-ha",
+    "name": "Sea Phone",
+    "category": "điện thoại di động",
+    "area": "Hà Nội",
+    "theme": "tech",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Sea%20Phone%2095%20Nguy%E1%BB%85n%20L%C6%B0%C6%A1ng%20B%E1%BA%B1ng%2C%20%C4%90%E1%BB%91ng%20%C4%90a%2C%20H%C3%A0%20N%E1%BB%99i%20100000%2C%20Vi%E1%BB%87t%20Nam"
+  },
+  {
+    "index": 45,
+    "folder": "45-dien-thoai-huy-hoang-mobile-hung",
+    "name": "Cửa Hàng Điện Thoại Huy Hoàng Mobile",
+    "category": "điện thoại di động",
+    "area": "Hưng Yên",
+    "theme": "tech",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=C%E1%BB%ADa%20H%C3%A0ng%20%C4%90i%E1%BB%87n%20Tho%E1%BA%A1i%20Huy%20Ho%C3%A0ng%20Mobile%20%C4%90%C6%B0%E1%BB%9Dng%20t%E1%BB%89nh%20200%2C%20Y%C3%AAn%20M%E1%BB%B9%2C%20H%C6%B0ng%20Y%C3%AAn%2C%20Vi%E1%BB%87t%20Nam"
+  },
+  {
+    "index": 46,
+    "folder": "46-he-thong-cua-hang-dien-thoai-di-dong-td-ph-hung",
+    "name": "Hệ thống cửa hàng điện thoại di động TĐ PHONE | EMPIRE",
+    "category": "bán đồ điện tử",
+    "area": "Hưng Yên",
+    "theme": "tech",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=H%E1%BB%87%20th%E1%BB%91ng%20c%E1%BB%ADa%20h%C3%A0ng%20%C4%91i%E1%BB%87n%20tho%E1%BA%A1i%20di%20%C4%91%E1%BB%99ng%20T%C4%90%20PHONE%20%7C%20EMPIRE%20%C4%90T200%2C%20H%E1%BB%93ng%20Quang%2C%20H%C6%B0ng%20Y%C3%AAn%2C%20Vi%E1%BB%87t%20Nam"
+  },
+  {
+    "index": 47,
+    "folder": "47-thien-tao-cua-hang-dien-thoai-di-dong-hung",
+    "name": "Thiện Táo - Cửa hàng điện thoại di động",
+    "category": "điện thoại di động",
+    "area": "Hưng Yên",
+    "theme": "tech",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Thi%E1%BB%87n%20T%C3%A1o%20-%20C%E1%BB%ADa%20h%C3%A0ng%20%C4%91i%E1%BB%87n%20tho%E1%BA%A1i%20di%20%C4%91%E1%BB%99ng%20V26J%2B552%2C%20%C4%90T382%2C%20Y%C3%AAn%20M%E1%BB%B9%2C%20H%C6%B0ng%20Y%C3%AAn%2C%20Vi%E1%BB%87t%20Nam"
+  },
+  {
+    "index": 48,
+    "folder": "48-shop-guitar-vinh-phuc-vinh",
+    "name": "Shop Guitar Vĩnh Phúc",
+    "category": "nhạc cụ",
+    "area": "Vĩnh Phúc",
+    "theme": "creative",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Shop%20Guitar%20Vi%CC%83nh%20Phu%CC%81c%201A%20Ho%C3%A0ng%20C%C3%B4ng%20Ph%C3%A1i%2C%20V%C4%A9nh%20Ph%C3%BAc%2C%20Ph%C3%BA%20Th%E1%BB%8D%20280000%2C%20Vi%E1%BB%87t%20Nam"
+  },
+  {
+    "index": 49,
+    "folder": "49-trung-tam-nhac-cu-vinh-phuc-vinh",
+    "name": "Trung Tâm Nhạc Cụ Vĩnh Phúc",
+    "category": "nhạc cụ",
+    "area": "Vĩnh Phúc",
+    "theme": "creative",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Trung%20T%C3%A2m%20Nh%E1%BA%A1c%20C%E1%BB%A5%20V%C4%A9nh%20Ph%C3%BAc%2026a%20Tr%E1%BA%A7n%20Ph%C3%BA%2C%20V%C4%A9nh%20Ph%C3%BAc%2C%20Ph%C3%BA%20Th%E1%BB%8D%2015000%2C%20Vi%E1%BB%87t%20Nam"
+  },
+  {
+    "index": 50,
+    "folder": "50-hanh-shop-goi-qua-nghe-thuat-ha",
+    "name": "Hạnh Shop - Gói quà nghệ thuật",
+    "category": "quà tặng",
+    "area": "Hà Nội",
+    "theme": "creative",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=H%E1%BA%A1nh%20Shop%20-%20G%C3%B3i%20qu%C3%A0%20ngh%E1%BB%87%20thu%E1%BA%ADt%2021%20P.%20N%C3%BAi%20Tr%C3%BAc%2C%20Gi%E1%BA%A3ng%20V%C3%B5%2C%20H%C3%A0%20N%E1%BB%99i%2010000%2C%20Vi%E1%BB%87t%20Nam"
+  }
+]
