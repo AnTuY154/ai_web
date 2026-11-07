@@ -1,0 +1,484 @@
+{
+  "title": "Hanoi Fishing World — lake research seed",
+  "as_of": "2026-11-07",
+  "purpose": "Game scenery candidates only; not a guide to real-life fishing",
+  "schema_version": 1,
+  "geo_note": "Khu vực are descriptive legacy/common-use names, not official post-2025 administrative addresses. Coordinates purposely omitted pending authoritative geospatial verification.",
+  "real_fishing_note": "Không mặc định được phép câu tại bất kỳ hồ thực nào. Hồ Tây: nguồn chính quyền 2025 nêu xử lý câu cá và đánh bắt trái phép.",
+  "deduplication_note": "Đồng Mô – Ngải Sơn is a historical region label; not separate playable lake until verified.",
+  "count": 26,
+  "lakes": [
+    {
+      "id": "dong-mo",
+      "name": "Hồ Đồng Mô",
+      "area": "Sơn Tây / Đoài Phương",
+      "category": "ngoai_thanh",
+      "scene_priority": "mvp",
+      "visual_motifs": [
+        "đồi cây",
+        "đảo nhỏ",
+        "bờ cỏ",
+        "hoàng hôn"
+      ],
+      "evidence_status": "verified_place",
+      "real_world_fishing": "not_verified",
+      "notice": "Chỉ làm bối cảnh game ảo; chưa xác minh quyền câu ngoài đời",
+      "sources": [
+        "https://datafiles.hanoi.gov.vn/gov-hni/7045/VanBan/2026/4/8/01%20DA-UBND.pdf"
+      ]
+    },
+    {
+      "id": "suoi-hai",
+      "name": "Hồ Suối Hai",
+      "area": "Ba Vì",
+      "category": "ngoai_thanh",
+      "scene_priority": "phase2",
+      "visual_motifs": [
+        "dãy Ba Vì",
+        "đảo cây",
+        "hồ rộng",
+        "sương sớm"
+      ],
+      "evidence_status": "verified_place",
+      "real_world_fishing": "not_verified",
+      "notice": "Chỉ làm bối cảnh game ảo; chưa xác minh quyền câu ngoài đời",
+      "sources": [
+        "https://sovhtt.hanoi.gov.vn/ho-suoi-hai-dep-tho-mong-duoi-chan-nui-ba-vi/"
+      ]
+    },
+    {
+      "id": "quan-son",
+      "name": "Hồ Quan Sơn",
+      "area": "Mỹ Đức",
+      "category": "ngoai_thanh",
+      "scene_priority": "phase2",
+      "visual_motifs": [
+        "núi đá vôi",
+        "hoa sen",
+        "vịnh hẹp",
+        "thuyền"
+      ],
+      "evidence_status": "verified_place",
+      "real_world_fishing": "not_verified",
+      "notice": "Chỉ làm bối cảnh game ảo; chưa xác minh quyền câu ngoài đời",
+      "sources": [
+        "https://scov.gov.vn/dat-nuoc-con-nguoi/ho-quan-son-ve-dep-hoang-so.html"
+      ]
+    },
+    {
+      "id": "dong-do",
+      "name": "Hồ Đồng Đò",
+      "area": "Sóc Sơn / Kim Anh",
+      "category": "ngoai_thanh",
+      "scene_priority": "phase2",
+      "visual_motifs": [
+        "rừng thông",
+        "đập đất",
+        "sườn đồi"
+      ],
+      "evidence_status": "verified_place",
+      "real_world_fishing": "not_verified",
+      "notice": "Chỉ làm bối cảnh game ảo; chưa xác minh quyền câu ngoài đời",
+      "sources": [
+        "https://vov.vn/xa-hoi/hien-trang-ho-dong-do-ha-noi-sau-khi-cac-cong-trinh-vi-pham-bi-thao-do-post1334691.vov"
+      ]
+    },
+    {
+      "id": "dong-quan",
+      "name": "Hồ Đồng Quan",
+      "area": "Sóc Sơn",
+      "category": "ngoai_thanh",
+      "scene_priority": "phase2",
+      "visual_motifs": [
+        "rừng ven hồ",
+        "đồi thấp",
+        "mặt nước phẳng"
+      ],
+      "evidence_status": "verified_place",
+      "real_world_fishing": "not_verified",
+      "notice": "Chỉ làm bối cảnh game ảo; chưa xác minh quyền câu ngoài đời",
+      "sources": [
+        "https://vqh.hanoi.gov.vn/index.php?language=vi&nv=news&op=tin-lien-ket%2Fha-noi-duyet-nhiem-vu-quy-hoach-5-phan-khu-do-thi-soc-son-1987.html"
+      ]
+    },
+    {
+      "id": "keo-ca",
+      "name": "Hồ Kèo Cà",
+      "area": "Sóc Sơn",
+      "category": "ngoai_thanh",
+      "scene_priority": "backlog",
+      "visual_motifs": [
+        "rừng",
+        "hồ thủy lợi"
+      ],
+      "evidence_status": "verified_place",
+      "real_world_fishing": "not_verified",
+      "notice": "Chỉ làm bối cảnh game ảo; chưa xác minh quyền câu ngoài đời",
+      "sources": [
+        "https://hanoi.gov.vn/dan-hoi-ubnd-thanh-pho-tra-loi/cau-hoi-de-nghi-ubnd-thanh-pho-chi-dao-co-quan-chuc-nang-kiem-tra-toan-dien-cac-du-an-lien-quan-den-chuyen-doi-muc-dich-su-dung-rung-phong-ho-tai-xa-soc-son-425091809564987.htm"
+      ]
+    },
+    {
+      "id": "tay",
+      "name": "Hồ Tây",
+      "area": "Tây Hồ",
+      "category": "noi_do",
+      "scene_priority": "phase2",
+      "visual_motifs": [
+        "mặt hồ rộng",
+        "đường ven hồ",
+        "hoàng hôn",
+        "hoa sen"
+      ],
+      "evidence_status": "verified_place",
+      "real_world_fishing": "unauthorized_fishing_enforcement_reported",
+      "notice": "Chỉ làm bối cảnh game ảo; chưa xác minh quyền câu ngoài đời",
+      "sources": [
+        "https://sovhtt.hanoi.gov.vn/gioi-thieu/ha-noi-thu-do-viet-nam/",
+        "https://tayho.hanoi.gov.vn/an-ninh-quoc-phong/chung-tay-giu-gin-ho-tay-xanh-sach-dep-hay-noi-khong-voi-boi-loi-phong-sinh-xa-rac-cau-ca-danh-bat-thuy-san-bat-hop-phap-tren-ho-tay-2697251013153954728.htm"
+      ]
+    },
+    {
+      "id": "truc-bach",
+      "name": "Hồ Trúc Bạch",
+      "area": "Ba Đình / Tây Hồ",
+      "category": "noi_do",
+      "scene_priority": "backlog",
+      "visual_motifs": [
+        "đường Thanh Niên",
+        "cầu",
+        "phố ven hồ"
+      ],
+      "evidence_status": "verified_place",
+      "real_world_fishing": "not_verified",
+      "notice": "Chỉ làm bối cảnh game ảo; chưa xác minh quyền câu ngoài đời",
+      "sources": [
+        "https://sovhtt.hanoi.gov.vn/gioi-thieu/ha-noi-thu-do-viet-nam/"
+      ]
+    },
+    {
+      "id": "hoan-kiem",
+      "name": "Hồ Hoàn Kiếm (Hồ Gươm)",
+      "area": "Hoàn Kiếm",
+      "category": "noi_do",
+      "scene_priority": "backlog",
+      "visual_motifs": [
+        "Tháp Rùa",
+        "cầu Thê Húc",
+        "tán cây"
+      ],
+      "evidence_status": "verified_place",
+      "real_world_fishing": "not_verified",
+      "notice": "Chỉ làm bối cảnh game ảo; chưa xác minh quyền câu ngoài đời",
+      "sources": [
+        "https://hanoi.gov.vn/dia-danh/ho-o-ha-noi-4241009161825854.htm"
+      ]
+    },
+    {
+      "id": "thien-quang",
+      "name": "Hồ Thiền Quang",
+      "area": "Hai Bà Trưng",
+      "category": "noi_do",
+      "scene_priority": "backlog",
+      "visual_motifs": [
+        "hàng cây",
+        "đường dạo",
+        "ánh đèn đô thị"
+      ],
+      "evidence_status": "verified_place",
+      "real_world_fishing": "not_verified",
+      "notice": "Chỉ làm bối cảnh game ảo; chưa xác minh quyền câu ngoài đời",
+      "sources": [
+        "https://hanoi.gov.vn/dia-danh/ho-o-ha-noi-4241009161825854.htm"
+      ]
+    },
+    {
+      "id": "bay-mau",
+      "name": "Hồ Bảy Mẫu",
+      "area": "Công viên Thống Nhất",
+      "category": "noi_do",
+      "scene_priority": "backlog",
+      "visual_motifs": [
+        "đảo",
+        "cây xanh",
+        "công viên"
+      ],
+      "evidence_status": "verified_place",
+      "real_world_fishing": "not_verified",
+      "notice": "Chỉ làm bối cảnh game ảo; chưa xác minh quyền câu ngoài đời",
+      "sources": [
+        "https://hanoi.gov.vn/dia-danh/ho-o-ha-noi-4241009161825854.htm"
+      ]
+    },
+    {
+      "id": "ba-mau",
+      "name": "Hồ Ba Mẫu",
+      "area": "Đống Đa",
+      "category": "noi_do",
+      "scene_priority": "backlog",
+      "visual_motifs": [
+        "bờ hồ",
+        "công viên",
+        "đô thị"
+      ],
+      "evidence_status": "verified_place",
+      "real_world_fishing": "not_verified",
+      "notice": "Chỉ làm bối cảnh game ảo; chưa xác minh quyền câu ngoài đời",
+      "sources": [
+        "https://hanoi.gov.vn/dia-danh/ho-o-ha-noi-4241009161825854.htm"
+      ]
+    },
+    {
+      "id": "dong-da",
+      "name": "Hồ Đống Đa (Hồ Hoàng Cầu)",
+      "area": "Đống Đa / Ô Chợ Dừa",
+      "category": "noi_do",
+      "scene_priority": "backlog",
+      "visual_motifs": [
+        "bán đảo",
+        "đường dạo",
+        "ánh đèn đêm"
+      ],
+      "evidence_status": "verified_place",
+      "real_world_fishing": "not_verified",
+      "notice": "Chỉ làm bối cảnh game ảo; chưa xác minh quyền câu ngoài đời",
+      "sources": [
+        "https://hanoi.gov.vn/tin-dia-phuong/ho-dong-da-thay-ao-moi-sau-hon-mot-nam-cai-tao-san-sang-phuc-vu-nhan-dan-vui-xuan-don-tet-4260204210727987.htm"
+      ]
+    },
+    {
+      "id": "giang-vo",
+      "name": "Hồ Giảng Võ",
+      "area": "Ba Đình / Giảng Võ",
+      "category": "noi_do",
+      "scene_priority": "backlog",
+      "visual_motifs": [
+        "cao ốc",
+        "bờ kè",
+        "phố xá"
+      ],
+      "evidence_status": "verified_place",
+      "real_world_fishing": "not_verified",
+      "notice": "Chỉ làm bối cảnh game ảo; chưa xác minh quyền câu ngoài đời",
+      "sources": [
+        "https://hanoi.gov.vn/dia-danh/ho-o-ha-noi-4241009161825854.htm"
+      ]
+    },
+    {
+      "id": "ngoc-khanh",
+      "name": "Hồ Ngọc Khánh",
+      "area": "Ba Đình / Giảng Võ",
+      "category": "noi_do",
+      "scene_priority": "backlog",
+      "visual_motifs": [
+        "bờ cây",
+        "mặt hồ nhỏ",
+        "nhà phố"
+      ],
+      "evidence_status": "verified_place",
+      "real_world_fishing": "not_verified",
+      "notice": "Chỉ làm bối cảnh game ảo; chưa xác minh quyền câu ngoài đời",
+      "sources": [
+        "https://hanoi.gov.vn/dia-danh/ho-o-ha-noi-4241009161825854.htm"
+      ]
+    },
+    {
+      "id": "thanh-cong",
+      "name": "Hồ Thành Công",
+      "area": "Ba Đình / Giảng Võ",
+      "category": "noi_do",
+      "scene_priority": "backlog",
+      "visual_motifs": [
+        "khu dân cư",
+        "công viên",
+        "cây"
+      ],
+      "evidence_status": "verified_place",
+      "real_world_fishing": "not_verified",
+      "notice": "Chỉ làm bối cảnh game ảo; chưa xác minh quyền câu ngoài đời",
+      "sources": [
+        "https://hanoi.gov.vn/dia-danh/ho-o-ha-noi-4241009161825854.htm"
+      ]
+    },
+    {
+      "id": "thu-le",
+      "name": "Hồ Thủ Lệ",
+      "area": "Ba Đình",
+      "category": "noi_do",
+      "scene_priority": "backlog",
+      "visual_motifs": [
+        "công viên Thủ Lệ",
+        "cầu nhỏ",
+        "cây"
+      ],
+      "evidence_status": "verified_place",
+      "real_world_fishing": "not_verified",
+      "notice": "Chỉ làm bối cảnh game ảo; chưa xác minh quyền câu ngoài đời",
+      "sources": [
+        "https://hanoi.gov.vn/dia-danh/ho-o-ha-noi-4241009161825854.htm"
+      ]
+    },
+    {
+      "id": "thanh-nhan",
+      "name": "Hồ Thanh Nhàn",
+      "area": "Hai Bà Trưng",
+      "category": "noi_do",
+      "scene_priority": "backlog",
+      "visual_motifs": [
+        "công viên",
+        "bờ kè",
+        "bóng cây"
+      ],
+      "evidence_status": "verified_place",
+      "real_world_fishing": "not_verified",
+      "notice": "Chỉ làm bối cảnh game ảo; chưa xác minh quyền câu ngoài đời",
+      "sources": [
+        "https://hanoi.gov.vn/dia-danh/ho-o-ha-noi-4241009161825854.htm"
+      ]
+    },
+    {
+      "id": "xa-dan",
+      "name": "Hồ Xã Đàn",
+      "area": "Đống Đa",
+      "category": "noi_do",
+      "scene_priority": "backlog",
+      "visual_motifs": [
+        "đô thị",
+        "hồ nhỏ",
+        "đường"
+      ],
+      "evidence_status": "historical_list_needs_recheck",
+      "real_world_fishing": "not_verified",
+      "notice": "Chỉ làm bối cảnh game ảo; chưa xác minh quyền câu ngoài đời",
+      "sources": [
+        "https://hanoi.gov.vn/dia-danh/ho-o-ha-noi-4241009161825854.htm"
+      ]
+    },
+    {
+      "id": "giam",
+      "name": "Hồ Giám",
+      "area": "Đống Đa / Văn Miếu",
+      "category": "noi_do",
+      "scene_priority": "backlog",
+      "visual_motifs": [
+        "Văn Miếu",
+        "phố cổ",
+        "cây"
+      ],
+      "evidence_status": "verified_place",
+      "real_world_fishing": "not_verified",
+      "notice": "Chỉ làm bối cảnh game ảo; chưa xác minh quyền câu ngoài đời",
+      "sources": [
+        "https://hanoi.gov.vn/dia-danh/ho-o-ha-noi-4241009161825854.htm"
+      ]
+    },
+    {
+      "id": "van-chuong",
+      "name": "Hồ Văn Chương",
+      "area": "Đống Đa",
+      "category": "noi_do",
+      "scene_priority": "backlog",
+      "visual_motifs": [
+        "khu dân cư",
+        "bờ kè",
+        "đường dạo"
+      ],
+      "evidence_status": "historical_list_needs_recheck",
+      "real_world_fishing": "not_verified",
+      "notice": "Chỉ làm bối cảnh game ảo; chưa xác minh quyền câu ngoài đời",
+      "sources": [
+        "https://hanoi.gov.vn/dia-danh/ho-o-ha-noi-4241009161825854.htm"
+      ]
+    },
+    {
+      "id": "linh-dam",
+      "name": "Hồ Linh Đàm (Linh Đường)",
+      "area": "Hoàng Mai / Thanh Trì",
+      "category": "noi_do",
+      "scene_priority": "backlog",
+      "visual_motifs": [
+        "bán đảo",
+        "chung cư",
+        "hồ đô thị"
+      ],
+      "evidence_status": "verified_place",
+      "real_world_fishing": "not_verified",
+      "notice": "Chỉ làm bối cảnh game ảo; chưa xác minh quyền câu ngoài đời",
+      "sources": [
+        "https://hanoi.gov.vn/tin-so-nganh/so-quy-hoach-kien-truc-cong-bo-ban-giao-3-do-an-quy-hoach-40002764911.htm"
+      ]
+    },
+    {
+      "id": "van-tri",
+      "name": "Đầm Vân Trì",
+      "area": "Đông Anh",
+      "category": "ngoai_thanh",
+      "scene_priority": "backlog",
+      "visual_motifs": [
+        "đầm nước",
+        "cỏ lau",
+        "chim nước"
+      ],
+      "evidence_status": "historical_list_needs_recheck",
+      "real_world_fishing": "not_verified",
+      "notice": "Chỉ làm bối cảnh game ảo; chưa xác minh quyền câu ngoài đời",
+      "sources": [
+        "https://hanoi.gov.vn/dia-danh/ho-o-ha-noi-4241009161825854.htm"
+      ]
+    },
+    {
+      "id": "yen-so",
+      "name": "Hệ hồ Công viên Yên Sở",
+      "area": "Hoàng Mai",
+      "category": "noi_do",
+      "scene_priority": "backlog",
+      "visual_motifs": [
+        "công viên cây xanh",
+        "cầu nhỏ",
+        "đảo"
+      ],
+      "evidence_status": "verified_place",
+      "real_world_fishing": "not_verified",
+      "notice": "Chỉ làm bối cảnh game ảo; chưa xác minh quyền câu ngoài đời",
+      "sources": [
+        "https://hanoi.gov.vn/tin-so-nganh/so-quy-hoach-kien-truc-cong-bo-ban-giao-3-do-an-quy-hoach-40002764911.htm"
+      ]
+    },
+    {
+      "id": "dong-nhan",
+      "name": "Hồ Đồng Nhân",
+      "area": "Hai Bà Trưng",
+      "category": "noi_do",
+      "scene_priority": "backlog",
+      "visual_motifs": [
+        "hồ nhỏ",
+        "đường dạo",
+        "phố"
+      ],
+      "evidence_status": "historical_list_needs_recheck",
+      "real_world_fishing": "not_verified",
+      "notice": "Chỉ làm bối cảnh game ảo; chưa xác minh quyền câu ngoài đời",
+      "sources": [
+        "https://hanoi.gov.vn/dia-danh/ho-o-ha-noi-4241009161825854.htm"
+      ]
+    },
+    {
+      "id": "dong-mo-ngai-son",
+      "name": "Khu hồ Đồng Mô – Ngải Sơn",
+      "area": "Sơn Tây",
+      "category": "ngoai_thanh",
+      "scene_priority": "backlog",
+      "visual_motifs": [
+        "mặt hồ rộng",
+        "đảo cây",
+        "đồi"
+      ],
+      "evidence_status": "historical_list_needs_recheck",
+      "real_world_fishing": "not_verified",
+      "notice": "Tên khu vực lịch sử có thể trùng Đồng Mô; KHÔNG tạo map thứ hai trước khi làm rõ ranh giới",
+      "sources": [
+        "https://hanoi.gov.vn/dia-danh/ho-o-ha-noi-4241009161825854.htm"
+      ]
+    }
+  ]
+}
