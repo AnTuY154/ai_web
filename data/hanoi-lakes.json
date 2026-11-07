@@ -5,8 +5,8 @@
   "schema_version": 1,
   "geo_note": "Khu vực are descriptive legacy/common-use names, not official post-2025 administrative addresses. Coordinates purposely omitted pending authoritative geospatial verification.",
   "real_fishing_note": "Không mặc định được phép câu tại bất kỳ hồ thực nào. Hồ Tây: nguồn chính quyền 2025 nêu xử lý câu cá và đánh bắt trái phép.",
-  "deduplication_note": "Đồng Mô – Ngải Sơn is a historical region label; not separate playable lake until verified.",
-  "count": 26,
+  "deduplication_note": "Khu Đồng Mô – Ngải Sơn là tên khu vực lịch sử đã hợp nhất vào hồ Đồng Mô, không tính thành hồ riêng.",
+  "count": 28,
   "lakes": [
     {
       "id": "dong-mo",
@@ -463,22 +463,58 @@
       ]
     },
     {
-      "id": "dong-mo-ngai-son",
-      "name": "Khu hồ Đồng Mô – Ngải Sơn",
-      "area": "Sơn Tây",
-      "category": "ngoai_thanh",
+      "id": "van-quan",
+      "name": "Hồ Văn Quán",
+      "area": "Hà Đông",
+      "category": "noi_do",
       "scene_priority": "backlog",
       "visual_motifs": [
-        "mặt hồ rộng",
-        "đảo cây",
-        "đồi"
+        "khu đô thị",
+        "đường dạo",
+        "hàng cây"
       ],
-      "evidence_status": "historical_list_needs_recheck",
-      "real_world_fishing": "not_verified",
-      "notice": "Tên khu vực lịch sử có thể trùng Đồng Mô; KHÔNG tạo map thứ hai trước khi làm rõ ranh giới",
       "sources": [
-        "https://hanoi.gov.vn/dia-danh/ho-o-ha-noi-4241009161825854.htm"
-      ]
+        "https://www.traveloka.com/vi-vn/explore/destination/ho-van-quan/561896"
+      ],
+      "evidence_status": "verified_place",
+      "real_world_fishing": "not_verified",
+      "notice": "Chỉ làm bối cảnh game ảo; chưa xác minh quyền câu ngoài đời"
+    },
+    {
+      "id": "dinh-cong",
+      "name": "Hồ Định Công",
+      "area": "Hoàng Mai",
+      "category": "noi_do",
+      "scene_priority": "backlog",
+      "visual_motifs": [
+        "bờ kè",
+        "cây xanh",
+        "đô thị"
+      ],
+      "sources": [
+        "https://dantri.com.vn/thoi-su/nhung-ho-nuoc-nhu-vien-ngoc-qui-giua-rung-nha-day-dac-o-ha-noi-20230914185547358.htm"
+      ],
+      "evidence_status": "verified_place",
+      "real_world_fishing": "not_verified",
+      "notice": "Chỉ làm bối cảnh game ảo; chưa xác minh quyền câu ngoài đời"
+    },
+    {
+      "id": "dam-hong",
+      "name": "Hồ Đầm Hồng",
+      "area": "Thanh Xuân",
+      "category": "noi_do",
+      "scene_priority": "backlog",
+      "visual_motifs": [
+        "bờ kè",
+        "khu dân cư",
+        "mặt hồ"
+      ],
+      "sources": [
+        "https://dantri.com.vn/thoi-su/nhung-ho-nuoc-nhu-vien-ngoc-qui-giua-rung-nha-day-dac-o-ha-noi-20230914185547358.htm"
+      ],
+      "evidence_status": "verified_place",
+      "real_world_fishing": "not_verified",
+      "notice": "Chỉ làm bối cảnh game ảo; chưa xác minh quyền câu ngoài đời"
     }
   ]
 }
