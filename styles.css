@@ -8,3 +8,63 @@
 .game-shell{max-width:1640px;margin:auto;padding:24px clamp(16px,3vw,50px)}.game-top{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:20px}.text-btn{background:transparent;color:var(--mint);border:0;padding:0;margin-bottom:18px;font:700 11px 'Space Mono',monospace}.game-top h1{font-size:36px;line-height:1;margin:0}.lake-sub{color:var(--gold)}.room-stats{display:flex;gap:8px}.room-stats>div{min-width:105px;text-align:center;background:#1b4147;border:2px solid #3d6764;padding:10px}.room-stats small{display:block;font:700 9px 'Space Mono',monospace;color:#b9ccc3}.room-stats strong{display:block;font:700 19px 'Space Mono',monospace;color:var(--mint);margin-top:5px}.game-layout{display:grid;grid-template-columns:minmax(0,1fr) 335px;gap:20px;align-items:start}.playfield-card{background:#153741;border:4px solid #375d59;box-shadow:5px 5px 0 #071721;min-width:0}.scene-status{display:flex;justify-content:space-between;padding:12px 14px;color:#b6d6bb;font:700 10px 'Space Mono',monospace;letter-spacing:.3px}.playfield-card canvas{width:100%;height:auto;display:block;background:#8cbe8a;image-rendering:pixelated;cursor:crosshair;touch-action:manipulation}.scene-footer{display:flex;justify-content:space-between;gap:9px;padding:12px 14px;font-size:11px;color:#adc7c3}.scene-footer span:last-child{font:700 9px 'Space Mono',monospace;white-space:nowrap}.game-sidebar{display:flex;flex-direction:column;gap:16px}.pixel-panel{background:#173943;border:2px solid #3c6663;padding:18px;box-shadow:4px 4px 0 #071b21}.panel-header{display:flex;align-items:center;justify-content:space-between;gap:9px;margin-bottom:17px}.panel-header h3{font-size:16px;margin:0}.panel-header span{color:var(--gold);font:700 9px 'Space Mono',monospace;text-align:right}.timer-block{background:#102c36;border:2px solid #2b5756;padding:13px;margin-bottom:15px}.timer-block>div:first-child{display:flex;justify-content:space-between;align-items:center;gap:8px}.timer-block small{color:#a6c5bb;font-size:10px}.timer-block strong{font:700 21px 'Space Mono',monospace;color:var(--gold)}.time-meter{height:10px;background:#284c4e;margin:10px 0}.time-meter>div{height:100%;background:#b5e07d;width:100%;transition:width .35s}.pixel-panel select{width:100%;background:#0c2a35;border:2px solid #426563;color:var(--cream);padding:10px 9px;margin:0 0 15px}.fishing-status{color:#d4e5d3;line-height:1.5;font-size:13px;min-height:40px;background:#264d49;padding:12px;border-left:4px solid var(--gold)}.action-stack{display:grid;gap:9px}.panel-footnote{font-size:10px;color:#91b4b2;line-height:1.5;margin:13px 0 0}.caught-count{display:flex;align-items:center;gap:12px;background:#0f2b32;padding:12px}.caught-count strong{color:var(--gold);font:700 30px 'Space Mono',monospace}.caught-count span{font-size:12px;color:#d3dfd0}.rarity-key{display:flex;gap:11px;flex-wrap:wrap;margin:13px 0;font-size:10px}.rarity-key span:first-child{color:#a8dca6}.rarity-key span:nth-child(2){color:#ffe19c}.rarity-key span:nth-child(3){color:#ffb3d1}.fish-list{display:grid;grid-template-columns:1fr 1fr;gap:6px;max-height:208px;overflow:auto}.fish-item{display:flex;justify-content:space-between;align-items:center;background:#284849;padding:8px;gap:4px;font-size:11px}.fish-item span{color:#e5ead3}.fish-item b{color:#a9dcb6;font:700 10px 'Space Mono',monospace}.fish-item.rare b{color:#ffe19c}.fish-item.epic b{color:#ffb3d1}.small-note b{color:var(--gold);font-size:13px}.small-note p{margin:9px 0 0;color:#b9ccca;font-size:12px;line-height:1.6}.mobile-controls{display:none;justify-content:center;gap:12px;padding:11px}.mobile-controls button{width:45px;height:45px;background:#3a7162;border:2px solid #91b486;color:white;font-size:19px;touch-action:none}footer{background:#091f28;border-top:3px solid #2b4d4b;display:flex;justify-content:space-between;gap:18px;padding:17px clamp(18px,4vw,58px);font:700 10px 'Space Mono',monospace;color:#95b9aa}footer span{color:#638b88}
 @media(max-width:1150px){.main-shell{grid-template-columns:285px minmax(0,1fr)}.game-layout{grid-template-columns:1fr}.game-sidebar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.small-note{grid-column:1/-1}}@media(max-width:780px){.topbar{height:auto;min-height:73px;padding:12px 16px}.topbar-right{gap:5px}.proto-badge{font-size:8px;padding:7px}.wallet{font-size:11px;padding:8px}.brand strong{font-size:14px}.brand small{font-size:8px}.main-shell{display:flex;flex-direction:column;padding:22px 16px}.map-sidebar h1{font-size:33px}.lake-list{max-height:168px}.map-section{margin-top:14px}.map-frame{height:480px}.lake-preview{flex-direction:column;align-items:stretch}.preview-action{text-align:left}.game-top{flex-direction:column;align-items:stretch}.room-stats>div{min-width:0;flex:1}.game-sidebar{grid-template-columns:1fr}.scene-status,.scene-footer{font-size:9px}.scene-footer span:last-child{display:none}.mobile-controls{display:flex}footer{font-size:8px;flex-direction:column;gap:6px}}@media(max-width:410px){.proto-badge{display:none}.brand-icon{width:37px;height:37px}.map-frame{height:380px}.map-controls button{width:29px}.map-heading h2{font-size:20px}.room-stats small{font-size:8px}.room-stats strong{font-size:15px}}
 @media(prefers-reduced-motion:reduce){.map-pin.is-playable .pin-glyph{animation:none}*{scroll-behavior:auto!important;transition:none!important}}
+
+
+/* ── Pixel fishing station: separate from the walking/lake map UI ─── */
+.fishing-view{padding-bottom:26px}
+.fishing-head{display:flex;align-items:center;justify-content:space-between;gap:24px;margin:0 0 19px}
+.fishing-head h2{font-size:clamp(24px,3vw,36px);margin:0 0 8px;line-height:1.16}
+.fishing-head h2 span{color:var(--gold);font-family:'Space Mono',monospace}
+.fishing-head p{font-size:13px;color:#a9c6be;line-height:1.55;max-width:750px;margin:0}
+.fishing-head button{white-space:nowrap}
+.fishing-layout{display:grid;grid-template-columns:minmax(0,1fr) 330px;align-items:start;gap:22px}
+.fishing-lake-frame{border:5px solid #456961;background:#112e38;box-shadow:7px 7px #061c24;min-width:0}
+.fishing-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;font:700 10px 'Space Mono',monospace;color:#c0ddb9;background:#183b40}
+.float-scene{position:relative;overflow:hidden;background:#549fb1;isolation:isolate}
+.float-scene canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges}
+.scene-buoy-caption{position:absolute;top:17px;left:17px;background:#15373cd9;border:2px solid #80a7a0;color:#ffedc5;padding:9px 14px;font:700 12px 'Space Mono',monospace;display:flex;align-items:center;gap:10px}
+.buoy-dot{color:#ffbd84;font-size:15px}
+.bite-banner{position:absolute;inset:40% 8% auto;text-align:center;padding:13px 10px;background:#ffb96d;color:#27373d;border:5px solid #ffe2a1;box-shadow:7px 7px 0 #214343;font:700 clamp(15px,2.8vw,29px) 'Space Mono',monospace;animation:bite-flash .32s infinite alternate}
+@keyframes bite-flash{from{transform:translateY(0) scale(1)}to{transform:translateY(-4px) scale(1.015)}}
+.float-instructions{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:5px solid #335a57;padding:12px 15px;color:#d9e9c9;background:#1c3c43}
+.key-hint{display:flex;align-items:center;gap:12px;font-size:13px;font-weight:600}
+kbd{font:700 12px 'Space Mono',monospace;padding:5px 8px;background:#f8dca0;border:2px solid #d0ad76;box-shadow:3px 3px 0 #8b7a55;color:#2c3e3e;display:inline-block;white-space:nowrap}
+#floatStage{font:700 10px 'Space Mono',monospace;color:var(--gold);white-space:nowrap}
+.fish-scene-bottom{display:flex;flex-wrap:wrap;justify-content:space-around;gap:10px;padding:15px 12px;border-top:3px solid #2c5858;color:#b7ddc2;font:700 10px 'Space Mono',monospace}
+.fishing-side{display:flex;flex-direction:column;gap:18px;min-width:0}
+.fishing-control-panel .timer-block{border-color:#4c7770}
+.fishing-control-panel .panel-header h3{font-size:19px}
+.fishing-control-panel .action-stack button{width:100%;min-height:52px;font-size:13px}
+.fishing-control-panel .fishing-status{min-height:63px;margin:4px 0 14px}
+.reel-control{background:#ffd07a!important;color:#253a35!important;touch-action:none;user-select:none;-webkit-user-select:none}
+.reel-control:active,.reel-control.is-holding{background:#ffac77!important;transform:translate(2px,2px);box-shadow:2px 2px #12262c}
+.control-help{background:#0e2c34;border-left:4px solid var(--mint);padding:13px 13px 9px;margin-top:16px}
+.control-help b{color:var(--gold);font:700 10px 'Space Mono',monospace}
+.control-help p{color:#c5d7c7;font-size:12px;line-height:1.55;margin:10px 0}
+.control-help kbd{font-size:10px;padding:3px 5px}
+.catch-panel .caught-count{margin-top:12px}
+.last-catch{padding:13px;color:#e7e8c7;background:#203e42;border:2px solid #3f6a60;font-size:13px;line-height:1.5;min-height:64px}
+.fight-panel{background:#102c34;border-top:5px solid #b5e07c;padding:22px clamp(14px,3vw,30px) 16px}
+.fight-top{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.fight-top h3{font-size:clamp(17px,2.3vw,25px);margin:3px 0}
+.fight-top p{margin:4px 0 0;font-size:12px;color:var(--gold)}
+.fight-timer{text-align:right;white-space:nowrap}
+.fight-timer small{font:700 10px 'Space Mono',monospace;color:#a9c2bd;display:block}
+.fight-timer strong{font:700 24px 'Space Mono',monospace;color:#ffe3a9}
+.tension-track{position:relative;height:58px;margin:24px 2px 9px;background:linear-gradient(90deg,#b96261 0%,#ddae6a 19%,#dfbd77 80%,#b96261 100%);border:4px solid #c4d4af;box-shadow:5px 5px 0 #001b23;overflow:visible}
+.tension-guide-left,.tension-guide-right{position:absolute;top:-21px;font:700 10px 'Space Mono',monospace;color:#d3dfc7}
+.tension-guide-left{left:0}.tension-guide-right{right:0}
+.safe-band{position:absolute;inset:0 auto 0 35%;width:30%;background:repeating-linear-gradient(90deg,#4b9c62 0 12px,#5bb276 12px 24px);border-left:4px solid #d8f9a8;border-right:4px solid #d8f9a8;transition:none}
+.tension-marker{position:absolute;z-index:2;top:-8px;bottom:-8px;width:7px;background:#fff9e7;border:2px solid #163c43;box-shadow:0 0 0 2px #ffd07a;transform:translateX(-50%);transition:none}
+.fight-under{display:flex;justify-content:space-between;gap:12px;margin:12px 0 19px;color:#a9d1ba;font:700 10px 'Space Mono',monospace}
+.fight-progress-row{display:flex;gap:13px;align-items:center;margin:12px 0;color:#cfdfcd;font:700 10px 'Space Mono',monospace}
+.fight-progress-row span:first-child{min-width:100px}
+.fight-progress-row span:last-child{min-width:35px;text-align:right;color:var(--gold)}
+.fight-progress{height:12px;background:#28474b;flex:1;border:2px solid #54716b}
+.fight-progress div{background:var(--mint);width:0%;height:100%;transition:width .1s}
+.fight-progress-row:nth-last-of-type(1) .fight-progress div{background:#f1ce87}
+.fight-feedback{font-weight:600;font-size:13px;color:#f6dfab;line-height:1.4;margin:14px 0 0}
+@media(max-width:1150px){.fishing-layout{grid-template-columns:minmax(0,1fr) 285px;gap:14px}}
+@media(max-width:850px){.fishing-layout{grid-template-columns:1fr}.fishing-side{display:grid;grid-template-columns:1fr 1fr}.fishing-control-panel{grid-column:1/-1}.fishing-head{flex-wrap:wrap}.float-instructions{font-size:11px}}
+@media(max-width:540px){.fishing-side{display:flex}.fishing-head h2{font-size:23px}.fishing-head button{width:100%}.float-scene canvas{min-height:300px;object-fit:cover}.fishing-toolbar{font-size:8px}.scene-buoy-caption{top:8px;left:8px;padding:7px;font-size:9px}.float-instructions{align-items:flex-start;flex-direction:column}.fish-scene-bottom{font-size:9px}.fight-panel{padding:17px 11px}.fight-under{font-size:8px}.fight-top h3{font-size:16px}.fight-timer strong{font-size:19px}.fight-progress-row{gap:7px;font-size:9px}.fight-progress-row span:first-child{min-width:82px}.tension-track{height:49px}.fishing-head{gap:14px}}
+@media(prefers-reduced-motion:reduce){.bite-banner{animation:none}}
