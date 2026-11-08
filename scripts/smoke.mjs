@@ -23,6 +23,7 @@ try{
   const expected=[
     ["/","text/html","Hồ Bảy Mẫu"],
     ["/app.js","text/javascript","MAX_ANGLERS=15"],
+    ["/fishing-engine.mjs","text/javascript","makeFight"],
     ["/styles.css","text/css","map-frame"],
     ["/data/hanoi-lakes.json","application/json","bay-mau"]
   ];
