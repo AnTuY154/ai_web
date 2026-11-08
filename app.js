@@ -1,9 +1,10 @@
+import { makeFight, stepFight, biteConfig, clamp } from "./fishing-engine.mjs";
 const $ = (id) => document.getElementById(id);
 const LAKE_FOCUS = "bay-mau";
 const FISH = [
   {id:"ro-phi",name:"Rô phi",rarity:"common",reward:6},
   {id:"ro-dong",name:"Rô đồng",rarity:"common",reward:7},
-  {id:"d iec".replace(" ",""),name:"Diếc",rarity:"common",reward:8},
+  {id:"diec",name:"Diếc",rarity:"common",reward:8},
   {id:"troi",name:"Trôi",rarity:"common",reward:9},
   {id:"me-trang",name:"Mè trắng",rarity:"common",reward:10},
   {id:"chep",name:"Chép",rarity:"rare",reward:19},
@@ -23,7 +24,8 @@ const state={
   lakes:[], selected:LAKE_FOCUS, screen:"map", coins:50,
   avatar:{x:456,y:479}, pressed:new Set(), gotoSpot:null, gotoPoint:null, spot:null,
   freeRemaining:FREE_SECONDS, paidRemaining:0, freeUsed:false,
-  fishing:"idle", biteAt:0, biteExpires:0, reelExpires:0, currentFish:null, reelLeft:0,
+  fishing:"idle", biteAt:0, biteStartedAt:0, biteExpires:0, nibbleAt:0, nibbleUntil:0,
+  currentFish:null, fight:null, held:false, lastCatch:null,
   caught:0, score:0, fishCounts:Object.fromEntries(FISH.map(f=>[f.id,0])),
   mapZoom:1, mapDX:0, mapDY:0, mapDragging:false, lastTime:0
 };
@@ -138,11 +140,14 @@ $("enterLake").addEventListener("click",()=>{if(state.selected!==LAKE_FOCUS)retu
 $("backMap").addEventListener("click",closeGame);
 function openGame(){
   state.screen="game";$("mapScreen").classList.add("hidden");$("gameScreen").classList.remove("hidden");
+  $("fishingView").classList.toggle("hidden",state.spot===null);
+  $("gameLayout").classList.toggle("hidden",state.spot!==null);
   window.scrollTo(0,0);$("gameCanvas").focus();displayStatus();
 }
 function closeGame(){
   if(state.spot!==null)releaseSpot();
   state.screen="map";$("gameScreen").classList.add("hidden");$("mapScreen").classList.remove("hidden");
+  state.held=false;
   window.scrollTo(0,0);updateHUD();
 }
 function isWater(x,y){
@@ -165,12 +170,19 @@ function chooseSpot(n){
 function occupySpot(n){
   state.gotoSpot=null;state.spot=n;
   state.avatar.x=SPOTS[n-1].x;state.avatar.y=SPOTS[n-1].y;
-  displayStatus("Đã nhận vị trí #"+n+". Bạn có 5 phút miễn phí lần đầu trong phiên demo.");
-  setHint("Đang ngồi câu ở vị trí #"+n+". Nhấn 'THẢ CÂU' ở bảng bên phải.");
+  $("seatNumber").textContent="#"+String(n).padStart(2,"0");
+  $("gameLayout").classList.add("hidden");
+  $("fishingView").classList.remove("hidden");
+  displayStatus("Đã tới chỗ ngồi. Thả câu rồi quan sát đầu phao. Space đúng lúc phao cắn!");
+  setHint("Bạn đang câu tại vị trí #"+n+".");
+  window.scrollTo(0,0);
   updateHUD();
 }
 function releaseSpot(){
   state.gotoSpot=null;state.spot=null;state.fishing="idle";state.currentFish=null;
+  state.fight=null;state.held=false;
+  $("fishingView").classList.add("hidden");
+  $("gameLayout").classList.remove("hidden");
   state.avatar.x=456;state.avatar.y=478;
   displayStatus("Đã trả vị trí. Bạn có thể di chuyển hoặc chọn chỗ khác.");
   setHint("Bạn trở lại khu chờ. 5 phút miễn phí không tự làm mới khi đổi chỗ.");
@@ -189,38 +201,65 @@ function chooseFish(){
   return pool[Math.floor(Math.random()*pool.length)];
 }
 function canFish(){return state.spot!==null&&(state.freeRemaining>0||state.paidRemaining>0)}
-$("castBtn").addEventListener("click",()=>{
+function castLine(){
   if(state.fishing!=="idle"||!canFish())return;
-  state.fishing="waiting";state.currentFish=null;state.biteAt=Date.now()+1800+Math.random()*2400;
-  displayStatus("Phao đã xuống nước... Chú ý khi cá cắn!");
-  updateHUD();
-});
-function missFish(text){
-  state.fishing="idle";state.currentFish=null;
-  displayStatus(text||"Cá thoát mất rồi. Thử quăng lại!");
+  const now=performance.now();
+  state.fishing="waiting";state.currentFish=chooseFish();state.fight=null;state.held=false;
+  state.nibbleAt=now+950+Math.random()*1100;
+  state.nibbleUntil=state.nibbleAt+440+Math.random()*500;
+  state.biteAt=now+4200+Math.random()*3900;
+  state.biteStartedAt=0;state.biteExpires=0;
+  displayStatus("Phao nổi trên nước. Những cú nhấp nhẹ có thể là cá thử mồi; đợi tín hiệu cắn rõ ràng.");
   updateHUD();
 }
-$("reelBtn").addEventListener("click",()=>{
-  if(state.fishing==="bite"){
-    state.fishing="reeling";
-    const f=state.currentFish;
-    state.reelLeft=f.rarity==="epic"?7:f.rarity==="rare"?5:3;
-    if($("rodSelect").value==="reel")state.reelLeft-=1;
-    state.reelExpires=Date.now()+8500+(f.rarity==="epic"?2000:0)+RODS[$("rodSelect").value].bonus;
-    displayStatus("Đã móc cá! Nhấn KÉO CÁ thêm "+state.reelLeft+" lần trước khi dây trùng.");
-  }else if(state.fishing==="reeling"){
-    state.reelLeft--;
-    if(state.reelLeft<=0){
-      const fish=state.currentFish;
-      const gained=fish.reward;
-      state.coins+=gained;state.caught++;state.score+=gained*10;
-      state.fishCounts[fish.id]++;
-      state.fishing="idle";state.currentFish=null;
-      displayStatus("Tuyệt! Câu được "+fish.name+" ("+(fish.rarity==="epic"?"CỰC HIẾM":fish.rarity==="rare"?"HIẾM":"PHỔ BIẾN")+") · +"+gained+" xu demo.");
-      drawFishList();
-    }else displayStatus("Đang kéo cá... còn "+state.reelLeft+" lần nhấn!");
-  }
+function missFish(text){
+  state.fishing="idle";state.currentFish=null;state.fight=null;state.held=false;
+  displayStatus(text||"Cá đã thoát. Bạn có thể thả câu lại!");
+  $("lastCatch").textContent=text||"Cá đã thoát. Hãy thử lại.";
+  $("catchTier").textContent="TRƯỢT CÁ";
   updateHUD();
+}
+function landFish(){
+  const fish=state.currentFish;
+  if(!fish||state.fishing!=="reeling")return;
+  state.coins+=fish.reward;state.caught++;state.score+=fish.reward*10;
+  state.fishCounts[fish.id]++;
+  state.lastCatch=fish;
+  state.fishing="idle";state.currentFish=null;state.fight=null;state.held=false;
+  const tier=fish.rarity==="epic"?"CỰC HIẾM":fish.rarity==="rare"?"HIẾM":"PHỔ BIẾN";
+  const message="Đã câu được "+fish.name+" · "+tier+" · +"+fish.reward+" xu demo!";
+  displayStatus("🎉 "+message+" Tiếp tục thả câu nhé.");
+  $("lastCatch").textContent="🎉 "+message;
+  $("catchTier").textContent=tier;
+  drawFishList();updateHUD();
+}
+function attemptStrike(){
+  if(!canFish())return;
+  if(state.fishing==="idle"){castLine();return}
+  if(state.fishing==="waiting"){
+    missFish("Giật quá sớm! Phao mới nhấp nhô/thử mồi, cá chưa ngậm chắc.");
+    return;
+  }
+  if(state.fishing==="bite"){
+    if(performance.now()>state.biteExpires){missFish("Bạn giật hơi muộn, cá đã nhả mồi.");return}
+    state.fight=makeFight(state.currentFish.id,$("rodSelect").value);
+    state.fishing="reeling";state.held=true;
+    displayStatus("Cá đã mắc câu! GIỮ Space để tăng lực, THẢ để giảm; giữ kim trong vùng xanh.");
+    updateHUD();
+  }
+}
+$("castBtn").addEventListener("click",castLine);
+const reelControl=$("reelBtn");
+reelControl.addEventListener("pointerdown",e=>{
+  e.preventDefault();
+  if(state.fishing==="waiting"||state.fishing==="bite")attemptStrike();
+  else if(state.fishing==="reeling")state.held=true;
+  try{reelControl.setPointerCapture(e.pointerId)}catch{}
+});
+function releaseReel(){state.held=false}
+for(const event of ["pointerup","pointercancel","lostpointercapture"])reelControl.addEventListener(event,releaseReel);
+reelControl.addEventListener("keydown",e=>{
+  if(e.key==="Enter"){e.preventDefault();if(!e.repeat)attemptStrike()}
 });
 $("rentBtn").addEventListener("click",()=>{
   if(state.spot===null||state.freeRemaining>0||state.paidRemaining>0)return;
@@ -238,14 +277,37 @@ function updateHUD(){
   const seconds=state.freeRemaining>0?Math.ceil(state.freeRemaining):Math.ceil(state.paidRemaining);
   $("freeClock").textContent=String(Math.floor(seconds/60)).padStart(2,"0")+":"+String(seconds%60).padStart(2,"0");
   $("timeFill").style.width=(Math.min(1,seconds/FREE_SECONDS)*100)+"%";
-  $("rentHint").textContent=state.freeRemaining>0?"Thời gian miễn phí còn lại · 5 phút/phiên thử":state.paidRemaining>0?"Đang sử dụng thời gian đã thuê (xu demo)":"Hết giờ miễn phí · cần thuê thêm để câu.";
+  $("rentHint").textContent=state.freeRemaining>0?"Thời gian miễn phí · 5 phút/phiên thử":state.paidRemaining>0?"Đang sử dụng thời gian thuê bằng xu demo":"Hết giờ miễn phí · thuê thêm để câu.";
+  $("castBtn").classList.toggle("hidden",state.fishing!=="idle");
   $("castBtn").disabled=!canFish()||state.fishing!=="idle";
-  $("castBtn").textContent=state.fishing==="waiting"?"ĐANG CHỜ CÁ...":"THẢ CÂU";
-  $("reelBtn").classList.toggle("hidden",state.fishing!=="bite"&&state.fishing!=="reeling");
-  $("reelBtn").textContent=state.fishing==="bite"?"⚡ GIẬT CẦN NGAY!":"KÉO CÁ! (CÒN "+state.reelLeft+")";
+  $("reelBtn").classList.toggle("hidden",state.fishing==="idle");
+  $("reelBtn").textContent=state.fishing==="reeling"?"GIỮ / THẢ ĐỂ ĐIỀU LỰC":state.fishing==="bite"?"⚡ GIẬT CẦN NGAY!":"GIẬT CẦN · SPACE (ĐÚNG LÚC)";
+  $("reelBtn").classList.toggle("is-holding",state.held);
   $("rentBtn").classList.toggle("hidden",state.spot===null||state.freeRemaining>0||state.paidRemaining>0);
   $("leaveSpot").disabled=state.spot===null;
   $("caughtCount").textContent=state.caught;$("totalScore").textContent=state.score;
+  $("sessionCatch").textContent=state.caught;$("sessionScore").textContent=state.score;
+  const stage=state.fishing;
+  const nibbling=stage==="waiting"&&performance.now()>=state.nibbleAt&&performance.now()<=state.nibbleUntil;
+  $("floatStage").textContent=stage==="idle"?"CHƯA THẢ CÂU":stage==="waiting"?(nibbling?"ĐANG NHẤP MỒI":"ĐANG CHỜ CẮN"):stage==="bite"?"CÁ ĐANG CẮN!":"ĐANG KÉO CÁ";
+  $("floatLabel").textContent=stage==="idle"?"PHAO CHƯA THẢ":stage==="waiting"?(nibbling?"PHAO RUNG NHẸ — HÃY ĐỢI":"PHAO NỔI YÊN — QUAN SÁT"):stage==="bite"?"PHAO BIẾN ĐỘNG MẠNH!":"DÂY ĐÃ CĂNG — GIỮ LỰC";
+  $("keyGuide").textContent=stage==="idle"?"Nhấn để thả câu":stage==="waiting"?"Đợi phao cắn dứt khoát rồi mới giật":stage==="bite"?"GIẬT NGAY TRƯỚC KHI CÁ NHẢ MỒI!":"Giữ tăng lực, thả giảm lực";
+  $("biteBanner").classList.toggle("hidden",stage!=="bite");
+  $("fightPanel").classList.toggle("hidden",stage!=="reeling");
+  if(state.fight&&stage==="reeling"){
+    const f=state.fight;
+    $("safeBand").style.left=f.safeLeft.toFixed(2)+"%";
+    $("safeBand").style.width=f.width+"%";
+    $("tensionMarker").style.left=f.tension.toFixed(2)+"%";
+    $("tensionTrack").setAttribute("aria-valuenow",String(Math.round(f.tension)));
+    $("fightClock").textContent=Math.max(0,f.seconds-f.elapsed).toFixed(1)+"s";
+    $("fishFightName").textContent="🐟 "+state.currentFish.name+" · "+f.seconds+" giây · vùng xanh "+f.width+"%";
+    const stable=Math.round(clamp(100*(1-f.danger/f.tolerance),0,100));
+    $("fightStability").style.width=stable+"%";$("fightStabilityText").textContent=stable+"%";
+    const elapsed=Math.round(clamp(f.elapsed/f.seconds*100,0,100));
+    $("fightElapsed").style.width=elapsed+"%";$("fightElapsedText").textContent=elapsed+"%";
+    $("fightFeedback").textContent=f.tension>f.safeRight?"⚠ Lực quá cao! THẢ Space để tránh đứt dây.":f.tension<f.safeLeft?"⚠ Lực quá thấp! GIỮ Space để tránh tuột cá.":"✓ Lực vừa đủ. Giữ nhịp kéo và thả khi cá vùng.";
+  }
 }
 function drawFishList(){
   const div=$("fishList");div.replaceChildren();
@@ -257,12 +319,26 @@ function drawFishList(){
   }
 }
 document.addEventListener("keydown",e=>{
-  if(!["ArrowUp","ArrowDown","ArrowLeft","ArrowRight","w","a","s","d","W","A","S","D"].includes(e.key)||state.screen!=="game")return;
+  if(state.screen!=="game")return;
   if(["INPUT","SELECT","TEXTAREA"].includes(document.activeElement.tagName))return;
+  if(state.spot!==null){
+    if(e.code==="Space"||e.key===" "){
+      e.preventDefault();
+      if(!e.repeat){
+        if(state.fishing==="reeling")state.held=true;
+        else attemptStrike();
+      }
+    }
+    return;
+  }
+  if(!["ArrowUp","ArrowDown","ArrowLeft","ArrowRight","w","a","s","d","W","A","S","D"].includes(e.key))return;
   state.pressed.add(e.key.toLowerCase());e.preventDefault();
 });
-document.addEventListener("keyup",e=>state.pressed.delete(e.key.toLowerCase()));
-window.addEventListener("blur",()=>state.pressed.clear());
+document.addEventListener("keyup",e=>{
+  if(e.code==="Space"||e.key===" "){state.held=false}
+  state.pressed.delete(e.key.toLowerCase());
+});
+window.addEventListener("blur",()=>{state.pressed.clear();state.held=false});
 for(const btn of document.querySelectorAll("[data-move]")){
   const key=btn.dataset.move.toLowerCase();
   btn.addEventListener("pointerdown",e=>{e.preventDefault();state.pressed.add(key);btn.setPointerCapture(e.pointerId)});
@@ -271,6 +347,8 @@ for(const btn of document.querySelectorAll("[data-move]")){
   btn.addEventListener("lostpointercapture",()=>state.pressed.delete(key));
 }
 const canvas=$("gameCanvas"),ctx=canvas.getContext("2d",{alpha:false});
+const floatCanvas=$("floatCanvas"),floatCtx=floatCanvas.getContext("2d",{alpha:false});
+floatCtx.imageSmoothingEnabled=false;
 ctx.imageSmoothingEnabled=false;
 function rect(x,y,w,h,color){ctx.fillStyle=color;ctx.fillRect(Math.floor(x),Math.floor(y),Math.ceil(w),Math.ceil(h))}
 function seed01(n){let x=Math.sin(n*127.1+78.233)*43758.5453;return x-Math.floor(x)}
@@ -426,14 +504,20 @@ function update(delta){
     else if(state.paidRemaining>0)state.paidRemaining=Math.max(0,state.paidRemaining-delta);
     if(!canFish()&&state.fishing!=="idle")missFish("Hết thời gian câu. Thuê thêm để tiếp tục.");
   }
-  const now=Date.now();
+  const now=performance.now();
   if(state.fishing==="waiting"&&now>=state.biteAt){
-    state.currentFish=chooseFish();state.fishing="bite";
-    state.biteExpires=now+2600+(RODS[$("rodSelect").value].bonus||0);
-    displayStatus("⚡ CÁ CẮN CÂU! Nhấn nút GIẬT CẦN ngay!");
+    state.fishing="bite";state.biteStartedAt=now;
+    state.biteExpires=now+biteConfig(state.currentFish.id,$("rodSelect").value).windowMs;
+    displayStatus("⚡ CÁ CẮN THẬT! Phao chuyển động dứt khoát — GIẬT CẦN (SPACE)!");
     updateHUD();
-  }else if(state.fishing==="bite"&&now>=state.biteExpires)missFish("Cá đã nhả mồi! Bạn giật cần quá chậm.");
-  else if(state.fishing==="reeling"&&now>=state.reelExpires)missFish("Dây câu chùng rồi, cá đã thoát.");
+  }else if(state.fishing==="bite"&&now>=state.biteExpires){
+    missFish("Cá đã nhả mồi! Bạn không giật kịp khi phao chìm.");
+  }else if(state.fishing==="reeling"&&state.fight){
+    stepFight(state.fight,delta,state.held);
+    if(state.fight.result==="caught")landFish();
+    else if(state.fight.result==="snapped")missFish("Lực căng quá cao! Dây đứt, cá đã thoát.");
+    else if(state.fight.result==="escaped")missFish("Không giữ được lực trong vùng xanh! Cá đã tuột.");
+  }
 }
 canvas.addEventListener("click",e=>{
   if(state.screen!=="game"||state.spot!==null)return;
@@ -448,7 +532,10 @@ let lastHUD=0;
 function frame(t){
   const delta=state.lastTime?Math.min((t-state.lastTime)/1000,.05):.016;state.lastTime=t;
   update(delta);
-  if(state.screen==="game")drawGame(t);
+  if(state.screen==="game"){
+    if(state.spot===null)drawGame(t);
+    else drawFloatScene(t);
+  }
   if(t-lastHUD>200){updateHUD();lastHUD=t}
   requestAnimationFrame(frame);
 }
