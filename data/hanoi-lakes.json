@@ -1,6 +1,6 @@
 {
   "title": "Hanoi Fishing World — lake research seed",
-  "as_of": "2026-11-07",
+  "as_of": "2026-11-08",
   "purpose": "Game scenery candidates only; not a guide to real-life fishing",
   "schema_version": 1,
   "geo_note": "Khu vực are descriptive legacy/common-use names, not official post-2025 administrative addresses. Coordinates purposely omitted pending authoritative geospatial verification.",
@@ -197,7 +197,7 @@
       "name": "Hồ Bảy Mẫu",
       "area": "Công viên Thống Nhất",
       "category": "noi_do",
-      "scene_priority": "backlog",
+      "scene_priority": "mvp",
       "visual_motifs": [
         "đảo",
         "cây xanh",

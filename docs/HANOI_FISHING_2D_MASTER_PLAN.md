@@ -154,17 +154,22 @@ Constraints:
 - Sau reload/reconnect, kết quả cá, đồ và xu không nhân đôi; rời hồ trả spot đúng.
 - Kiểm tra fps/mobile, an toàn data/anti-cheat và chat spam.
 
-## 12. Quyết định chưa chốt (không cản việc dựng plan)
+## 12. Các quyết định đã chốt và câu hỏi còn mở
 
-- Phong cách hình ảnh: pixel art / hoạt hình vẽ tay / isometric nhẹ (MVP hiện tạm chọn top-down).
+- **ĐÃ CHỐT: Pixel Art hiện đại, sạch, màu tươi**, world map và lake scene đều top-down **2D**; UI hiện đại kết hợp đồ hoạ thế giới pixel. Xem [Pixel Art Style Guide](./PIXEL_ART_STYLE_GUIDE.md).
 - Phí sau 5 phút: bao nhiêu xu/bao nhiêu phút, và có lựa chọn dừng ngay hay gia hạn tự động (đề xuất chỉ xác nhận thủ công).
 - Quy tắc nhận lại 5 phút miễn phí: mỗi lượt/ngày/hồ và cooldown chống exploit.
 - Số hồ playable ở launch ngoài Bảy Mẫu; số phòng mở đồng thời và thuật toán chia phòng.
 - Có NPC trang trí hay khán giả luôn là người thật (plan mặc định 30 khán giả là người thật).
 - Các tỉ lệ cá, chi phí mồi và nâng cấp: dữ liệu thử nghiệm, chưa phê duyệt.
 
-## 13. Giới hạn triển khai và Git
+## 13. Triển khai nguyên mẫu và Git
 
-Nhánh trước tên plan/hanoi-fishing-3d là tên lịch sử; kế hoạch chính thức bây giờ là tài liệu này (**2D**). PR plan tiếp tục ở trạng thái draft cho đến khi code nền 2D được phát triển/test. Kế hoạch không đồng nghĩa website game đã chạy. Khi bắt đầu lập trình, loại bỏ UI/code 50 landing page cũ từ cây nguồn của sản phẩm mới theo yêu cầu chuyển đổi toàn bộ; không force-push/xóa lịch sử Git.
+Nhánh trước tên plan/hanoi-fishing-3d là tên lịch sử; kế hoạch chính thức bây giờ là tài liệu này (**2D**). Đã chuẩn bị mã prototype static Pixel Art 2D với bản đồ 28 hồ và một cảnh chơi cục bộ cho Hồ Bảy Mẫu. Bản chơi **chưa có server online**, 15+30 là giới hạn mục tiêu; tiền xu/thuê chỉ là demo, cần thay bằng giao dịch server trước khi ra mắt. Khi bắt đầu lập trình, loại bỏ UI/code 50 landing page cũ từ cây nguồn của sản phẩm mới theo yêu cầu chuyển đổi toàn bộ; không force-push/xóa lịch sử Git.
 
 **Tài liệu liên quan:** data/hanoi-lakes.json (seed hồ); kế hoạch cũ docs/HANOI_FISHING_3D_PLAN.md chỉ còn để chuyển hướng/đọc lịch sử.
+
+
+## 14. Ghi chú triển khai 2026-11-08
+
+Đã chọn thiết kế **Pixel Art** (không 3D). Bản prototype frontend gồm bản đồ chọn hồ, top-down scene Bảy Mẫu, nhân vật di chuyển, 15 vị trí, minigame 10 loài, ba loại cần và năm phút miễn phí trong phiên demo. Mọi thông số giả lập sẽ được cấu hình ở server sau khi xây multiplayer. Không giới thiệu bản prototype như game online hoàn chỉnh.
