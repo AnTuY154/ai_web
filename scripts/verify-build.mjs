@@ -3,7 +3,7 @@ import { readFile, stat } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 const root=dirname(dirname(fileURLToPath(import.meta.url)));
-const files=["index.html","app.js","styles.css","data/hanoi-lakes.json"];
+const files=["index.html","app.js","fishing-engine.mjs","styles.css","data/hanoi-lakes.json"];
 for(const file of files){
   const [source,built]=await Promise.all([
     readFile(join(root,file)),

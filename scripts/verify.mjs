@@ -14,13 +14,19 @@ for(const lake of data.lakes){
 }
 assert.ok(ids.has("bay-mau"),"sample lake Bảy Mẫu must exist");
 const html=await readFile(new URL("../index.html",import.meta.url),"utf8");
-for(const id of ["mapScreen","mapFrame","gameScreen","gameCanvas","castBtn","fishList","rentBtn"]){
+for(const id of ["mapScreen","mapFrame","gameScreen","gameCanvas","gameLayout","fishingView","floatCanvas","seatNumber","biteBanner","fightPanel","safeBand","tensionMarker","fightClock","fishingStatus","castBtn","reelBtn","fishList","rentBtn"]){
   assert.ok(html.includes('id="'+id+'"'),"missing frontend id "+id);
 }
 const js=await readFile(new URL("../app.js",import.meta.url),"utf8");
 assert.ok(js.includes("MAX_ANGLERS=15"),"15-spot rule");
 assert.ok(js.includes("MAX_SPECTATORS=30"),"30-spectator rule");
 assert.ok(js.includes("FREE_SECONDS=300"),"5-minute free rule");
+assert.ok(js.includes("makeFight("),"must enter tension mini-game after a strike");
+assert.ok(js.includes("drawFloatScene("),"must render float close-up");
+assert.ok(js.includes("Space"),"Space controls must exist");
+for(const found of js.matchAll(/\$\("([\w-]+)"\)/g)){
+  assert.ok(html.includes('id="'+found[1]+'"'),"missing HTML ID referenced by JS: "+found[1]);
+}
 const count=(js.match(/rarity:"(common|rare|epic)"/g)||[]).length;
 assert.equal(count,10,"ten fish species");
 const vercel=JSON.parse(await readFile(new URL("../vercel.json",import.meta.url),"utf8"));
