@@ -1,29 +1,15 @@
 {
-  "name": "ai-web-50-local-stores",
-  "version": "1.0.0",
+  "name": "hanoi-fishing-world",
+  "version": "0.1.0",
   "private": true,
-  "packageManager": "pnpm@11.25.0",
-  "description": "50 independent Next.js landing pages for local retail stores around Ha Noi",
-  "workspaces": [
-    "sites/*"
-  ],
+  "description": "2D Pixel Art fishing game prototype set around Hanoi lakes",
+  "type": "module",
   "scripts": {
-    "generate": "node scripts/generate-sites.mjs",
-    "validate": "node scripts/validate-sites.mjs",
-    "build:all": "node scripts/build-all.mjs"
-  },
-  "dependencies": {
-    "next": "^16.4.0",
-    "react": "^19.3.0",
-    "react-dom": "^19.3.0"
-  },
-  "devDependencies": {
-    "@types/node": "^24.10.0",
-    "@types/react": "^19.2.0",
-    "@types/react-dom": "^19.2.0",
-    "typescript": "^5.9.0"
+    "dev": "node server.mjs",
+    "start": "node server.mjs",
+    "test": "node scripts/verify.mjs && node --check app.js && node --check server.mjs"
   },
   "engines": {
-    "node": ">=20.9.0"
+    "node": ">=20"
   }
 }
