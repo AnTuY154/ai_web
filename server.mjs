@@ -8,6 +8,7 @@ const allowed = new Map([
   ["/index.html",["index.html","text/html; charset=utf-8"]],
   ["/styles.css",["styles.css","text/css; charset=utf-8"]],
   ["/app.js",["app.js","text/javascript; charset=utf-8"]],
+  ["/fishing-engine.mjs",["fishing-engine.mjs","text/javascript; charset=utf-8"]],
   ["/data/hanoi-lakes.json",["data/hanoi-lakes.json","application/json; charset=utf-8"]]
 ]);
 const port = Number(process.env.PORT || 3000);
