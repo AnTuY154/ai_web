@@ -425,6 +425,132 @@ function drawAvatar(x,y,time){
     rect(x+12,y-28,3,34,"#634b33");rect(x+13,y-32,3,7,"#f9dfa0");
   }
 }
+// Dedicated pixel-art float close-up. A separate view opens when the player takes a seat.
+const floatBackground=document.createElement("canvas");
+floatBackground.width=960;floatBackground.height=520;
+const fb=floatBackground.getContext("2d");
+fb.imageSmoothingEnabled=false;
+function fpx(c,x,y,w,h,color){
+  c.fillStyle=color;c.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h));
+}
+function createFloatBackground(){
+  fpx(fb,0,0,960,520,"#6ab6c3");
+  for(let i=0;i<7;i++){
+    const colors=["#a9d2b5","#a1cebd","#97c9bf","#90c5c0","#87c3c0","#76b8bf","#6ab6c3"];
+    fpx(fb,0,i*24,960,25,colors[i]);
+  }
+  // Hanoi lakeside promenade in the distance.
+  fpx(fb,0,142,960,30,"#a2be83");
+  fpx(fb,0,163,960,26,"#79aa77");
+  fpx(fb,0,181,960,15,"#d0c28b");
+  for(let i=0;i<19;i++){
+    const x=18+i*56+seed01(81+i)*22;
+    const height=25+seed01(90+i)*32;
+    fpx(fb,x+12,169-height/3,9,height,"#635749");
+    fpx(fb,x,135-height,37,35,"#4b835f");
+    fpx(fb,x+6,126-height,24,24,"#6a9c68");
+    fpx(fb,x+10,121-height,13,12,"#88b479");
+  }
+  fpx(fb,0,194,960,326,"#4799b0");
+  for(let y=198;y<520;y+=11){
+    fpx(fb,0,y,960,4,(Math.floor(y/11)%3===0)?"#57a7b7":(Math.floor(y/11)%3===1)?"#55a2b5":"#4e9fb3");
+  }
+  for(let i=0;i<320;i++){
+    const x=seed01(i*19+53)*960,y=208+seed01(i*23+8)*300;
+    const width=5+Math.round(seed01(i+707)*34);
+    fpx(fb,x,y,width,2,seed01(i*11)>.4?"#7fc3c4":"#5cb0bc");
+  }
+  // Stone dock and pixel fishermen's platform, foreground left.
+  fpx(fb,0,368,205,152,"#79624a");fpx(fb,0,376,197,145,"#ae9169");
+  for(let y=386;y<520;y+=18){
+    fpx(fb,0,y,188,4,"#826f56");
+    for(let x=12;x<180;x+=53)fpx(fb,x+(y%37),y+8,8,4,"#bda279");
+  }
+  fpx(fb,164,369,26,150,"#5c493d");fpx(fb,153,364,56,13,"#d3b181");
+  fpx(fb,0,357,205,17,"#d6b77c");
+  for(let i=0;i<10;i++)fpx(fb,i*21,362,12,4,"#ebd498");
+  // Player hand and rod. A curved rod is suggested with chunky segments.
+  fpx(fb,50,360,62,76,"#466e7a");fpx(fb,66,339,30,34,"#ecc494");
+  fpx(fb,91,321,35,19,"#ecc494");
+  fpx(fb,120,307,23,15,"#d19b70");
+  fb.strokeStyle="#544b3c";fb.lineWidth=8;
+  fb.beginPath();fb.moveTo(136,311);fb.lineTo(166,251);fb.lineTo(217,205);fb.lineTo(260,192);fb.stroke();
+  fb.strokeStyle="#e2ad6c";fb.lineWidth=3;
+  fb.beginPath();fb.moveTo(140,311);fb.lineTo(168,250);fb.lineTo(219,205);fb.lineTo(260,192);fb.stroke();
+  fpx(fb,136,294,24,18,"#f1d598");fpx(fb,140,301,14,5,"#82704f");
+  // Tiny park-label pixel plate and nearby flower.
+  fpx(fb,710,19,231,48,"#285357");fpx(fb,719,26,213,32,"#426f66");
+  fb.fillStyle="#fff0d1";fb.font="bold 15px monospace";fb.textAlign="center";
+  fb.fillText("HỒ BẢY MẪU",825,47);
+}
+function drawFloatScene(now){
+  floatCtx.drawImage(floatBackground,0,0);
+  const status=state.fishing,t=now/1000;
+  // Near-water sparkles continue in all stages.
+  for(let i=0;i<25;i++){
+    const x=208+seed01(120+i)*724,y=225+seed01(i+991)*281;
+    if(Math.floor(t*2+i*3)%4<2)fpx(floatCtx,x,y,12+seed01(i+80)*18,2,"#9bd1ce");
+  }
+  if(status==="idle"){
+    floatCtx.fillStyle="#e2edca";floatCtx.font="bold 18px monospace";floatCtx.textAlign="center";
+    floatCtx.fillText("THẢ CÂU ĐỂ PHÓNG PHAO RA MẶT NƯỚC",578,337);
+    return;
+  }
+  const nibble=status==="waiting"&&now>=state.nibbleAt&&now<=state.nibbleUntil;
+  const after=Math.max(0,now-state.biteStartedAt);
+  const phase=status==="bite"?clamp(after/Math.max(1,state.biteExpires-state.biteStartedAt),0,1):0;
+  const pattern=state.currentFish?biteConfig(state.currentFish.id,$("rodSelect").value).pattern:"dive";
+  let x=596+Math.sin(t*1.9)*3,y=319+Math.sin(t*3.1)*3;
+  let submerge=0,tilt=0;
+  if(nibble){y+=6+Math.abs(Math.sin(t*28))*9;x+=Math.sin(t*22)*5}
+  if(status==="bite"){
+    if(pattern==="dive"){submerge=phase*54;x+=Math.sin(t*7)*10}
+    else if(pattern==="slide"){x+=phase*114;submerge=phase*21}
+    else{y-=phase*36;tilt=phase*1.05;x-=phase*29}
+  }
+  if(status==="reeling"){
+    x+=Math.sin(t*3.8)*27;y+=Math.sin(t*4.8)*10;
+  }
+  const waterY=y;
+  // Dynamic water rings around the float to make small false nibbles readable.
+  for(let i=0;i<3;i++){
+    const r=21+i*18+(t*14+i*7)%22;
+    floatCtx.strokeStyle=nibble?"#f6dc91":status==="bite"?"#f9cf9a":"#9ed5cc";
+    floatCtx.lineWidth=i===0?3:2;floatCtx.beginPath();
+    floatCtx.ellipse(x,waterY+4,r,r*.22,0,0,Math.PI*2);floatCtx.stroke();
+  }
+  if(status==="reeling"){
+    // Dark fish silhouette below the float; purely visual, no fake opponents.
+    const sway=Math.sin(t*5)*15;
+    floatCtx.globalAlpha=.4;fpx(floatCtx,x+50+sway,waterY+42,67,14,"#285b70");
+    fpx(floatCtx,x+112+sway,waterY+35,16,25,"#285b70");floatCtx.globalAlpha=1;
+    for(let i=0;i<5;i++){
+      const bx=x+(seed01(i*8)*72)-36,by=waterY+22+seed01(i+3)*30;
+      fpx(floatCtx,bx,by,5,5,"#a6d9d1");
+    }
+  }
+  // Tight line from player's rod to float.
+  floatCtx.beginPath();floatCtx.moveTo(260,192);
+  floatCtx.quadraticCurveTo(381,165+(status==="reeling"?Math.sin(t*9)*10:23),x,waterY-12+submerge);
+  floatCtx.lineWidth=status==="reeling"?3:1.7;
+  floatCtx.strokeStyle="#fbefd2";floatCtx.stroke();
+  // The tip and white/red cylindrical body move together with the water signal.
+  floatCtx.save();floatCtx.translate(x,waterY+submerge);floatCtx.rotate(tilt);
+  if(submerge>0)floatCtx.globalAlpha=1-phase*.65;
+  fpx(floatCtx,-3,-46,6,25,"#2a4050");fpx(floatCtx,-4,-40,8,20,"#f0c077");
+  fpx(floatCtx,-8,-20,16,25,"#fff2d4");fpx(floatCtx,-8,-19,16,10,"#e46e68");
+  fpx(floatCtx,-6,-2,12,10,"#f7deb0");
+  fpx(floatCtx,-3,8,6,16,"#c8d4ad");
+  floatCtx.restore();
+  if(status==="bite"){
+    // The clear bite cue: decisive sink, lift or sideways movement (not just jitter).
+    const splashX=x+((pattern==="slide")?22:0);
+    for(let i=0;i<7;i++){
+      const sx=splashX+(i-3)*15,sy=waterY+Math.sin(t*20+i)*9;
+      fpx(floatCtx,sx,sy,8,5,i%2?"#ffdea6":"#afe6d8");
+    }
+  }
+}
 function drawGame(now){
   ctx.drawImage(bgCanvas,0,0);
   // Water sparkles are low-cost and deliberately blocky.
@@ -539,4 +665,4 @@ function frame(t){
   if(t-lastHUD>200){updateHUD();lastHUD=t}
   requestAnimationFrame(frame);
 }
-drawFishList();loadLakes();createBackground();updateHUD();renderMapTransform();requestAnimationFrame(frame);
+drawFishList();loadLakes();createBackground();createFloatBackground();updateHUD();renderMapTransform();requestAnimationFrame(frame);
