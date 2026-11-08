@@ -54,3 +54,14 @@ Trong Vercel → Project Settings → Build and Deployment / General:
 - Nếu giao diện hiện nhưng game không load, mở Developer Tools → Network/Console để kiểm tra `/app.js`, `/styles.css`, `/data/hanoi-lakes.json` phải trả 200 và đúng MIME; kiểm tra bảo vệ deployment, DNS hoặc root directory nếu báo 401/403/404.
 
 GitHub Actions xác nhận **build tĩnh và HTTP smoke test**; không thay cho E2E trên trình duyệt hoặc thử trực tiếp domain Vercel.
+
+## Cơ chế câu cá mới: phao phản xạ + giữ lực
+
+Sau khi đến một trong 15 vị trí câu, game chuyển sang giao diện **Fishing Station** riêng với góc nhìn cận cảnh phao trên mặt nước:
+- Bấm **THẢ CÂU** hoặc **Space**, phao nổi và nhấp nhô; nhấp giả không có nghĩa là đã mắc cá.
+- Khi phao **chìm dứt khoát / chạy ngang / nổi bật lên**, bấm **Space** kịp thời để giật cần. Giật sớm hoặc quá muộn sẽ mất cá.
+- Màn hình **thanh lực** xuất hiện: **giữ Space** tăng lực, **thả Space** hạ lực; giữ kim trong vùng xanh từ **5–10 giây**, độ rộng/thời gian thay đổi tùy từng loài cá.
+- Trên điện thoại, **ấn giữ hoặc thả nút ĐIỀU LỰC** tương tự Space.
+- Nút **RỜI GHẾ CÂU** quay về bờ hồ và không làm mới 5 phút miễn phí.
+
+Tài liệu chi tiết, tham khảo thực tế và cân bằng game: [Float Fishing Mechanics](docs/FLOAT_FISHING_MECHANICS.md). Các thông số là gameplay thử nghiệm.
