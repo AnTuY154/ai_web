@@ -58,6 +58,16 @@ test("a player who adjusts Space can land a common fish",()=>{
   assert.ok(f.elapsed>=5&&f.elapsed<=10);
   assert.ok(f.safeSeconds>=f.seconds*.48);
 });
+test("all ten fish remain mechanically catchable with controlled tension",()=>{
+  for(const id of fishIds){
+    const f=makeFight(id);
+    for(let i=0;i<1200&&!f.result;i++){
+      const target=(f.safeLeft+f.safeRight)/2;
+      stepFight(f,.016,f.tension<target);
+    }
+    assert.equal(f.result,"caught",id+" must be winnable by skilled reel control");
+  }
+});
 test("cannot continue updating a finished battle",()=>{
   const f=makeFight("ro-phi");
   f.result="caught";stepFight(f,1,true);
