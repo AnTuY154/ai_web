@@ -7,7 +7,9 @@
   "scripts": {
     "dev": "node server.mjs",
     "start": "node server.mjs",
-    "test": "node scripts/verify.mjs && node --check app.js && node --check server.mjs"
+    "build": "npm run test && node scripts/build.mjs && node scripts/verify-build.mjs",
+    "test": "node scripts/verify.mjs && node --check app.js && node --check server.mjs && node --check scripts/build.mjs && node --check scripts/smoke.mjs && node --check scripts/verify-build.mjs && node scripts/smoke.mjs",
+    "test:build": "node scripts/verify-build.mjs"
   },
   "engines": {
     "node": ">=20"
