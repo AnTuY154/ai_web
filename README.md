@@ -41,3 +41,16 @@ Có thể dùng bất kỳ static HTTP server nào; không mở bằng file:// v
 ## Nguyên tắc dữ liệu
 
 Các hồ có thật được dùng làm **bối cảnh trò chơi hư cấu**, không hàm ý được phép câu cá tại địa điểm thật. Danh sách 28 hồ chỉ là nguồn khởi tạo có ghi chú kiểm chứng, chưa phải đầy đủ toàn bộ hồ Hà Nội.
+
+## Triển khai Vercel (cấu hình production)
+
+`vercel.json` ở root cố định 3 thiết lập: Framework Preset **Other**, Build Command `npm run build`, Output Directory **dist**. Đây là website HTML/CSS/JS tĩnh, **không phải** Next.js hay Node server chạy trên Vercel.
+
+Trong Vercel → Project Settings → Build and Deployment / General:
+- **Root Directory:** để trống / `.` (gốc repo `ai_web`, **không** phải `sites/...` cũ).
+- **Production Branch:** `main`.
+- `vercel.json` sẽ ghi đè build command, framework và output directory; không cần `node server.mjs` trên Vercel.
+- Sau commit mới, chạy **Redeploy** production. Nếu vẫn thấy 404, xem Vercel → Deployment → Build Logs & Source/Output và xác nhận `index.html`, `app.js`, `styles.css`, `data/hanoi-lakes.json` nằm ở root của output.
+- Nếu giao diện hiện nhưng game không load, mở Developer Tools → Network/Console để kiểm tra `/app.js`, `/styles.css`, `/data/hanoi-lakes.json` phải trả 200 và đúng MIME; kiểm tra bảo vệ deployment, DNS hoặc root directory nếu báo 401/403/404.
+
+GitHub Actions xác nhận **build tĩnh và HTTP smoke test**; không thay cho E2E trên trình duyệt hoặc thử trực tiếp domain Vercel.
