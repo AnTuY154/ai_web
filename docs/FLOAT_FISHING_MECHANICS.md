@@ -1,4 +1,4 @@
-# Hanoi Fishing World · Cơ chế câu phao & kéo lực (Pixel Art 2D)
+# Hanoi Fishing World · Câu phao & canh Space theo nhịp (Pixel Art 2D)
 
 **Triển khai nguyên mẫu tháng 11/2026.** Bản chơi đơn, xu và kết quả demo local (không phải kết quả server authoritative).
 
@@ -11,50 +11,49 @@ Trong **game**:
 2. Nhấn **THẢ CÂU** hoặc **Space** (nút cảm ứng trên điện thoại).
 3. Phao luôn có dao động theo sóng nhỏ. Trước khi cắn thật xuất hiện **đợt nhấp giả**; giật quá sớm sẽ mất lượt.
 4. Sau 4,2–8,1 giây (đề xuất demo), phao có một trong ba tín hiệu: **lặn sâu**, **bị kéo ngang**, hoặc **nổi cao**. Phải bấm **Space đúng trong cửa sổ** khoảng 0,84–1,41 giây (tùy cá và cần).
-5. Bấm quá muộn cá bỏ chạy; bấm đúng chuyển sang **giữ lực kéo cá**.
+5. Bấm quá muộn cá bỏ chạy; bấm đúng chuyển sang **minigame kim tự chạy ngang**.
 
 Thời gian và tín hiệu được điều chỉnh để có gameplay vui, không phải mô phỏng khoa học hay quy tắc câu thực tế cho mọi loài.
 
-## 2. Giữ lực như trong các game câu cá
+## 2. Thanh lực ở chính giữa màn hình, kim chạy qua lại
 
-[How to play Fishing World](https://fishing-world-game.com/html/howtoplay.php) mô tả việc điều chỉnh lực kéo: kéo mạnh làm dây căng; buông giúp dây chùng trở lại, cá lớn vùng vẫy. [Adventure Academy Fishing](https://support.adventureacademy.com/hc/en-us/articles/360048271453-How-does-fishing-work) cũng có thao tác giữ/thả để giữ lực trong vùng an toàn.
+Phiên bản được chủ dự án xác nhận sử dụng **cơ chế bấm Space theo nhịp** (khác với kiểu giữ/thả lực của Fishing World và Adventure Academy). Sau khi giật phao đúng thời điểm:
 
-Trong nguyên mẫu:
-- **Giữ Space** (giữ nút trên điện thoại) làm **kim lực tăng**.
-- **Thả Space** làm **kim lực giảm**.
-- Vùng xanh là vùng chịu lực tốt; quá cao gây đứt dây, quá thấp cá tuột.
-- Mỗi loài có thời lượng **5–10 giây**, độ rộng vùng xanh và độ vùng vẫy riêng; độ khó tăng dần theo thứ tự dưới đây.
-- Vùng xanh dao động nhẹ theo nhịp vùng vẫy của cá. Chạm màu đỏ một thoáng vẫn có thể cứu; lỗi kéo dài bị mất cá. Kết thúc đủ thời gian mà không giữ ổn định đủ cũng mất cá.
-- **Cần tay** cho vùng xanh rộng thêm 3 điểm, **cần máy** làm lực biến đổi dịu hơn và cho thêm thời gian giật, **cần lure** hẹp hơn 2 điểm và cửa sổ giật ngắn hơn.
+- Một **bảng Pixel Art nổi cố định ở giữa viewport** xuất hiện trên nền hồ được làm tối nhẹ, vẫn thấy nước phía sau.
+- Một **kim sáng tự di chuyển từ trái sang phải, đến biên lại quay về trái**, không phụ thuộc việc đang giữ phím.
+- **Bấm Space mỗi lần kim chạm vùng xanh** để ghi một nhịp. Giữ Space không tự ghi thêm nhịp; mỗi lần quét chỉ tính tối đa một điểm.
+- **Bấm ngoài vùng xanh** là trượt. **4 lần trượt** thì cá thoát. Không đạt đủ nhịp trước khi đồng hồ **5–10 giây** hết cũng mất cá.
+- Đạt đủ nhịp và hết thời gian thì bắt được cá. Vùng xanh có dao động nhẹ để tạo thử thách; cá càng khó, **kim càng nhanh, vùng xanh càng hẹp, cần nhiều nhịp hơn và thời gian dài hơn**.
+- Trên điện thoại, **chạm từng nhịp** vào nút **BẤM ĐÚNG NHỊP** ở chính giữa màn hình thay cho Space.
 
-| Loài | Nhóm | Thời gian | Chiều rộng vùng xanh cơ bản |
-|---|---|---:|---:|
-| Rô phi | Thường | 5,0 s | 43% |
-| Rô đồng | Thường | 5,3 s | 41% |
-| Diếc | Thường | 5,6 s | 39% |
-| Trôi | Thường | 6,0 s | 37% |
-| Mè trắng | Thường | 6,3 s | 35% |
-| Chép | Hiếm | 7,0 s | 30% |
-| Trắm cỏ | Hiếm | 7,8 s | 27% |
-| Trê | Hiếm | 8,1 s | 25% |
-| Trắm đen | Cực hiếm | 9,4 s | 20% |
-| Cá quả | Cực hiếm | 10,0 s | 18% |
+| Loài | Nhóm | Thời gian | Độ rộng xanh cơ bản | Vận tốc kim (điểm/s) | Số nhịp cần |
+|---|---|---:|---:|---:|---:|
+| Rô phi | Thường | 5,0 s | 43% | 78 | 2 |
+| Rô đồng | Thường | 5,3 s | 41% | 84 | 2 |
+| Diếc | Thường | 5,6 s | 39% | 88 | 3 |
+| Trôi | Thường | 6,0 s | 37% | 92 | 3 |
+| Mè trắng | Thường | 6,3 s | 35% | 96 | 3 |
+| Chép | Hiếm | 7,0 s | 30% | 105 | 4 |
+| Trắm cỏ | Hiếm | 7,8 s | 27% | 113 | 4 |
+| Trê | Hiếm | 8,1 s | 25% | 122 | 5 |
+| Trắm đen | Cực hiếm | 9,4 s | 20% | 134 | 6 |
+| Cá quả | Cực hiếm | 10,0 s | 18% | 145 | 7 |
 
-Đây là **tham số thiết kế**, không phải dữ liệu sức kéo thật của từng loài.
+**Hiệu ứng cần:** cần tay rộng vùng xanh thêm 3 điểm; cần máy làm kim chạy chậm ~8%; lure nhanh ~6% và thu hẹp vùng xanh 2 điểm. Đây là thông số balance game để chơi thử, không phải sức kéo sinh học.
 
 ## 3. UI/UX
 
 - World map và khu chờ hồ vẫn có 15 spot; click một spot mở riêng **Fishing Station** với khung nhìn phao lớn, tên hồ, số spot, thời gian miễn phí còn lại, chọn cần/mồi, nút câu và bảng lực.
-- Trên desktop dùng **Space**; trên mobile giữ nút lớn để tăng lực, nhả để giảm.
+- Trên desktop bấm **Space từng nhịp**; trên mobile chạm nút lớn **BẤM ĐÚNG NHỊP**. Thanh lực luôn ở **giữa viewport**, cả trên mobile.
 - Cảnh báo chuyển động phao và thanh lực có chữ rõ ràng, không chỉ phân biệt bằng màu.
 - Bỏ ghế đưa trở lại bản đồ hồ, hủy pha câu hiện tại; đồng hồ miễn phí không reset.
 
 ## 4. Cấu trúc và xác nhận
 
-- \`fishing-engine.mjs\`: hàm thuần \`makeFight\`, \`stepFight\`, \`biteConfig\`; không phụ thuộc DOM nên kiểm thử Node được.
+- \`fishing-engine.mjs\`: hàm thuần \`makeFight\`, \`stepFight\`, \`strikeFight\`, \`biteConfig\`; không phụ thuộc DOM nên kiểm thử Node được.
 - \`app.js\`: kết nối phao Canvas, trạng thái \`idle → waiting → bite → reeling → caught/missed\`, Space + pointer input.
 - \`index.html\`/\`styles.css\`: Fishing Station Pixel Art riêng.
-- \`scripts/fishing-engine.test.mjs\`: test đơn vị dữ liệu 10 cá, lực khi giữ/thả, cá tuột nếu không kéo, đứt nếu cứ giữ, và kịch bản có kỹ năng câu được cá.
+- \`scripts/fishing-engine.test.mjs\`: test đơn vị cho 10 cá, kim tự chạy hai chiều, chống spam nhịp, giới hạn 4 lần bấm hụt và kịch bản điều khiển đúng nhịp thắng tất cả cá.
 - \`npm run build\`: kiểm tra game, module JS, HTTP assets rồi đóng gói \`dist/\` cho Vercel.
 
 **Hạn chế:** Chưa có đồng bộ nhiều người / server authoritative, thanh toán, lưu lịch sử. Độ khó và thời gian giật sẽ tiếp tục được cân bằng dựa trên chơi thử; không có chế độ auto-catch.
