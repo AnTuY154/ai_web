@@ -59,6 +59,7 @@ export function stepFight(fight,seconds){
 // during the same sweep cannot farm points.
 export function strikeFight(fight){
   if(fight.result)return "finished";
+  if(fight.hits>=fight.targetHits)return "complete";
   const inside=fight.cursor>=fight.safeLeft&&fight.cursor<=fight.safeRight;
   if(inside){
     if(fight.pass===fight.lastHitPass)return "duplicate";
