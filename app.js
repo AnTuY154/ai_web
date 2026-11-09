@@ -282,6 +282,14 @@ $("rentBtn").addEventListener("click",()=>{
   displayStatus("Đã gia hạn 5 phút bằng xu demo. Chúc bạn câu vui!");
   updateHUD();
 });
+function syncFightMeter(){
+  if(state.fishing!=="reeling"||!state.fight)return;
+  const f=state.fight;
+  $("safeBand").style.left=f.safeLeft.toFixed(2)+"%";
+  $("safeBand").style.width=f.width+"%";
+  $("tensionMarker").style.left=f.cursor.toFixed(2)+"%";
+  $("tensionTrack").setAttribute("aria-valuenow",String(Math.round(f.cursor)));
+}
 function updateHUD(){
   $("coins").textContent=state.coins;
   $("anglerCount").textContent=state.spot===null?0:1;
@@ -309,10 +317,7 @@ function updateHUD(){
   $("fightScrim").classList.toggle("hidden",stage!=="reeling");
   if(state.fight&&stage==="reeling"){
     const f=state.fight;
-    $("safeBand").style.left=f.safeLeft.toFixed(2)+"%";
-    $("safeBand").style.width=f.width+"%";
-    $("tensionMarker").style.left=f.cursor.toFixed(2)+"%";
-    $("tensionTrack").setAttribute("aria-valuenow",String(Math.round(f.cursor)));
+    syncFightMeter();
     $("fightClock").textContent=Math.max(0,f.seconds-f.elapsed).toFixed(1)+"s";
     $("fishFightName").textContent="🐟 "+state.currentFish.name+" · "+f.seconds+" giây · vùng xanh "+f.width+"% · "+f.targetHits+" nhịp";
     $("fightStability").style.width=Math.round(100*f.hits/f.targetHits)+"%";
@@ -670,6 +675,7 @@ let lastHUD=0;
 function frame(t){
   const delta=state.lastTime?Math.min((t-state.lastTime)/1000,.05):.016;state.lastTime=t;
   update(delta);
+  if(state.fishing==="reeling")syncFightMeter();
   if(state.screen==="game"){
     if(state.spot===null)drawGame(t);
     else drawFloatScene(t);
