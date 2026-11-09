@@ -33,6 +33,27 @@ assert.match(css,/translate\(-50%,-50%\)/,"meter must be centered in both axes")
 for(const found of js.matchAll(/\$\("([\w-]+)"\)/g)){
   assert.ok(html.includes('id="'+found[1]+'"'),"missing HTML ID referenced by JS: "+found[1]);
 }
+// A successful catch must show a real local fish sprite (never a missing image).
+for(const id of ["catchSuccessModal","catchSuccessCard","catchSuccessTitle","catchSuccessImage","catchSuccessName","catchSuccessRarity","catchSuccessCoins","catchSuccessPoints","catchSuccessClose"]){
+  assert.ok(html.includes('id="'+id+'"'),"catch result is missing "+id);
+}
+assert.match(html,/id="catchSuccessModal"[^>]*role="dialog"[^>]*aria-modal="true"/,"catch result must be an accessible dialog");
+assert.match(js,/function showCatchSuccess\(fish\)/,"show catch result function missing");
+assert.match(js,/function closeCatchSuccess\(continueFishing=false\)/,"continue fishing handler missing");
+assert.match(js,/showCatchSuccess\(fish\);/,"successful catch must trigger fish result");
+assert.match(js,/state\.catchModalOpen/,"result dialog must guard keyboard input");
+assert.match(css,/\.catch-success-modal\s*\{[^}]*position:fixed/,"result dialog must cover viewport");
+const fishIds=["ro-phi","ro-dong","diec","troi","me-trang","chep","tram-co","tre","tram-den","ca-qua"];
+const spriteBodies=[];
+for(const id of fishIds){
+  const svg=await readFile(new URL("../assets/fish/"+id+".svg",import.meta.url),"utf8");
+  assert.match(svg,/<svg\s/,"missing SVG root: "+id);
+  assert.match(svg,/shape-rendering="crispEdges"/,"fish sprite must be crisp pixel art: "+id);
+  assert.match(svg,/<title>/,"fish needs accessible title: "+id);
+  assert.doesNotMatch(svg,/<script\b|<foreignObject\b|(?:href|src)="https?:\/\//i,"fish sprite must not contain scripts or external image resources: "+id);
+  spriteBodies.push(svg);
+}
+assert.equal(new Set(spriteBodies).size,10,"all 10 fish must use distinct art assets");
 const count=(js.match(/rarity:"(common|rare|epic)"/g)||[]).length;
 assert.equal(count,10,"ten fish species");
 const vercel=JSON.parse(await readFile(new URL("../vercel.json",import.meta.url),"utf8"));

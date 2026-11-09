@@ -13,6 +13,7 @@ const FISH = [
   {id:"tram-den",name:"Trắm đen",rarity:"epic",reward:48},
   {id:"ca-qua",name:"Cá quả",rarity:"epic",reward:55}
 ];
+const FISH_SPRITES = Object.freeze(Object.fromEntries(FISH.map(f=>[f.id,"./assets/fish/"+f.id+".svg"])));
 const RODS = {
   hand:{name:"Cần tay",bonus:0,reelBonus:0},
   reel:{name:"Cần máy",bonus:800,reelBonus:1},
@@ -25,7 +26,7 @@ const state={
   avatar:{x:456,y:479}, pressed:new Set(), gotoSpot:null, gotoPoint:null, spot:null,
   freeRemaining:FREE_SECONDS, paidRemaining:0, freeUsed:false,
   fishing:"idle", biteAt:0, biteStartedAt:0, biteExpires:0, nibbleAt:0, nibbleUntil:0,
-  currentFish:null, fight:null, lastCatch:null,
+  currentFish:null, fight:null, lastCatch:null, catchModalOpen:false,
   caught:0, score:0, fishCounts:Object.fromEntries(FISH.map(f=>[f.id,0])),
   mapZoom:1, mapDX:0, mapDY:0, mapDragging:false, lastTime:0
 };
@@ -178,6 +179,7 @@ function occupySpot(n){
   updateHUD();
 }
 function releaseSpot(){
+  closeCatchSuccess(false);
   state.gotoSpot=null;state.spot=null;state.fishing="idle";state.currentFish=null;
   state.fight=null;
   $("fishingView").classList.add("hidden");
@@ -201,7 +203,7 @@ function chooseFish(){
 }
 function canFish(){return state.spot!==null&&(state.freeRemaining>0||state.paidRemaining>0)}
 function castLine(){
-  if(state.fishing!=="idle"||!canFish())return;
+  if(state.catchModalOpen||state.fishing!=="idle"||!canFish())return;
   const now=performance.now();
   state.fishing="waiting";state.currentFish=chooseFish();state.fight=null;
   state.nibbleAt=now+950+Math.random()*1100;
@@ -231,9 +233,42 @@ function landFish(){
   $("lastCatch").textContent="🎉 "+message;
   $("catchTier").textContent=tier;
   drawFishList();updateHUD();
+  showCatchSuccess(fish);
 }
+function rarityLabel(rarity){
+  return rarity==="epic"?"CỰC HIẾM":rarity==="rare"?"HIẾM":"PHỔ BIẾN";
+}
+function showCatchSuccess(fish){
+  // Only real, successfully landed fish can show this success dialog.
+  if(!fish||!FISH_SPRITES[fish.id])return;
+  const fishName=fish.name.startsWith("Cá ")?fish.name:"Cá "+fish.name;
+  $("catchSuccessCard").dataset.rarity=fish.rarity;
+  $("catchSuccessImage").src=FISH_SPRITES[fish.id];
+  $("catchSuccessImage").alt="Hình cá pixel-art: "+fishName;
+  $("catchSuccessName").textContent=fishName;
+  $("catchSuccessRarity").textContent=rarityLabel(fish.rarity);
+  $("catchSuccessCoins").textContent="+"+fish.reward+" xu";
+  $("catchSuccessPoints").textContent="+"+(fish.reward*10)+" điểm";
+  state.catchModalOpen=true;
+  $("catchSuccessModal").classList.remove("hidden");
+  // Keep focus and keyboard input inside the result, not the fishing game.
+  $("gameScreen").inert=true;
+  $("catchSuccessClose").focus({preventScroll:true});
+}
+function closeCatchSuccess(continueFishing=false){
+  if(!state.catchModalOpen)return;
+  state.catchModalOpen=false;
+  $("catchSuccessModal").classList.add("hidden");
+  $("gameScreen").inert=false;
+  if(state.screen==="game"&&state.spot!==null){
+    if(continueFishing&&canFish())castLine();
+    else if(continueFishing)displayStatus("Hết thời gian câu. Bạn có thể thuê thêm bằng xu demo để câu tiếp.");
+    $("fishingView").focus({preventScroll:true});
+  }
+}
+$("catchSuccessClose").addEventListener("click",()=>closeCatchSuccess(true));
 function attemptStrike(){
-  if(!canFish())return;
+  if(state.catchModalOpen||!canFish())return;
   if(state.fishing==="idle"){castLine();return}
   if(state.fishing==="waiting"){
     missFish("Giật quá sớm! Phao mới nhấp nhô/thử mồi, cá chưa ngậm chắc.");
@@ -338,6 +373,12 @@ function drawFishList(){
   }
 }
 document.addEventListener("keydown",e=>{
+  if(state.catchModalOpen){
+    if(e.key==="Escape"){e.preventDefault();closeCatchSuccess(false)}
+    else if(e.key==="Tab"){e.preventDefault();$("catchSuccessClose").focus({preventScroll:true})}
+    else if(e.code==="Space"||e.key===" "){e.preventDefault()}
+    return;
+  }
   if(state.screen!=="game")return;
   if(["INPUT","SELECT","TEXTAREA"].includes(document.activeElement.tagName))return;
   if(state.spot!==null){

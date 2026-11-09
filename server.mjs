@@ -11,6 +11,8 @@ const allowed = new Map([
   ["/fishing-engine.mjs",["fishing-engine.mjs","text/javascript; charset=utf-8"]],
   ["/data/hanoi-lakes.json",["data/hanoi-lakes.json","application/json; charset=utf-8"]]
 ]);
+const FISH_IDS=["ro-phi","ro-dong","diec","troi","me-trang","chep","tram-co","tre","tram-den","ca-qua"];
+for(const id of FISH_IDS)allowed.set("/assets/fish/"+id+".svg",["assets/fish/"+id+".svg","image/svg+xml; charset=utf-8"]);
 const port = Number(process.env.PORT || 3000);
 createServer(async (req,res)=>{
   let pathname;

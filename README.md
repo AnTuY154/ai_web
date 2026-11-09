@@ -65,3 +65,14 @@ Sau khi đến một trong 15 vị trí câu, game chuyển sang giao diện **F
 - Nút **RỜI GHẾ CÂU** quay về bờ hồ và không làm mới 5 phút miễn phí.
 
 Tài liệu chi tiết, tham khảo thực tế và cân bằng game: [Float Fishing Mechanics](docs/FLOAT_FISHING_MECHANICS.md). Các thông số là gameplay thử nghiệm.
+
+## Kết quả câu cá thành công
+
+Khi hoàn tất minigame kim Space, game hiện **popup "🎉 CÂU THÀNH CÔNG!"** cố định giữa màn hình, với **hình pixel art đúng loài cá**, tên, nhãn độ hiếm, xu và điểm được cộng. Bộ ảnh có **10 SVG pixel-art khác nhau** tại `assets/fish/`. Ảnh là minh hoạ game được vẽ riêng, không phải ảnh chụp sinh vật ngoài đời.
+
+- Thường: viền xanh lá. Hiếm: vàng. Cực hiếm: tím.
+- Nút **CÂU TIẾP** đóng kết quả và tự thả câu lượt tiếp theo nếu vẫn còn thời gian; khi hết giờ hiển thị hướng dẫn gia hạn xu ảo.
+- **Esc** đóng popup mà chưa thả câu; **Enter** kích hoạt nút CÂU TIẾP; khi popup đang mở thì Space không được phép vô tình khởi tạo lượt câu mới.
+- Trình duyệt và Vercel phục vụ file SVG độc lập; `npm run build` kiểm tra đủ 10 hình ảnh, đúng MIME trên HTTP server.
+
+Bản demo vẫn chưa có tài khoản, lưu lịch sử, multiplayer hay thanh toán tiền thật.

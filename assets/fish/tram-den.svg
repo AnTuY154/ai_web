@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="384" height="224" viewBox="0 0 192 112" shape-rendering="crispEdges" role="img" aria-label="Cá trắm đen kiểu pixel art">
+  <title>Cá trắm đen · Hanoi Fishing World</title>
+  <g opacity=".72"><rect x="5" y="8" width="5" height="3" fill="#8eabb0" opacity="0.16"/><rect x="36" y="21" width="3" height="3" fill="#8eabb0" opacity="0.23"/><rect x="67" y="34" width="3" height="3" fill="#8eabb0" opacity="0.23"/><rect x="98" y="47" width="5" height="3" fill="#8eabb0" opacity="0.16"/><rect x="129" y="60" width="3" height="3" fill="#8eabb0" opacity="0.23"/><rect x="160" y="73" width="3" height="3" fill="#8eabb0" opacity="0.23"/><rect x="15" y="86" width="5" height="3" fill="#8eabb0" opacity="0.16"/><rect x="46" y="15" width="3" height="3" fill="#8eabb0" opacity="0.23"/><rect x="77" y="28" width="3" height="3" fill="#8eabb0" opacity="0.23"/><rect x="108" y="41" width="5" height="3" fill="#8eabb0" opacity="0.16"/><rect x="139" y="54" width="3" height="3" fill="#8eabb0" opacity="0.23"/><rect x="170" y="67" width="3" height="3" fill="#8eabb0" opacity="0.23"/></g>
+  <g stroke="#1b3338" stroke-width="4" stroke-linejoin="miter">
+    <polygon points="47,50 30,43 14,25 10,27 19,56 10,85 15,88 31,69 47,62" fill="#34484c"/>
+    <polygon points="70,42.5 76,22.5 82,31.5 88,18.5 97,29.5 108,23.5 120,34.5 136,42.5" fill="#34484c"/>
+    <polygon points="80,69.5 87,86.5 94,78.5 105,89.5 114,78.5 135,71.5" fill="#34484c"/>
+    <polygon points="45,49 58,45.5 75,37.5 132,37.5 151,46.5 163,44 170,52 168,63 155,65.5 136,74.5 75,74.5 59,68.5 45,63" fill="#515e64"/>
+  </g>
+  <polygon points="62,50.5 86,44.5 136,47.5 160,49 135,44 83,46" fill="#8eabb0" opacity=".67"/>
+  <polygon points="67,64 90,68.5 133,68.5 158,64 126,67" fill="#9bafb1" opacity=".75"/>
+  
+  <rect x="81" y="51" width="7" height="5" fill="#8eabb0" opacity=".42"/><rect x="94" y="51" width="7" height="5" fill="#263a45" opacity=".42"/><rect x="107" y="51" width="7" height="5" fill="#8eabb0" opacity=".42"/><rect x="120" y="51" width="7" height="5" fill="#263a45" opacity=".42"/><rect x="133" y="51" width="7" height="5" fill="#8eabb0" opacity=".42"/><rect x="87" y="55" width="7" height="5" fill="#8eabb0" opacity=".42"/><rect x="100" y="55" width="7" height="5" fill="#263a45" opacity=".42"/><rect x="113" y="55" width="7" height="5" fill="#8eabb0" opacity=".42"/><rect x="126" y="55" width="7" height="5" fill="#263a45" opacity=".42"/><rect x="81" y="60" width="7" height="5" fill="#8eabb0" opacity=".42"/><rect x="94" y="60" width="7" height="5" fill="#263a45" opacity=".42"/><rect x="107" y="60" width="7" height="5" fill="#8eabb0" opacity=".42"/><rect x="120" y="60" width="7" height="5" fill="#263a45" opacity=".42"/><rect x="133" y="60" width="7" height="5" fill="#8eabb0" opacity=".42"/>
+  <polygon points="126,65 97,75 113,82 137,69" fill="#34484c" stroke="#263a45" stroke-width="3"/>
+  <path d="M132 51.5 L128 62 L138 64.5" stroke="#263a45" stroke-width="3" fill="none" opacity=".65"/>
+  <rect x="145" y="46" width="12" height="12" fill="#e4d9ad"/>
+  <rect x="147" y="48" width="8" height="8" fill="#1c333c"/>
+  <rect x="148" y="49" width="3" height="3" fill="#fff5d9"/>
+  <path d="M166 63 h9" stroke="#283d40" stroke-width="3" fill="none"/>
+  
+  <rect x="32" y="55" width="18" height="3" fill="#8eabb0" opacity=".6"/>
+</svg>

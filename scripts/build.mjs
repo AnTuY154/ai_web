@@ -5,7 +5,8 @@ import { fileURLToPath } from "node:url";
 
 const root=dirname(dirname(fileURLToPath(import.meta.url)));
 const dist=join(root,"dist");
-const assets=["index.html","styles.css","app.js","fishing-engine.mjs","data/hanoi-lakes.json"];
+const FISH_IDS=["ro-phi","ro-dong","diec","troi","me-trang","chep","tram-co","tre","tram-den","ca-qua"];
+const assets=["index.html","styles.css","app.js","fishing-engine.mjs","data/hanoi-lakes.json",...FISH_IDS.map(id=>"assets/fish/"+id+".svg")];
 
 const html=await readFile(join(root,"index.html"),"utf8");
 assert.match(html, /src="\.\/app\.js"/, "index.html needs local app.js");
