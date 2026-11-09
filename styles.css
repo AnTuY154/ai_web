@@ -68,3 +68,62 @@ kbd{font:700 12px 'Space Mono',monospace;padding:5px 8px;background:#f8dca0;bord
 @media(max-width:850px){.fishing-layout{grid-template-columns:1fr}.fishing-side{display:grid;grid-template-columns:1fr 1fr}.fishing-control-panel{grid-column:1/-1}.fishing-head{flex-wrap:wrap}.float-instructions{font-size:11px}}
 @media(max-width:540px){.fishing-side{display:flex}.fishing-head h2{font-size:23px}.fishing-head button{width:100%}.float-scene canvas{min-height:300px;object-fit:cover}.fishing-toolbar{font-size:8px}.scene-buoy-caption{top:8px;left:8px;padding:7px;font-size:9px}.float-instructions{align-items:flex-start;flex-direction:column}.fish-scene-bottom{font-size:9px}.fight-panel{padding:17px 11px}.fight-under{font-size:8px}.fight-top h3{font-size:16px}.fight-timer strong{font-size:19px}.fight-progress-row{gap:7px;font-size:9px}.fight-progress-row span:first-child{min-width:82px}.tension-track{height:49px}.fishing-head{gap:14px}}
 @media(prefers-reduced-motion:reduce){.bite-banner{animation:none}}
+
+
+/* v2: centered reflex minigame — the cursor sweeps automatically left↔right. */
+.fight-scrim{position:fixed;inset:0;z-index:98;background:rgba(4,18,26,.69);backdrop-filter:blur(2px)}
+#fightPanel{
+  position:fixed;top:50%;left:50%;z-index:99;
+  width:min(780px,calc(100vw - 32px));
+  max-height:calc(100dvh - 30px);
+  overflow-y:auto;overscroll-behavior:contain;
+  transform:translate(-50%,-50%);
+  background:#102f38;
+  border:5px solid #e5c787;
+  box-shadow:9px 9px 0 #051720,0 0 0 4px #386f65;
+  padding:clamp(16px,3vw,34px);
+}
+#fightPanel .fight-top h3{font-size:clamp(19px,3vw,29px);color:#f9eabd}
+#fightPanel .fight-timer strong{font-size:clamp(20px,3vw,29px)}
+.fight-center-hint{
+  display:flex;align-items:center;justify-content:center;gap:16px;
+  margin:19px 0 28px;letter-spacing:.08em;
+  color:#ffdf98;font:700 12px 'Space Mono',monospace
+}
+.fight-motion{color:#b5ec96;font-size:21px;animation:move-tip .65s ease-in-out infinite alternate}
+.fight-motion:last-child{animation-delay:-.65s}
+@keyframes move-tip{from{transform:translateX(-7px)}to{transform:translateX(7px)}}
+#fightPanel .tension-track{
+  height:70px;margin:34px 6px 13px;
+  background:linear-gradient(90deg,#a74c55 0%,#dfac72 22%,#dec07b 78%,#a74c55 100%);
+  border:5px solid #f6e3ae;box-shadow:5px 5px 0 #091b24;
+}
+#fightPanel .safe-band{
+  background:repeating-linear-gradient(90deg,#338e52 0 15px,#58bd75 15px 30px);
+  border-left:5px solid #daffad;border-right:5px solid #daffad;
+  box-shadow:inset 0 0 0 3px rgba(24,79,48,.22)
+}
+#fightPanel .tension-marker{
+  top:-11px;bottom:-11px;width:9px;
+  background:#fff;box-shadow:0 0 0 3px #ffd274,0 0 18px rgba(255,220,134,.7)
+}
+#fightPanel .tension-guide-left,#fightPanel .tension-guide-right{top:-25px;color:#fad2a1}
+#fightPanel .fight-under{margin-bottom:24px}
+#fightPanel .fight-under kbd{padding:3px 7px;font-size:10px}
+.fight-mistakes{margin:16px 0;color:#ebc6a0;font-size:12px;line-height:1.5}
+.fight-hit-btn{width:100%;min-height:60px;margin:10px 0 6px;font-size:clamp(12px,2vw,16px);touch-action:manipulation}
+.fight-hit-btn:active{background:#f5ca7f;transform:translate(2px,2px)}
+#fightPanel .fight-feedback{min-height:35px;font-size:14px;text-align:center}
+@media(max-width:550px){
+ #fightPanel{width:calc(100vw - 20px);padding:15px;max-height:calc(100dvh - 18px);border-width:3px}
+ #fightPanel .fight-top{align-items:flex-start}
+ #fightPanel .fight-timer small{font-size:8px}
+ .fight-center-hint{font-size:10px;gap:9px;margin:12px 0 20px}
+ #fightPanel .tension-track{height:55px;margin:27px 4px 10px}
+ #fightPanel .fight-under{font-size:8px;gap:9px;line-height:1.6}
+ #fightPanel .fight-top p{font-size:11px}
+ #fightPanel .fight-progress-row{margin:9px 0}
+ .fight-mistakes{font-size:11px;margin:11px 0}
+ .fight-hit-btn{min-height:54px}
+}
+@media(prefers-reduced-motion:reduce){.fight-motion{animation:none}}
