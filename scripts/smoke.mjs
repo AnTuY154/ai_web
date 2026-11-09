@@ -27,6 +27,8 @@ try{
     ["/styles.css","text/css","map-frame"],
     ["/data/hanoi-lakes.json","application/json","bay-mau"]
   ];
+  const fishIds=["ro-phi","ro-dong","diec","troi","me-trang","chep","tram-co","tre","tram-den","ca-qua"];
+  for(const id of fishIds)expected.push(["/assets/fish/"+id+".svg","image/svg+xml","<svg"]);
   for(const [path,type,token] of expected){
     const response=await fetch(base+path);
     assert.equal(response.status,200,path);
