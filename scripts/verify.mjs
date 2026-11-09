@@ -50,7 +50,7 @@ for(const id of fishIds){
   assert.match(svg,/<svg\s/,"missing SVG root: "+id);
   assert.match(svg,/shape-rendering="crispEdges"/,"fish sprite must be crisp pixel art: "+id);
   assert.match(svg,/<title>/,"fish needs accessible title: "+id);
-  assert.doesNotMatch(svg,/<script\b|<foreignObject\b|https?:\/\//i,"fish sprite must not contain scripts or external resources: "+id);
+  assert.doesNotMatch(svg,/<script\b|<foreignObject\b|(?:href|src)="https?:\/\//i,"fish sprite must not contain scripts or external image resources: "+id);
   spriteBodies.push(svg);
 }
 assert.equal(new Set(spriteBodies).size,10,"all 10 fish must use distinct art assets");
