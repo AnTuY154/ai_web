@@ -24,8 +24,6 @@
 .float-scene canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges}
 .scene-buoy-caption{position:absolute;top:17px;left:17px;background:#15373cd9;border:2px solid #80a7a0;color:#ffedc5;padding:9px 14px;font:700 12px 'Space Mono',monospace;display:flex;align-items:center;gap:10px}
 .buoy-dot{color:#ffbd84;font-size:15px}
-.bite-banner{position:absolute;inset:40% 8% auto;text-align:center;padding:13px 10px;background:#ffb96d;color:#27373d;border:5px solid #ffe2a1;box-shadow:7px 7px 0 #214343;font:700 clamp(15px,2.8vw,29px) 'Space Mono',monospace;animation:bite-flash .32s infinite alternate}
-@keyframes bite-flash{from{transform:translateY(0) scale(1)}to{transform:translateY(-4px) scale(1.015)}}
 .float-instructions{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:5px solid #335a57;padding:12px 15px;color:#d9e9c9;background:#1c3c43}
 .key-hint{display:flex;align-items:center;gap:12px;font-size:13px;font-weight:600}
 kbd{font:700 12px 'Space Mono',monospace;padding:5px 8px;background:#f8dca0;border:2px solid #d0ad76;box-shadow:3px 3px 0 #8b7a55;color:#2c3e3e;display:inline-block;white-space:nowrap}
@@ -67,7 +65,7 @@ kbd{font:700 12px 'Space Mono',monospace;padding:5px 8px;background:#f8dca0;bord
 @media(max-width:1150px){.fishing-layout{grid-template-columns:minmax(0,1fr) 285px;gap:14px}}
 @media(max-width:850px){.fishing-layout{grid-template-columns:1fr}.fishing-side{display:grid;grid-template-columns:1fr 1fr}.fishing-control-panel{grid-column:1/-1}.fishing-head{flex-wrap:wrap}.float-instructions{font-size:11px}}
 @media(max-width:540px){.fishing-side{display:flex}.fishing-head h2{font-size:23px}.fishing-head button{width:100%}.float-scene canvas{min-height:300px;object-fit:cover}.fishing-toolbar{font-size:8px}.scene-buoy-caption{top:8px;left:8px;padding:7px;font-size:9px}.float-instructions{align-items:flex-start;flex-direction:column}.fish-scene-bottom{font-size:9px}.fight-panel{padding:17px 11px}.fight-under{font-size:8px}.fight-top h3{font-size:16px}.fight-timer strong{font-size:19px}.fight-progress-row{gap:7px;font-size:9px}.fight-progress-row span:first-child{min-width:82px}.tension-track{height:49px}.fishing-head{gap:14px}}
-@media(prefers-reduced-motion:reduce){.bite-banner{animation:none}}
+
 
 
 /* v2: centered reflex minigame — the cursor sweeps automatically left↔right. */
