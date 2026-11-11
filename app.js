@@ -1,6 +1,6 @@
 import { makeFight, stepFight, strikeFight, biteConfig, clamp } from "./fishing-engine.mjs";
 import { planFloatCast, floatPose } from "./float-behavior.mjs";
-import { BAITS, getBaitInfo, chooseFishByBait } from "./bait-engine.mjs";
+import { getBaitInfo, chooseFishByBait } from "./bait-engine.mjs";
 const $ = (id) => document.getElementById(id);
 const LAKE_FOCUS = "bay-mau";
 const FISH = [
