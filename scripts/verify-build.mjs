@@ -4,7 +4,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 const root=dirname(dirname(fileURLToPath(import.meta.url)));
 const FISH_IDS=["ro-phi","ro-dong","diec","troi","me-trang","chep","tram-co","tre","tram-den","ca-qua"];
-const files=["index.html","app.js","fishing-engine.mjs","float-behavior.mjs","styles.css","data/hanoi-lakes.json",...FISH_IDS.map(id=>"assets/fish/"+id+".svg")];
+const files=["index.html","app.js","fishing-engine.mjs","float-behavior.mjs","bait-engine.mjs","styles.css","data/hanoi-lakes.json",...FISH_IDS.map(id=>"assets/fish/"+id+".svg")];
 for(const file of files){
   const [source,built]=await Promise.all([
     readFile(join(root,file)),
