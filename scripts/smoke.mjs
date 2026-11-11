@@ -25,6 +25,7 @@ try{
     ["/app.js","text/javascript","MAX_ANGLERS=15"],
     ["/fishing-engine.mjs","text/javascript","makeFight"],
     ["/float-behavior.mjs","text/javascript","planFloatCast"],
+    ["/bait-engine.mjs","text/javascript","chooseFishByBait"],
     ["/styles.css","text/css","map-frame"],
     ["/data/hanoi-lakes.json","application/json","bay-mau"]
   ];
