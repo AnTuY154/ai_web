@@ -548,70 +548,60 @@ function createFloatBackground(){
 }
 function drawFloatScene(now){
   floatCtx.drawImage(floatBackground,0,0);
-  const status=state.fishing,t=now/1000;
-  // Near-water sparkles continue in all stages.
-  for(let i=0;i<25;i++){
-    const x=208+seed01(120+i)*724,y=225+seed01(i+991)*281;
-    if(Math.floor(t*2+i*3)%4<2)fpx(floatCtx,x,y,12+seed01(i+80)*18,2,"#9bd1ce");
+  const mode=state.fishing,time=now/1000;
+  // Gentle wind-driven wavelets exist at all times, not just when fish visit.
+  for(let i=0;i<32;i++){
+    const x=205+seed01(120+i)*735+Math.sin(time*.7+i)*7;
+    const y=217+seed01(i+991)*283;
+    if(Math.floor(time*1.5+i*3)%4<3)fpx(floatCtx,x,y,8+seed01(i+80)*19,2,"#87c7c5");
   }
-  if(status==="idle"){
+  if(mode==="idle"){
     floatCtx.fillStyle="#e2edca";floatCtx.font="bold 18px monospace";floatCtx.textAlign="center";
-    floatCtx.fillText("THẢ CÂU ĐỂ PHÓNG PHAO RA MẶT NƯỚC",578,337);
+    floatCtx.fillText("THẢ CÂU ĐỂ ĐẶT PHAO LÊN MẶT NƯỚC",580,345);
     return;
   }
-  const nibble=status==="waiting"&&now>=state.nibbleAt&&now<=state.nibbleUntil;
-  const after=Math.max(0,now-state.biteStartedAt);
-  const phase=status==="bite"?clamp(after/Math.max(1,state.biteExpires-state.biteStartedAt),0,1):0;
   const pattern=state.currentFish?biteConfig(state.currentFish.id,$("rodSelect").value).pattern:"dive";
-  let x=596+Math.sin(t*1.9)*3,y=319+Math.sin(t*3.1)*3;
-  let submerge=0,tilt=0;
-  if(nibble){y+=6+Math.abs(Math.sin(t*28))*9;x+=Math.sin(t*22)*5}
-  if(status==="bite"){
-    if(pattern==="dive"){submerge=phase*54;x+=Math.sin(t*7)*10}
-    else if(pattern==="slide"){x+=phase*114;submerge=phase*21}
-    else{y-=phase*36;tilt=phase*1.05;x-=phase*29}
-  }
-  if(status==="reeling"){
-    x+=Math.sin(t*3.8)*27;y+=Math.sin(t*4.8)*10;
-  }
-  const waterY=y;
-  // Dynamic water rings around the float to make small false nibbles readable.
+  const pose=floatPose(now,state.floatSequence,mode,pattern,state.biteStartedAt,state.biteExpires);
+  const x=596+pose.dx,y=320+pose.dy;
+  const surfaceY=323+Math.sin(time*2.1+(state.floatSequence?.seed??0))*.6;
+  // Movement should be seen by comparing the float with surrounding water:
+  // no special colored rings, sound, text or flashing particles reveal a take.
   for(let i=0;i<3;i++){
-    const r=21+i*18+(t*14+i*7)%22;
-    floatCtx.strokeStyle=nibble?"#f6dc91":status==="bite"?"#f9cf9a":"#9ed5cc";
-    floatCtx.lineWidth=i===0?3:2;floatCtx.beginPath();
-    floatCtx.ellipse(x,waterY+4,r,r*.22,0,0,Math.PI*2);floatCtx.stroke();
+    const radius=21+i*24+(time*13+i*6)%24;
+    const opacity=Math.max(.1,.28+pose.disturbance*.26-i*.09);
+    floatCtx.strokeStyle="rgba(181,229,222,"+opacity+")";
+    floatCtx.lineWidth=2;
+    floatCtx.beginPath();floatCtx.ellipse(x,surfaceY+2,radius,radius*.18,0,0,Math.PI*2);floatCtx.stroke();
   }
-  if(status==="reeling"){
-    // Dark fish silhouette below the float; purely visual, no fake opponents.
-    const sway=Math.sin(t*5)*15;
-    floatCtx.globalAlpha=.4;fpx(floatCtx,x+50+sway,waterY+42,67,14,"#285b70");
-    fpx(floatCtx,x+112+sway,waterY+35,16,25,"#285b70");floatCtx.globalAlpha=1;
-    for(let i=0;i<5;i++){
-      const bx=x+(seed01(i*8)*72)-36,by=waterY+22+seed01(i+3)*30;
-      fpx(floatCtx,bx,by,5,5,"#a6d9d1");
-    }
-  }
-  // Tight line from player's rod to float.
   floatCtx.beginPath();floatCtx.moveTo(260,192);
-  floatCtx.quadraticCurveTo(381,165+(status==="reeling"?Math.sin(t*9)*10:23),x,waterY-12+submerge);
-  floatCtx.lineWidth=status==="reeling"?3:1.7;
-  floatCtx.strokeStyle="#fbefd2";floatCtx.stroke();
-  // The tip and white/red cylindrical body move together with the water signal.
-  floatCtx.save();floatCtx.translate(x,waterY+submerge);floatCtx.rotate(tilt);
-  if(submerge>0)floatCtx.globalAlpha=1-phase*.65;
-  fpx(floatCtx,-3,-46,6,25,"#2a4050");fpx(floatCtx,-4,-40,8,20,"#f0c077");
-  fpx(floatCtx,-8,-20,16,25,"#fff2d4");fpx(floatCtx,-8,-19,16,10,"#e46e68");
-  fpx(floatCtx,-6,-2,12,10,"#f7deb0");
-  fpx(floatCtx,-3,8,6,16,"#c8d4ad");
+  floatCtx.quadraticCurveTo(385,191+Math.sin(time*.9)*13,x,y-51);
+  floatCtx.strokeStyle="#e5dbc4";floatCtx.lineWidth=1.35;floatCtx.stroke();
+
+  // Pixel-art bobber is clipped by the water surface. A proper dive submerges
+  // the red tip rather than moving the whole sprite *on top* of the water.
+  floatCtx.save();
+  floatCtx.beginPath();floatCtx.rect(0,0,960,surfaceY+1);floatCtx.clip();
+  floatCtx.translate(x,y);floatCtx.rotate(pose.rotation);floatCtx.scale(1.48,1.48);
+  fpx(floatCtx,-3,-49,6,23,"#283e4b");
+  fpx(floatCtx,-5,-43,10,12,"#f1d194");
+  fpx(floatCtx,-6,-32,12,9,"#e16463");
+  fpx(floatCtx,-9,-23,18,29,"#f8edcf");
+  fpx(floatCtx,-9,-23,18,10,"#d94f56");
+  fpx(floatCtx,-7,-6,14,13,"#efc9a1");
+  fpx(floatCtx,-3,7,6,14,"#8aa59d");
+  fpx(floatCtx,-5,-34,10,4,"#fae6ad");
   floatCtx.restore();
-  if(status==="bite"){
-    // The clear bite cue: decisive sink, lift or sideways movement (not just jitter).
-    const splashX=x+((pattern==="slide")?22:0);
-    for(let i=0;i<7;i++){
-      const sx=splashX+(i-3)*15,sy=waterY+Math.sin(t*20+i)*9;
-      fpx(floatCtx,sx,sy,8,5,i%2?"#ffdea6":"#afe6d8");
-    }
+
+  // A weak reflection stays below the tip, without hiding water movement.
+  floatCtx.globalAlpha=.21;
+  fpx(floatCtx,x-7,surfaceY+8,14,12+Math.sin(time*3)*2,"#bfd6bf");
+  floatCtx.globalAlpha=1;
+  if(mode==="reeling"){
+    const sway=Math.sin(time*5)*15;
+    floatCtx.globalAlpha=.35;
+    fpx(floatCtx,x+50+sway,surfaceY+44,67,14,"#285b70");
+    fpx(floatCtx,x+112+sway,surfaceY+37,16,25,"#285b70");
+    floatCtx.globalAlpha=1;
   }
 }
 function drawGame(now){
