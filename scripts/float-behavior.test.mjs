@@ -55,3 +55,14 @@ test("fake signals never register as a genuine bite unless the game phase says s
   const real=floatPose(cast.biteAt+1400,cast,"bite","dive",cast.biteAt,cast.biteAt+1700);
   assert.ok(real.dy>50);
 });
+
+test("a sideways line knock looks like a brief rebound, not a sail-away",()=>{
+  const sequence={seed:.3,biteAt:14000,touches:[{at:2500,duration:700,kind:"liner",direction:-1}]};
+  const onset=floatPose(2501,sequence);
+  const peak=floatPose(2850,sequence);
+  const end=floatPose(3201,sequence);
+  assert.ok(peak.dx<onset.dx-8,"temporary knock should drift sideways");
+  assert.ok(Math.abs(peak.dx)<23,"false pull must remain small");
+  assert.ok(Math.abs(end.dx)<7,"the float must return to wave baseline");
+  assert.ok(Math.abs(end.dy)<4.2,"the float must settle vertically as well");
+});
