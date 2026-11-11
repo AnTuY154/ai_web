@@ -24,6 +24,7 @@ try{
     ["/","text/html","Hồ Bảy Mẫu"],
     ["/app.js","text/javascript","MAX_ANGLERS=15"],
     ["/fishing-engine.mjs","text/javascript","makeFight"],
+    ["/float-behavior.mjs","text/javascript","planFloatCast"],
     ["/styles.css","text/css","map-frame"],
     ["/data/hanoi-lakes.json","application/json","bay-mau"]
   ];
