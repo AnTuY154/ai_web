@@ -58,8 +58,9 @@ GitHub Actions xác nhận **build tĩnh và HTTP smoke test**; không thay cho 
 ## Cơ chế câu cá mới: phao phản xạ + thanh Space chạy qua lại
 
 Sau khi đến một trong 15 vị trí câu, game chuyển sang giao diện **Fishing Station** riêng với góc nhìn cận cảnh phao trên mặt nước:
-- Bấm **THẢ CÂU** hoặc **Space**, phao nổi và nhấp nhô; nhấp giả không có nghĩa là đã mắc cá.
-- Khi phao **chìm dứt khoát / chạy ngang / nổi bật lên**, bấm **Space** kịp thời để giật cần. Giật sớm hoặc quá muộn sẽ mất cá.
+- Bấm **THẢ CÂU** hoặc **Space**. Phao chuyển động bởi sóng nước, cá rỉa mồi hoặc va dây; **không hiện bất kỳ chữ, âm thanh hay hiệu ứng nào báo cá cắn**.
+- Hãy tự nhìn **cú chìm sâu / kéo ngang có hướng / nổi cao và nghiêng**, rồi nhấc cần bằng **Space**. Chỉ khi người chơi nhấc cần mới biết có mắc cá hay không. Bỏ lỡ cắn thật thì phao lặng lẽ ổn định và tiếp tục chờ, không có thông báo bí mật.
+- Bản mô phỏng phân biệt sóng nhẹ, nhấp giả, va dây và ba kiểu cá lấy mồi bằng chuyển động phao; thời điểm xuất hiện được xáo ngẫu nhiên.
 - Một **thanh lực lớn nổi chính giữa màn hình** xuất hiện; **kim tự chạy trái ↔ phải**. Người chơi **bấm Space từng nhịp** khi kim vào **vùng xanh** để lấy đủ số nhịp trong **5–10 giây** tùy loài. Bấm ngoài vùng xanh 4 lần sẽ mất cá; giữ Space liên tục không có tác dụng.
 - Trên điện thoại, **chạm từng nhịp** nút CANH SPACE ở giữa màn hình; không cần giữ.
 - Nút **RỜI GHẾ CÂU** quay về bờ hồ và không làm mới 5 phút miễn phí.
