@@ -30,7 +30,6 @@ assert.ok(js.includes("planNextTake(now);"),"missed takes must settle silently a
 assert.ok(js.includes('state.fishing==="bite"'),"real bite still needs a genuine hook window");
 assert.doesNotMatch(html,/id="biteBanner"|CÁ CẮN!|CÁ CẮN THẬT!/i,"do not show a flashing bite warning");
 assert.doesNotMatch(js,/CÁ CẮN THẬT|CÁ CẮN!|GIẬT CẦN NGAY|PHAO BIẾN ĐỘNG MẠNH/,"no cheat text or prompt at bite time");
-assert.doesNotMatch(css,/\.bite-banner|bite-flash/,"no dormant bite alarm CSS");
 assert.match(js,/const observing=stage==="waiting"\|\|stage==="bite";/,"identical visual HUD states before and during take");
 
 assert.ok(js.includes("Space"),"Space controls must exist");
@@ -38,6 +37,7 @@ assert.ok(js.includes("strikeFight("),"Space press must score moving marker");
 assert.ok(js.includes('if(state.fishing==="reeling")syncFightMeter();'),"cursor animation should update every frame");
 assert.ok(!js.includes("state.held"),"old hold/release model must be removed");
 const css=await readFile(new URL("../styles.css",import.meta.url),"utf8");
+assert.doesNotMatch(css,/\.bite-banner|bite-flash/,"no dormant bite alarm CSS");
 assert.match(css,/\#fightPanel\s*\{[^}]*position:fixed;top:50%;left:50%/,"meter must be fixed in center of screen");
 assert.match(css,/translate\(-50%,-50%\)/,"meter must be centered in both axes");
 for(const found of js.matchAll(/\$\("([\w-]+)"\)/g)){
