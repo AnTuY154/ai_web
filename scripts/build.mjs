@@ -14,6 +14,7 @@ assert.match(html, /href="\.\/styles\.css"/, "index.html needs local styles.css"
 const js=await readFile(join(root,"app.js"),"utf8");
 assert.match(js, /fetch\("\.\/data\/hanoi-lakes\.json"\)/, "app.js needs relative lake data asset");
 assert.match(js, /from "\.\/fishing-engine\.mjs"/, "app.js needs relative fishing engine module");
+assert.match(js, /from "\.\/bait-engine\.mjs"/, "app.js needs relative bait engine module");
 
 await rm(dist,{recursive:true,force:true});
 for(const asset of assets){
