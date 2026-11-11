@@ -33,6 +33,18 @@ assert.doesNotMatch(js,/CÁ CẮN THẬT|CÁ CẮN!|GIẬT CẦN NGAY|PHAO BIẾ
 assert.match(js,/const observing=stage==="waiting"\|\|stage==="bite";/,"identical visual HUD states before and during take");
 
 assert.ok(js.includes("Space"),"Space controls must exist");
+for(const id of ["baitSelect","baitAdvice","baitGroup","baitFavorites","baitDescription"]){
+  assert.ok(html.includes('id="'+id+'"'),"bait UI missing "+id);
+}
+const baitSelectHtml=html.match(/<select id="baitSelect"[^>]*>([\s\S]*?)<\/select>/)?.[1];
+assert.ok(baitSelectHtml,"bait choice control is missing");
+const baitOptions=[...baitSelectHtml.matchAll(/<option value="([^"]+)"/g)].map(x=>x[1]);
+assert.deepEqual(baitOptions.sort(),["worm","flour","corn","greens","shrimp","snail","lure"].sort(),"all 7 bait types must be selectable");
+assert.match(js,/from "\.\/bait-engine\.mjs"/,"app must import bait encounter engine");
+assert.match(js,/chooseFishByBait\(FISH,\$\("baitSelect"\)\.value,\$\("rodSelect"\)\.value\)/,"bait and rod must affect fish choice");
+assert.match(js,/const locked=state\.fishing!=="idle";/,"bait and rod should lock during cast");
+assert.match(js,/renderBaitAdvice\(\)/,"bait selection must show contextual guide");
+
 assert.ok(js.includes("strikeFight("),"Space press must score moving marker");
 assert.ok(js.includes('if(state.fishing==="reeling")syncFightMeter();'),"cursor animation should update every frame");
 assert.ok(!js.includes("state.held"),"old hold/release model must be removed");

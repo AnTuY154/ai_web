@@ -195,3 +195,21 @@ kbd{font:700 12px 'Space Mono',monospace;padding:5px 8px;background:#f8dca0;bord
 @media(prefers-reduced-motion:reduce){
  .catch-fish-image,.catch-fish-halo{animation:none}
 }
+
+
+/* Bait choice: grounded target hints without leaking the next hidden bite. */
+.bait-advice{
+  margin:9px 0 16px;padding:12px 13px;
+  background:#112f37;border:2px solid #47776b;
+  box-shadow:3px 3px 0 #0b212a;
+}
+.bait-advice-head{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;
+  color:#a5d1a5;font:700 9px 'Space Mono',monospace;letter-spacing:.02em;
+  margin-bottom:8px;
+}
+.bait-advice-head span:last-child{color:#d4c58e}
+.bait-advice strong{display:block;color:#fff2be;font-size:15px;line-height:1.45}
+.bait-advice p{font-size:12px;line-height:1.55;color:#d2e0d3;margin:8px 0 7px}
+.bait-advice small{font-size:10px;color:#abc1b7;line-height:1.4;display:block}
+.fishing-control-panel select:disabled{opacity:.7;cursor:not-allowed}

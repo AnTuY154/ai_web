@@ -1,5 +1,6 @@
 import { makeFight, stepFight, strikeFight, biteConfig, clamp } from "./fishing-engine.mjs";
 import { planFloatCast, floatPose } from "./float-behavior.mjs";
+import { getBaitInfo, chooseFishByBait } from "./bait-engine.mjs";
 const $ = (id) => document.getElementById(id);
 const LAKE_FOCUS = "bay-mau";
 const FISH = [
@@ -192,16 +193,17 @@ function releaseSpot(){
 }
 $("leaveSpot").addEventListener("click",releaseSpot);
 function chooseFish(){
-  // Tỉ lệ 70% phổ biến / 25% hiếm / 5% cực hiếm — cấu hình thử nghiệm.
-  const rod=$("rodSelect").value,bait=$("baitSelect").value;
-  let epic=.05,rare=.25;
-  if(rod==="lure"&&bait==="lure")epic+=.015;
-  if(rod==="reel")rare+=.02;
-  const r=Math.random();
-  const tier=r<epic?"epic":r<epic+rare?"rare":"common";
-  const pool=FISH.filter(f=>f.rarity===tier);
-  return pool[Math.floor(Math.random()*pool.length)];
+  // Gameplay odds depend on bait affinities, base rarity and rod type.
+  // Selecting a preferred bait never guarantees a fish, and never auto-hooks it.
+  return chooseFishByBait(FISH,$("baitSelect").value,$("rodSelect").value);
 }
+function renderBaitAdvice(){
+  const bait=getBaitInfo($("baitSelect").value);
+  $("baitGroup").textContent=bait.group.toUpperCase();
+  $("baitDescription").textContent=bait.description;
+  $("baitFavorites").textContent=bait.favorites.map(id=>FISH.find(f=>f.id===id)?.name??id).join(" · ");
+}
+$("baitSelect").addEventListener("change",renderBaitAdvice);
 function canFish(){return state.spot!==null&&(state.freeRemaining>0||state.paidRemaining>0)}
 function planNextTake(now){
   state.currentFish=chooseFish();
@@ -339,6 +341,10 @@ function updateHUD(){
   $("rentHint").textContent=state.freeRemaining>0?"Thời gian miễn phí · 5 phút/phiên thử":state.paidRemaining>0?"Đang sử dụng thời gian thuê bằng xu demo":"Hết giờ miễn phí · thuê thêm để câu.";
   $("castBtn").classList.toggle("hidden",state.fishing!=="idle");
   $("castBtn").disabled=!canFish()||state.fishing!=="idle";
+  // Prevent changing gear after a cast; that encounter was already selected.
+  const locked=state.fishing!=="idle";
+  $("baitSelect").disabled=locked;
+  $("rodSelect").disabled=locked;
   $("reelBtn").classList.toggle("hidden",state.fishing==="idle"||state.fishing==="reeling");
   $("reelBtn").textContent="NHẤC CẦN · SPACE";
   $("rentBtn").classList.toggle("hidden",state.spot===null||state.freeRemaining>0||state.paidRemaining>0);
@@ -717,4 +723,4 @@ function frame(t){
   if(t-lastHUD>200){updateHUD();lastHUD=t}
   requestAnimationFrame(frame);
 }
-drawFishList();loadLakes();createBackground();createFloatBackground();updateHUD();renderMapTransform();requestAnimationFrame(frame);
+drawFishList();renderBaitAdvice();loadLakes();createBackground();createFloatBackground();updateHUD();renderMapTransform();requestAnimationFrame(frame);

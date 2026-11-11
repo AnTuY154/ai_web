@@ -77,3 +77,16 @@ Khi hoàn tất minigame kim Space, game hiện **popup "🎉 CÂU THÀNH CÔNG!
 - Trình duyệt và Vercel phục vụ file SVG độc lập; `npm run build` kiểm tra đủ 10 hình ảnh, đúng MIME trên HTTP server.
 
 Bản demo vẫn chưa có tài khoản, lưu lịch sử, multiplayer hay thanh toán tiền thật.
+
+## Mồi câu ảnh hưởng đến loài cá xuất hiện
+
+Trong **Fishing Station**, menu mồi có **7 loại**: giun, bột ngũ cốc, ngô ngọt, rau non/cỏ, tép, ốc và mồi giả. Chọn mồi sẽ hiện **những loài có khả năng hợp mồi** và mô tả ngắn:
+
+- **Giun:** rô đồng, trê, diếc; **bột:** mè trắng, trôi, chép.
+- **Ngô:** chép, trắm cỏ, trôi; **rau/cỏ:** thiên về trắm cỏ.
+- **Tép:** trê, rô đồng, cá quả; **ốc:** thiên về trắm đen.
+- **Mồi giả:** thiên về cá săn mồi như cá quả.
+
+Mồi thay đổi **xác suất gặp cá theo loài và độ hiếm** (không bảo đảm sẽ câu được), kết hợp với cần và kỹ năng phản xạ. Khi đã thả câu, mồi/cần được khóa cho đến lượt sau, tránh đổi đồ giữa chừng. Bản demo **không trừ mồi và không dùng tiền thật**.
+
+Tỷ lệ thiết kế, bảng 10 × 7 và nguồn hướng dẫn câu cá: [Bait Mechanics](docs/BAIT_MECHANICS.md). Game vẫn giữ nguyên **phao không báo cá cắn**, minigame canh Space ở giữa màn hình và popup hình cá sau khi câu thành công.
