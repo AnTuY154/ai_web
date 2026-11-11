@@ -57,7 +57,7 @@ export function floatPose(now,sequence,mode="waiting",pattern="dive",biteStarted
     // A decisive, sustained movement (not a separate flashing signal).
     const grow=smooth(progress/.67);
     if(pattern==="dive"){
-      dy+=58*grow;
+      dy+=86*grow;
       dx+=Math.sin(progress*8)*4*grow;
       disturbance=grow*.72;
     }else if(pattern==="slide"){
