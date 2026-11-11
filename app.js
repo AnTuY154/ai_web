@@ -1,4 +1,5 @@
 import { makeFight, stepFight, strikeFight, biteConfig, clamp } from "./fishing-engine.mjs";
+import { planFloatCast, floatPose } from "./float-behavior.mjs";
 const $ = (id) => document.getElementById(id);
 const LAKE_FOCUS = "bay-mau";
 const FISH = [
@@ -25,7 +26,7 @@ const state={
   lakes:[], selected:LAKE_FOCUS, screen:"map", coins:50,
   avatar:{x:456,y:479}, pressed:new Set(), gotoSpot:null, gotoPoint:null, spot:null,
   freeRemaining:FREE_SECONDS, paidRemaining:0, freeUsed:false,
-  fishing:"idle", biteAt:0, biteStartedAt:0, biteExpires:0, nibbleAt:0, nibbleUntil:0,
+  fishing:"idle", biteAt:0, biteStartedAt:0, biteExpires:0, floatSequence:null,
   currentFish:null, fight:null, lastCatch:null, catchModalOpen:false,
   caught:0, score:0, fishCounts:Object.fromEntries(FISH.map(f=>[f.id,0])),
   mapZoom:1, mapDX:0, mapDY:0, mapDragging:false, lastTime:0
@@ -181,7 +182,7 @@ function occupySpot(n){
 function releaseSpot(){
   closeCatchSuccess(false);
   state.gotoSpot=null;state.spot=null;state.fishing="idle";state.currentFish=null;
-  state.fight=null;
+  state.fight=null;state.floatSequence=null;
   $("fishingView").classList.add("hidden");
   $("gameLayout").classList.remove("hidden");
   state.avatar.x=456;state.avatar.y=478;
@@ -202,15 +203,17 @@ function chooseFish(){
   return pool[Math.floor(Math.random()*pool.length)];
 }
 function canFish(){return state.spot!==null&&(state.freeRemaining>0||state.paidRemaining>0)}
+function planNextTake(now){
+  state.currentFish=chooseFish();
+  state.floatSequence=planFloatCast(now);
+  state.biteAt=state.floatSequence.biteAt;
+  state.biteStartedAt=0;state.biteExpires=0;state.fishing="waiting";
+}
 function castLine(){
   if(state.catchModalOpen||state.fishing!=="idle"||!canFish())return;
-  const now=performance.now();
-  state.fishing="waiting";state.currentFish=chooseFish();state.fight=null;
-  state.nibbleAt=now+950+Math.random()*1100;
-  state.nibbleUntil=state.nibbleAt+440+Math.random()*500;
-  state.biteAt=now+4200+Math.random()*3900;
-  state.biteStartedAt=0;state.biteExpires=0;
-  displayStatus("Phao nổi trên nước. Những cú nhấp nhẹ có thể là cá thử mồi; đợi tín hiệu cắn rõ ràng.");
+  state.fight=null;
+  planNextTake(performance.now());
+  displayStatus("Đang thả câu. Quan sát phao, so sánh với nhịp sóng và tự chọn lúc nhấc cần.");
   updateHUD();
 }
 function missFish(text){
@@ -271,11 +274,11 @@ function attemptStrike(){
   if(state.catchModalOpen||!canFish())return;
   if(state.fishing==="idle"){castLine();return}
   if(state.fishing==="waiting"){
-    missFish("Giật quá sớm! Phao mới nhấp nhô/thử mồi, cá chưa ngậm chắc.");
+    missFish("Chưa mắc cá. Hãy quan sát chuyển động phao và thử lại.");
     return;
   }
   if(state.fishing==="bite"){
-    if(performance.now()>state.biteExpires){missFish("Bạn giật hơi muộn, cá đã nhả mồi.");return}
+    if(performance.now()>state.biteExpires){missFish("Nhấc cần nhưng không mắc cá. Thử lại nhé.");return}
     state.fight=makeFight(state.currentFish.id,$("rodSelect").value);
     state.fishing="reeling";
     $("fightFeedback").textContent="Kim tự chạy! Bấm Space từng nhịp đúng lúc kim nằm trong vùng xanh.";
@@ -337,17 +340,18 @@ function updateHUD(){
   $("castBtn").classList.toggle("hidden",state.fishing!=="idle");
   $("castBtn").disabled=!canFish()||state.fishing!=="idle";
   $("reelBtn").classList.toggle("hidden",state.fishing==="idle"||state.fishing==="reeling");
-  $("reelBtn").textContent=state.fishing==="bite"?"⚡ GIẬT CẦN NGAY!":"GIẬT CẦN · SPACE (ĐÚNG LÚC)";
+  $("reelBtn").textContent="NHẤC CẦN · SPACE";
   $("rentBtn").classList.toggle("hidden",state.spot===null||state.freeRemaining>0||state.paidRemaining>0);
   $("leaveSpot").disabled=state.spot===null;
   $("caughtCount").textContent=state.caught;$("totalScore").textContent=state.score;
   $("sessionCatch").textContent=state.caught;$("sessionScore").textContent=state.score;
   const stage=state.fishing;
-  const nibbling=stage==="waiting"&&performance.now()>=state.nibbleAt&&performance.now()<=state.nibbleUntil;
-  $("floatStage").textContent=stage==="idle"?"CHƯA THẢ CÂU":stage==="waiting"?(nibbling?"ĐANG NHẤP MỒI":"ĐANG CHỜ CẮN"):stage==="bite"?"CÁ ĐANG CẮN!":"ĐANG KÉO CÁ";
-  $("floatLabel").textContent=stage==="idle"?"PHAO CHƯA THẢ":stage==="waiting"?(nibbling?"PHAO RUNG NHẸ — HÃY ĐỢI":"PHAO NỔI YÊN — QUAN SÁT"):stage==="bite"?"PHAO BIẾN ĐỘNG MẠNH!":"CANH KIM CHẠY QUA VÙNG XANH";
-  $("keyGuide").textContent=stage==="idle"?"Nhấn để thả câu":stage==="waiting"?"Đợi phao cắn dứt khoát rồi mới giật":stage==="bite"?"GIẬT NGAY TRƯỚC KHI CÁ NHẢ MỒI!":"Bấm từng nhịp khi kim chạy vào vùng xanh";
-  $("biteBanner").classList.toggle("hidden",stage!=="bite");
+  // Identical UI for ordinary drift, false pecks AND a true take.
+  // Only the physical float pose communicates the difference.
+  const observing=stage==="waiting"||stage==="bite";
+  $("floatStage").textContent=stage==="idle"?"CHƯA THẢ CÂU":observing?"ĐANG QUAN SÁT":"ĐANG KÉO CÁ";
+  $("floatLabel").textContent=stage==="idle"?"PHAO CHƯA THẢ":observing?"QUAN SÁT PHAO":"ĐANG KÉO CÁ";
+  $("keyGuide").textContent=stage==="idle"?"Nhấn để thả câu":observing?"Nhấc cần khi bạn nhận thấy phao chuyển động bất thường":"Bấm từng nhịp khi kim chạy vào vùng xanh";
   $("fightPanel").classList.toggle("hidden",stage!=="reeling");
   $("fightScrim").classList.toggle("hidden",stage!=="reeling");
   if(state.fight&&stage==="reeling"){
@@ -544,70 +548,60 @@ function createFloatBackground(){
 }
 function drawFloatScene(now){
   floatCtx.drawImage(floatBackground,0,0);
-  const status=state.fishing,t=now/1000;
-  // Near-water sparkles continue in all stages.
-  for(let i=0;i<25;i++){
-    const x=208+seed01(120+i)*724,y=225+seed01(i+991)*281;
-    if(Math.floor(t*2+i*3)%4<2)fpx(floatCtx,x,y,12+seed01(i+80)*18,2,"#9bd1ce");
+  const mode=state.fishing,time=now/1000;
+  // Gentle wind-driven wavelets exist at all times, not just when fish visit.
+  for(let i=0;i<32;i++){
+    const x=205+seed01(120+i)*735+Math.sin(time*.7+i)*7;
+    const y=217+seed01(i+991)*283;
+    if(Math.floor(time*1.5+i*3)%4<3)fpx(floatCtx,x,y,8+seed01(i+80)*19,2,"#87c7c5");
   }
-  if(status==="idle"){
+  if(mode==="idle"){
     floatCtx.fillStyle="#e2edca";floatCtx.font="bold 18px monospace";floatCtx.textAlign="center";
-    floatCtx.fillText("THẢ CÂU ĐỂ PHÓNG PHAO RA MẶT NƯỚC",578,337);
+    floatCtx.fillText("THẢ CÂU ĐỂ ĐẶT PHAO LÊN MẶT NƯỚC",580,345);
     return;
   }
-  const nibble=status==="waiting"&&now>=state.nibbleAt&&now<=state.nibbleUntil;
-  const after=Math.max(0,now-state.biteStartedAt);
-  const phase=status==="bite"?clamp(after/Math.max(1,state.biteExpires-state.biteStartedAt),0,1):0;
   const pattern=state.currentFish?biteConfig(state.currentFish.id,$("rodSelect").value).pattern:"dive";
-  let x=596+Math.sin(t*1.9)*3,y=319+Math.sin(t*3.1)*3;
-  let submerge=0,tilt=0;
-  if(nibble){y+=6+Math.abs(Math.sin(t*28))*9;x+=Math.sin(t*22)*5}
-  if(status==="bite"){
-    if(pattern==="dive"){submerge=phase*54;x+=Math.sin(t*7)*10}
-    else if(pattern==="slide"){x+=phase*114;submerge=phase*21}
-    else{y-=phase*36;tilt=phase*1.05;x-=phase*29}
-  }
-  if(status==="reeling"){
-    x+=Math.sin(t*3.8)*27;y+=Math.sin(t*4.8)*10;
-  }
-  const waterY=y;
-  // Dynamic water rings around the float to make small false nibbles readable.
+  const pose=floatPose(now,state.floatSequence,mode,pattern,state.biteStartedAt,state.biteExpires);
+  const x=596+pose.dx,y=320+pose.dy;
+  const surfaceY=323+Math.sin(time*2.1+(state.floatSequence?.seed??0))*.6;
+  // Movement should be seen by comparing the float with surrounding water:
+  // no special colored rings, sound, text or flashing particles reveal a take.
   for(let i=0;i<3;i++){
-    const r=21+i*18+(t*14+i*7)%22;
-    floatCtx.strokeStyle=nibble?"#f6dc91":status==="bite"?"#f9cf9a":"#9ed5cc";
-    floatCtx.lineWidth=i===0?3:2;floatCtx.beginPath();
-    floatCtx.ellipse(x,waterY+4,r,r*.22,0,0,Math.PI*2);floatCtx.stroke();
+    const radius=21+i*24+(time*13+i*6)%24;
+    const opacity=Math.max(.1,.28+pose.disturbance*.26-i*.09);
+    floatCtx.strokeStyle="rgba(181,229,222,"+opacity+")";
+    floatCtx.lineWidth=2;
+    floatCtx.beginPath();floatCtx.ellipse(x,surfaceY+2,radius,radius*.18,0,0,Math.PI*2);floatCtx.stroke();
   }
-  if(status==="reeling"){
-    // Dark fish silhouette below the float; purely visual, no fake opponents.
-    const sway=Math.sin(t*5)*15;
-    floatCtx.globalAlpha=.4;fpx(floatCtx,x+50+sway,waterY+42,67,14,"#285b70");
-    fpx(floatCtx,x+112+sway,waterY+35,16,25,"#285b70");floatCtx.globalAlpha=1;
-    for(let i=0;i<5;i++){
-      const bx=x+(seed01(i*8)*72)-36,by=waterY+22+seed01(i+3)*30;
-      fpx(floatCtx,bx,by,5,5,"#a6d9d1");
-    }
-  }
-  // Tight line from player's rod to float.
   floatCtx.beginPath();floatCtx.moveTo(260,192);
-  floatCtx.quadraticCurveTo(381,165+(status==="reeling"?Math.sin(t*9)*10:23),x,waterY-12+submerge);
-  floatCtx.lineWidth=status==="reeling"?3:1.7;
-  floatCtx.strokeStyle="#fbefd2";floatCtx.stroke();
-  // The tip and white/red cylindrical body move together with the water signal.
-  floatCtx.save();floatCtx.translate(x,waterY+submerge);floatCtx.rotate(tilt);
-  if(submerge>0)floatCtx.globalAlpha=1-phase*.65;
-  fpx(floatCtx,-3,-46,6,25,"#2a4050");fpx(floatCtx,-4,-40,8,20,"#f0c077");
-  fpx(floatCtx,-8,-20,16,25,"#fff2d4");fpx(floatCtx,-8,-19,16,10,"#e46e68");
-  fpx(floatCtx,-6,-2,12,10,"#f7deb0");
-  fpx(floatCtx,-3,8,6,16,"#c8d4ad");
+  floatCtx.quadraticCurveTo(385,191+Math.sin(time*.9)*13,x,y-51);
+  floatCtx.strokeStyle="#e5dbc4";floatCtx.lineWidth=1.35;floatCtx.stroke();
+
+  // Pixel-art bobber is clipped by the water surface. A proper dive submerges
+  // the red tip rather than moving the whole sprite *on top* of the water.
+  floatCtx.save();
+  floatCtx.beginPath();floatCtx.rect(0,0,960,surfaceY+1);floatCtx.clip();
+  floatCtx.translate(x,y);floatCtx.rotate(pose.rotation);floatCtx.scale(1.48,1.48);
+  fpx(floatCtx,-3,-49,6,23,"#283e4b");
+  fpx(floatCtx,-5,-43,10,12,"#f1d194");
+  fpx(floatCtx,-6,-32,12,9,"#e16463");
+  fpx(floatCtx,-9,-23,18,29,"#f8edcf");
+  fpx(floatCtx,-9,-23,18,10,"#d94f56");
+  fpx(floatCtx,-7,-6,14,13,"#efc9a1");
+  fpx(floatCtx,-3,7,6,14,"#8aa59d");
+  fpx(floatCtx,-5,-34,10,4,"#fae6ad");
   floatCtx.restore();
-  if(status==="bite"){
-    // The clear bite cue: decisive sink, lift or sideways movement (not just jitter).
-    const splashX=x+((pattern==="slide")?22:0);
-    for(let i=0;i<7;i++){
-      const sx=splashX+(i-3)*15,sy=waterY+Math.sin(t*20+i)*9;
-      fpx(floatCtx,sx,sy,8,5,i%2?"#ffdea6":"#afe6d8");
-    }
+
+  // A weak reflection stays below the tip, without hiding water movement.
+  floatCtx.globalAlpha=.21;
+  fpx(floatCtx,x-7,surfaceY+8,14,12+Math.sin(time*3)*2,"#bfd6bf");
+  floatCtx.globalAlpha=1;
+  if(mode==="reeling"){
+    const sway=Math.sin(time*5)*15;
+    floatCtx.globalAlpha=.35;
+    fpx(floatCtx,x+50+sway,surfaceY+44,67,14,"#285b70");
+    fpx(floatCtx,x+112+sway,surfaceY+37,16,25,"#285b70");
+    floatCtx.globalAlpha=1;
   }
 }
 function drawGame(now){
@@ -638,8 +632,7 @@ function drawGame(now){
     const sp=SPOTS[state.spot-1];
     const fx=sp.x-48*Math.cos(sp.a),fy=sp.y-48*Math.sin(sp.a);
     const x=Math.round(fx),y=Math.round(fy);
-    if(state.fishing==="bite"){rect(x-13,y-12,26,24,"#fff0a0");rect(x-6,y-5,12,10,"#ff816d")}
-    else{rect(x-4,y-4,8,8,"#f9e7b2");rect(x-4,y-6,8,4,"#fa705f")}
+    rect(x-4,y-4,8,8,"#f9e7b2");rect(x-4,y-6,8,4,"#fa705f")
     ctx.strokeStyle="#f1e0ac";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(sp.x,sp.y-23);ctx.lineTo(x,y);ctx.stroke();
   }
   drawAvatar(state.avatar.x,state.avatar.y,now);
@@ -692,11 +685,11 @@ function update(delta){
   const now=performance.now();
   if(state.fishing==="waiting"&&now>=state.biteAt){
     state.fishing="bite";state.biteStartedAt=now;
-    state.biteExpires=now+biteConfig(state.currentFish.id,$("rodSelect").value).windowMs;
-    displayStatus("⚡ CÁ CẮN THẬT! Phao chuyển động dứt khoát — GIẬT CẦN (SPACE)!");
-    updateHUD();
+    state.biteExpires=now+Math.max(1500,biteConfig(state.currentFish.id,$("rodSelect").value).windowMs+550);
+    // No HUD update, sound, banner or notification reveals a real bite.
   }else if(state.fishing==="bite"&&now>=state.biteExpires){
-    missFish("Cá đã nhả mồi! Bạn không giật kịp khi phao chìm.");
+    // If nobody reacts the fish slips away; the float settles silently.
+    planNextTake(now);
   }else if(state.fishing==="reeling"&&state.fight){
     stepFight(state.fight,delta);
     if(state.fight.result==="caught")landFish();

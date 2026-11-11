@@ -2,18 +2,30 @@
 
 **Triển khai nguyên mẫu tháng 11/2026.** Bản chơi đơn, xu và kết quả demo local (không phải kết quả server authoritative).
 
-## 1. Cơ chế phao dựa trên quan sát thực tế
+## 1. Đọc phao như ngoài đời: KHÔNG HIỆN CẢNH BÁO CÁ CẮN
 
-Theo [Discover Nature Fishing Instructor Guide của Missouri Department of Conservation](https://education.mdc.mo.gov/sites/default/files/2025-12/Discover-Nature-Fishing-Instructor-Guide-2024-508.pdf) (mục “Bobber Movement”), **phao rung, nhấp nhô** có thể chỉ là cá đang tìm hiểu mồi; **phao đâm xuống hoặc trượt ngang** là tín hiệu cá đã cắn chắc để giật cần. [Take Me Fishing — Traditional Fishing Floats](https://www.takemefishing.org/blog/november-2015/traditional-fishing-floats-the-bobber/) cũng mô tả nhấp, phao biến mất hoặc di chuyển đều như những tín hiệu cần phân biệt.
+**Quy tắc trải nghiệm:** khi thả câu, game KHÔNG hiển thị chữ “CÁ CẮN”, popup, âm báo, nút đổi màu hay trạng thái HUD khác biệt. Người chơi tự nhận ra cắn thật nhờ chuyển động phao, nhấn **Space** hoặc **NHẤC CẦN**. Không có đồng hồ đếm đến khi cắn.
 
-Trong **game**:
-1. Người chơi nhấp vào số chỗ câu để đi tới chỗ ngồi; **màn hình chuyên biệt** mở thay bản đồ.
-2. Nhấn **THẢ CÂU** hoặc **Space** (nút cảm ứng trên điện thoại).
-3. Phao luôn có dao động theo sóng nhỏ. Trước khi cắn thật xuất hiện **đợt nhấp giả**; giật quá sớm sẽ mất lượt.
-4. Sau 4,2–8,1 giây (đề xuất demo), phao có một trong ba tín hiệu: **lặn sâu**, **bị kéo ngang**, hoặc **nổi cao**. Phải bấm **Space đúng trong cửa sổ** khoảng 0,84–1,41 giây (tùy cá và cần).
-5. Bấm quá muộn cá bỏ chạy; bấm đúng chuyển sang **minigame kim tự chạy ngang**.
+**Các nguồn tham khảo:**
+- [California Department of Fish and Wildlife — F.I.S.H. Handbook](https://nrm.dfg.ca.gov/FileHandler.ashx?DocumentID=28748): phao có thể rung, chuyển ngang, nằm nghiêng; không nhất thiết chìm.
+- [Mississippi Department of Wildlife, Fisheries and Parks — Sinkers and Bobbers](https://www.mdwfp.com/sites/default/files/2024-06/Sinkers%20and%20Bobbers%20_%20Revised%2012.20.19.pdf): tư thế phao còn phụ thuộc cách mắc phao/chì; phao nằm ngang không mặc nhiên là cá cắn.
+- [Take Me Fishing — How to Fish](https://www.takemefishing.org/getmedia/1212b64d-4fbf-4f99-ae9e-7565a4c477eb/How-to-Fish-Tailored-Tackle-Take-Me-Fishing-Book.pdf): phao đổi hướng đột ngột, chìm hoặc kéo ngang có thể báo cá ăn.
+- [Lake & Lines — Missing Bites](https://www.lakeandlines.co.uk/guides/missing-bites-float-fishing): phải phân biệt gió, nhấp nhẹ, cú kéo ngang bền, phao nổi lên (*lift bite*) và giật quá sớm.
 
-Thời gian và tín hiệu được điều chỉnh để có gameplay vui, không phải mô phỏng khoa học hay quy tắc câu thực tế cho mọi loài.
+**Mô phỏng Hồ Bảy Mẫu:**
+
+| Quan sát trực tiếp | Hành vi mô phỏng | Có thể mắc cá? |
+|---|---|---|
+| Sóng gợn đều | Hai nhịp sóng nhỏ và trôi ngang nhẹ | Không |
+| Phao nhấp vài cái rồi yên | Cá thử mồi (peck), kéo 0,32–0,83 giây | Không |
+| Phao dạt nhẹ rồi bật về | Va vào dây (liner) hoặc gió, không giữ hướng | Không |
+| Phao chìm dần, **đầu đỏ mất dưới nước** | Dive: phao thực sự được che bởi mặt nước Canvas | Có |
+| Phao lướt ngang rõ rệt và liên tục | Slide: kéo ngang lớn hơn các chuyển động giả | Có |
+| Phao **nổi cao**, thân nghiêng | Lift: cá nâng mồi và chì trong cấu hình câu phù hợp | Có |
+
+**Thời gian chỉ để cân bằng game:** một cú cắn xảy ra ngẫu nhiên sau khoảng 6,5–14,5 giây; chuyển động nhỏ trước đó cũng không cố định, số lần va mồi thay đổi. Khung giật khoảng 1,5–1,8 giây, đủ nhìn và phản xạ; không ám chỉ thời gian mắc cá thực tế. Nếu không giật, phao sẽ yên lại trong im lặng, rồi tiếp tục chờ cơ hội mới trong cùng lượt thả. Chỉ khi nhấc cần, game mới xác nhận có mắc cá hoặc giật hụt.
+
+**Hạn chế mô phỏng:** dấu hiệu phao thực tế còn phụ thuộc loại phao, chì, độ sâu, gió và loài cá. Game mô phỏng nguyên tắc quan sát, không khẳng định 100% hình thái cắn của một loài cá cụ thể.
 
 ## 2. Thanh lực ở chính giữa màn hình, kim chạy qua lại
 

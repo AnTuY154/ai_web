@@ -14,7 +14,7 @@ for(const lake of data.lakes){
 }
 assert.ok(ids.has("bay-mau"),"sample lake Bảy Mẫu must exist");
 const html=await readFile(new URL("../index.html",import.meta.url),"utf8");
-for(const id of ["mapScreen","mapFrame","gameScreen","gameCanvas","gameLayout","fishingView","floatCanvas","seatNumber","biteBanner","fightPanel","fightScrim","fightHitBtn","fightMistakes","safeBand","tensionMarker","fightClock","fishingStatus","castBtn","reelBtn","fishList","rentBtn"]){
+for(const id of ["mapScreen","mapFrame","gameScreen","gameCanvas","gameLayout","fishingView","floatCanvas","seatNumber","fightPanel","fightScrim","fightHitBtn","fightMistakes","safeBand","tensionMarker","fightClock","fishingStatus","castBtn","reelBtn","fishList","rentBtn"]){
   assert.ok(html.includes('id="'+id+'"'),"missing frontend id "+id);
 }
 const js=await readFile(new URL("../app.js",import.meta.url),"utf8");
@@ -23,11 +23,21 @@ assert.ok(js.includes("MAX_SPECTATORS=30"),"30-spectator rule");
 assert.ok(js.includes("FREE_SECONDS=300"),"5-minute free rule");
 assert.ok(js.includes("makeFight("),"must enter tension mini-game after a strike");
 assert.ok(js.includes("drawFloatScene("),"must render float close-up");
+
+assert.ok(js.includes("planFloatCast("),"must randomly schedule natural false movements and real takes");
+assert.ok(js.includes("floatPose("),"bobber motion must use pure physical float simulation");
+assert.ok(js.includes("planNextTake(now);"),"missed takes must settle silently and offer another bite");
+assert.ok(js.includes('state.fishing==="bite"'),"real bite still needs a genuine hook window");
+assert.doesNotMatch(html,/id="biteBanner"|CÁ CẮN!|CÁ CẮN THẬT!/i,"do not show a flashing bite warning");
+assert.doesNotMatch(js,/CÁ CẮN THẬT|CÁ CẮN!|GIẬT CẦN NGAY|PHAO BIẾN ĐỘNG MẠNH/,"no cheat text or prompt at bite time");
+assert.match(js,/const observing=stage==="waiting"\|\|stage==="bite";/,"identical visual HUD states before and during take");
+
 assert.ok(js.includes("Space"),"Space controls must exist");
 assert.ok(js.includes("strikeFight("),"Space press must score moving marker");
 assert.ok(js.includes('if(state.fishing==="reeling")syncFightMeter();'),"cursor animation should update every frame");
 assert.ok(!js.includes("state.held"),"old hold/release model must be removed");
 const css=await readFile(new URL("../styles.css",import.meta.url),"utf8");
+assert.doesNotMatch(css,/\.bite-banner|bite-flash/,"no dormant bite alarm CSS");
 assert.match(css,/\#fightPanel\s*\{[^}]*position:fixed;top:50%;left:50%/,"meter must be fixed in center of screen");
 assert.match(css,/translate\(-50%,-50%\)/,"meter must be centered in both axes");
 for(const found of js.matchAll(/\$\("([\w-]+)"\)/g)){

@@ -68,16 +68,16 @@
 
       <section id="fishingView" class="fishing-view hidden" tabindex="-1" aria-label="Màn hình câu cá cận cảnh">
         <div class="fishing-head">
-          <div><div class="eyebrow">PIXEL FLOAT FISHING / HỒ BẢY MẪU</div><h2>Ngồi câu bên hồ <span id="seatNumber">#01</span></h2><p>Quan sát phao — nhấp nhẹ chưa chắc cá cắn. Phao lặn hẳn, chạy ngang hoặc nổi bật lên mới là lúc giật cần.</p></div>
+          <div><div class="eyebrow">PIXEL FLOAT FISHING / HỒ BẢY MẪU</div><h2>Ngồi câu bên hồ <span id="seatNumber">#01</span></h2><p>Quan sát nhịp phao so với sóng nước. Không phải cú nhấp nào cũng do cá; hãy tự chọn thời điểm nhấc cần.</p></div>
           <button id="leaveSpot" class="secondary-btn">← RỜI GHẾ CÂU</button>
         </div>
         <div class="fishing-layout">
           <section class="fishing-lake-frame">
             <div class="fishing-toolbar"><span>◉ GÓC NHÌN PHAO · 2D PIXEL</span><span id="floatWeather">HỒ YÊN · NƯỚC NHẸ</span></div>
             <div class="float-scene">
-              <canvas id="floatCanvas" width="960" height="520" role="img" aria-label="Cận cảnh phao đỏ trắng nhấp nhô trên mặt hồ, khi cá cắn phao sẽ chìm, trượt ngang hoặc nổi cao"></canvas>
-              <div class="scene-buoy-caption"><span class="buoy-dot">◉</span><span id="floatLabel">PHAO ĐANG CHỜ THẢ</span></div>
-              <div id="biteBanner" class="bite-banner hidden" aria-live="assertive">⚡ CÁ CẮN! SPACE NGAY!</div>
+              <canvas id="floatCanvas" width="960" height="520" role="img" aria-label="Cận cảnh phao đỏ trắng trên hồ, theo dõi chuyển động phao để chọn thời điểm nhấc cần"></canvas>
+              <div class="scene-buoy-caption"><span class="buoy-dot">◉</span><span id="floatLabel">PHAO CHƯA THẢ</span></div>
+              
             </div>
             <div class="float-instructions">
               <div class="key-hint"><kbd>SPACE</kbd><span id="keyGuide">Thả câu để bắt đầu quan sát phao</span></div>
@@ -112,10 +112,10 @@
               <select id="rodSelect"><option value="hand">Cần tay · Vùng lực rộng</option><option value="reel">Cần máy · Kim chạy chậm hơn</option><option value="lure">Cần lure · Thử thách</option></select>
               <label for="baitSelect">LOẠI MỒI</label>
               <select id="baitSelect"><option value="worm">Mồi giun</option><option value="flour">Mồi bột</option><option value="lure">Mồi giả</option></select>
-              <p id="fishingStatus" class="fishing-status" aria-live="polite">Chọn cần, mồi rồi thả câu.</p>
+              <p id="fishingStatus" class="fishing-status" aria-live="polite">Chọn cần, mồi rồi thả câu. Phần còn lại do bạn quan sát.</p>
               <div class="action-stack">
                 <button id="castBtn" class="primary-btn">THẢ CÂU · SPACE</button>
-                <button id="reelBtn" class="primary-btn reel-control hidden" type="button">GIẬT CẦN · SPACE</button>
+                <button id="reelBtn" class="primary-btn reel-control hidden" type="button">NHẤC CẦN · SPACE</button>
                 <button id="rentBtn" class="gold-btn hidden">THUÊ 5 PHÚT · 20 XU (DEMO)</button>
               </div>
               <div class="control-help"><b>HƯỚNG DẪN</b><p><kbd>SPACE</kbd> lúc phao chìm để mắc cá. Khi kéo cá, <strong>kim tự chạy qua lại</strong>; <strong>bấm Space từng nhịp</strong> lúc kim vào vùng xanh. Thanh lực ở giữa màn hình.</p><p>Trên điện thoại, chạm từng nhịp vào nút CANH SPACE giữa màn hình.</p></div>

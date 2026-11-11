@@ -9,6 +9,7 @@ const allowed = new Map([
   ["/styles.css",["styles.css","text/css; charset=utf-8"]],
   ["/app.js",["app.js","text/javascript; charset=utf-8"]],
   ["/fishing-engine.mjs",["fishing-engine.mjs","text/javascript; charset=utf-8"]],
+  ["/float-behavior.mjs",["float-behavior.mjs","text/javascript; charset=utf-8"]],
   ["/data/hanoi-lakes.json",["data/hanoi-lakes.json","application/json; charset=utf-8"]]
 ]);
 const FISH_IDS=["ro-phi","ro-dong","diec","troi","me-trang","chep","tram-co","tre","tram-den","ca-qua"];
