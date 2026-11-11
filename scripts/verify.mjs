@@ -27,7 +27,7 @@ assert.ok(js.includes("drawFloatScene("),"must render float close-up");
 assert.ok(js.includes("planFloatCast("),"must randomly schedule natural false movements and real takes");
 assert.ok(js.includes("floatPose("),"bobber motion must use pure physical float simulation");
 assert.ok(js.includes("planNextTake(now);"),"missed takes must settle silently and offer another bite");
-assert.ok(js.includes("state.fishing==="+'"bite"'+"),"real bite still needs a genuine hook window");
+assert.ok(js.includes('state.fishing==="bite"'),"real bite still needs a genuine hook window");
 assert.doesNotMatch(html,/id="biteBanner"|CÁ CẮN!|CÁ CẮN THẬT!/i,"do not show a flashing bite warning");
 assert.doesNotMatch(js,/CÁ CẮN THẬT|CÁ CẮN!|GIẬT CẦN NGAY|PHAO BIẾN ĐỘNG MẠNH/,"no cheat text or prompt at bite time");
 assert.doesNotMatch(css,/\.bite-banner|bite-flash/,"no dormant bite alarm CSS");
