@@ -62,6 +62,22 @@ assert.match(js,/spendBait\(state\.baitInventory,id\)/,"every cast must use one 
 assert.match(js,/state\.baitInventory=paid\.inventory/,"spent bait must update live inventory");
 assert.match(js,/buyBait\(state\.baitInventory,state\.coins,id,quantity\)/,"shop purchases must use game wallet");
 assert.match(js,/renderShop\(\)/,"shop must render purchase options");
+
+for(const id of ["rodShop","rodShopList","rodShopFeedback","rodOwnedCount","rodOwnedHint",
+                 "fishInventory","fishInventoryList","fishInventoryFeedback","fishInventoryTotal"]){
+  assert.ok(html.includes('id="'+id+'"'),"missing fish/rod inventory UI: "+id);
+}
+assert.match(js,/addCaughtFish\(state\.fishInventory,fish\.id\)/,"new catches must enter saleable inventory");
+assert.doesNotMatch(js,/state\.coins\+=fish\.reward/,"a caught fish must not pay coins before selling");
+assert.match(js,/sellFish\(state\.fishInventory,state\.coins,fishId,qty\)/,"selling must use inventory economy");
+assert.match(js,/buyRod\(state\.ownedRods,state\.coins,rodId\)/,"rod purchases must use saved coin wallet");
+assert.match(js,/!state\.ownedRods\.includes\(state\.selectedRod\)/,"unowned rods cannot be used to cast");
+assert.match(js,/if\(!state\.ownedRods\.includes\(select\.value\)\)/,"unowned rod selection must be blocked");
+assert.match(js,/selectedRod:savedProgress\.selectedRod/,"equipped rod must be persisted");
+assert.match(html,/CÁ THÊM VÀO KHO/,"catch success must award fish, not duplicate cash");
+assert.match(html,/BÁN 1 CON|Bán 1 con/,"fish sale option must be explained");
+assert.match(css,/\.fish-inventory-card\s*\{/,"fish inventory needs sprite card styling");
+
 assert.match(html,/Mỗi lần thả câu trừ 1 mồi/,"show bait-consumption rule");
 assert.match(html,/50 lượt mồi miễn phí/,"explain free starter pack");
 
