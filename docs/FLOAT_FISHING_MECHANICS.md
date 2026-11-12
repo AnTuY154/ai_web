@@ -42,7 +42,7 @@ Phiên bản được chủ dự án xác nhận sử dụng **cơ chế bấm S
 - Một **kim sáng tự di chuyển từ trái sang phải, đến biên lại quay về trái**, không phụ thuộc việc đang giữ phím.
 - **Bấm Space mỗi lần kim chạm vùng xanh** để ghi một nhịp. Giữ Space không tự ghi thêm nhịp; mỗi lần quét chỉ tính tối đa một điểm.
 - **Bấm ngoài vùng xanh** là trượt. **4 lần trượt** thì cá thoát. Không đạt đủ nhịp trước khi đồng hồ **5–10 giây** hết cũng mất cá.
-- Đạt đủ nhịp và hết thời gian thì bắt được cá. Vùng xanh có dao động nhẹ để tạo thử thách; cá càng khó, **kim càng nhanh, vùng xanh càng hẹp, cần nhiều nhịp hơn và thời gian dài hơn**.
+- **Bắt được cá ngay khi ghi đủ nhịp chuẩn**, hiện popup thành công và hình cá lập tức, **không cần đợi hết thời gian**. Không hiển thị thanh tiến trình thời gian thứ hai; đồng hồ còn lại chỉ giới hạn thời gian tối đa để hoàn thành. Vùng xanh có dao động nhẹ; cá càng khó, kim càng nhanh, vùng xanh càng hẹp và cần nhiều nhịp hơn.
 - Trên điện thoại, **chạm từng nhịp** vào nút **BẤM ĐÚNG NHỊP** ở chính giữa màn hình thay cho Space.
 
 | Loài | Nhóm | Thời gian | Độ rộng xanh cơ bản | Vận tốc kim (điểm/s) | Số nhịp cần |

@@ -66,6 +66,9 @@ export function strikeFight(fight){
     fight.lastHitPass=fight.pass;
     fight.hits=Math.min(fight.targetHits,fight.hits+1);
     fight.lastAction="hit";
+    // Catch immediately on the final correct Space press. A fight's seconds
+    // remain a timeout limit, never a mandatory wait after success.
+    if(fight.hits===fight.targetHits)fight.result="caught";
     return "hit";
   }
   fight.misses++;

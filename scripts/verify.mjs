@@ -53,6 +53,12 @@ assert.match(js,/const locked=state\.fishing!=="idle";/,"bait and rod should loc
 assert.match(js,/renderBaitAdvice\(\)/,"bait selection must show contextual guide");
 
 assert.ok(js.includes("strikeFight("),"Space press must score moving marker");
+
+assert.ok(!html.includes('id="fightElapsed"')&&!html.includes('id="fightElapsedText"'),"hide redundant time progress bar in fight");
+assert.ok(!js.includes('fightElapsed'),"do not update removed time bar");
+assert.ok(js.includes('if(f.result==="caught"){landFish();return}'),"show successful fish immediately on final Space hit");
+assert.ok(html.includes('id="fightClock"'),"retain countdown as a failure limit, not a time progress bar");
+
 assert.ok(js.includes('if(state.fishing==="reeling")syncFightMeter();'),"cursor animation should update every frame");
 assert.ok(!js.includes("state.held"),"old hold/release model must be removed");
 const css=await readFile(new URL("../styles.css",import.meta.url),"utf8");

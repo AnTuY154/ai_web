@@ -307,7 +307,8 @@ function attemptMeterHit(){
   if(outcome==="hit")$("fightFeedback").textContent="✓ CHUẨN! "+f.hits+"/"+f.targetHits+" nhịp trong vùng xanh.";
   else if(outcome==="miss")$("fightFeedback").textContent="✕ LỆCH NHỊP! "+f.misses+"/"+f.maxMisses+" lần trượt.";
   else if(outcome==="duplicate")$("fightFeedback").textContent="Nhịp này đã ghi điểm — đợi kim quay đầu rồi bấm lần nữa.";
-  else if(outcome==="complete")$("fightFeedback").textContent="Đủ nhịp! Chờ đồng hồ kết thúc để kéo cá.";
+  // Do not keep the player waiting after they have hit enough green-zone beats.
+  if(f.result==="caught"){landFish();return}
   if(f.result==="escaped"){missFish("Bấm lệch vùng xanh quá nhiều lần nên cá thoát.");return}
   updateHUD();
 }
@@ -378,9 +379,7 @@ function updateHUD(){
     $("fishFightName").textContent="🐟 "+state.currentFish.name+" · "+f.seconds+" giây · vùng xanh "+f.width+"% · "+f.targetHits+" nhịp";
     $("fightStability").style.width=Math.round(100*f.hits/f.targetHits)+"%";
     $("fightStabilityText").textContent=f.hits+"/"+f.targetHits;
-    const elapsed=Math.round(clamp(f.elapsed/f.seconds*100,0,100));
-    $("fightElapsed").style.width=elapsed+"%";$("fightElapsedText").textContent=elapsed+"%";
-    $("fightMistakes").textContent="Lệch: "+f.misses+"/"+f.maxMisses+" · "+(f.hits>=f.targetHits?"Đã đủ nhịp — chờ cá mệt.":"Còn thiếu "+(f.targetHits-f.hits)+" nhịp đúng.");
+    $("fightMistakes").textContent="Lệch: "+f.misses+"/"+f.maxMisses+" · Còn thiếu "+(f.targetHits-f.hits)+" nhịp đúng.";
     $("fightHitBtn").disabled=f.hits>=f.targetHits;
   }
 }
