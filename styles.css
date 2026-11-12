@@ -285,6 +285,7 @@ kbd{font:700 12px 'Space Mono',monospace;padding:5px 8px;background:#f8dca0;bord
 .equipment-shop .bait-shop-inner>p,.fish-inventory .bait-shop-inner>p{color:#cddfcb}
 .rod-shop-card .bait-shop-card-head strong{color:#ffe5ad}
 .rod-shop-description{font-size:11px;color:#bbd0c8;line-height:1.45;margin:8px 0}
+.rod-shop-card .bait-shop-buttons{grid-template-columns:1fr}
 .rod-shop-card .bait-shop-buttons button{width:100%}
 .rod-shop-owned{font-size:11px;color:#bce6bd;font-weight:800}
 .fish-inventory-list{display:grid;gap:10px;margin:12px 0}
