@@ -124,6 +124,10 @@
                 <strong id="baitFavorites">Rô đồng · Trê · Diếc</strong>
                 <p id="baitDescription">Giun đất hấp dẫn nhiều loài cá nước ngọt.</p>
                 <small>Mồi làm thay đổi cơ hội gặp từng loài, không đảm bảo mắc cá.</small>
+                <div class="bait-stock-selection">
+                  <span>TRONG TÚI: <strong id="baitOwned">16</strong> mồi</span>
+                  <span id="baitRates">Hiếm 23,5% · Cực hiếm 4,0%</span>
+                </div>
               </div>
               <p id="fishingStatus" class="fishing-status" aria-live="polite">Chọn cần, mồi rồi thả câu. Phần còn lại do bạn quan sát.</p>
               <div class="action-stack">
@@ -144,8 +148,18 @@
                   <small>Gợi ý chung để học quan sát, không phải thông báo thời gian thực.</small>
                 </div>
               </details>
-              <p class="panel-footnote">Tất cả xu và chi phí chỉ là mô phỏng trong phiên trình duyệt. Không có thanh toán thật.</p>
+              <p class="panel-footnote">Xu và mồi là vật phẩm ảo. Kho được lưu trong trình duyệt này; không có thanh toán thật.</p>
             </section>
+            <details id="baitShop" class="pixel-panel bait-shop">
+              <summary>🏪 CỬA HÀNG MỒI <span>TÚI: <b id="baitTotal">50</b> MỒI</span></summary>
+              <div class="bait-shop-inner">
+                <p>🎁 Người chơi mới được <strong>50 lượt mồi miễn phí</strong> gồm đủ 7 loại. <strong>Mỗi lần thả câu trừ 1 mồi</strong>, dù sau đó giật hụt hoặc thu phao. Mồi giả dùng 1 lượt sử dụng trong game.</p>
+                <p class="bait-shop-headnote">Dùng xu nhận từ cá để mua thêm. Các tỷ lệ bên dưới là xác suất <strong>gặp</strong> nhóm cá khi dùng cần đang chọn, không phải tỷ lệ chắc chắn bắt được.</p>
+                <div id="baitShopList" class="bait-shop-list" aria-label="Danh sách các loại mồi có thể mua"></div>
+                <p id="shopFeedback" class="bait-shop-feedback" role="status" aria-live="polite">Chọn MUA 1 hoặc MUA 5 để bổ sung mồi vào túi.</p>
+                <small>Kho lưu trong trình duyệt hiện tại, chưa có tài khoản hoặc thanh toán tiền thật.</small>
+              </div>
+            </details>
             <section class="pixel-panel catch-panel"><div class="panel-header"><h3>🐟 Thành quả</h3><span id="catchTier">ĐANG CHỜ</span></div><div id="lastCatch" class="last-catch" aria-live="polite">Chờ phao nhấp nhô và bắt đầu chuyến câu của bạn.</div><div class="caught-count"><strong id="sessionCatch">0</strong><span>cá đã câu · <b id="sessionScore">0</b> điểm</span></div></section>
           </aside>
         </div>
