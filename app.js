@@ -220,13 +220,70 @@ function chooseFish(){
   // Selecting a preferred bait never guarantees a fish, and never auto-hooks it.
   return chooseFishByBait(FISH,$("baitSelect").value,$("rodSelect").value);
 }
+function rarityPercent(value){
+  return (100*value).toFixed(1).replace(".",",")+"%";
+}
 function renderBaitAdvice(){
-  const bait=getBaitInfo($("baitSelect").value);
+  const id=$("baitSelect").value,bait=getBaitInfo(id);
   $("baitGroup").textContent=bait.group.toUpperCase();
   $("baitDescription").textContent=bait.description;
-  $("baitFavorites").textContent=bait.favorites.map(id=>FISH.find(f=>f.id===id)?.name??id).join(" · ");
+  $("baitFavorites").textContent=bait.favorites.map(fid=>FISH.find(f=>f.id===fid)?.name??fid).join(" · ");
+  const rate=fishEncounterOdds(FISH,id,$("rodSelect").value).rarityOdds;
+  $("baitRates").textContent="Hiếm "+rarityPercent(rate.rare)+" · Cực hiếm "+rarityPercent(rate.epic);
+  $("baitOwned").textContent=state.baitInventory[id]??0;
 }
-$("baitSelect").addEventListener("change",renderBaitAdvice);
+function purchaseShopBait(id,quantity){
+  const result=buyBait(state.baitInventory,state.coins,id,quantity);
+  if(!result.ok){
+    $("shopFeedback").textContent=result.reason==="not-enough-coins"
+      ?"Không đủ "+result.cost+" xu để mua "+quantity+" "+BAITS[id].name+"."
+      :"Không thể hoàn tất giao dịch. Kiểm tra số xu và túi mồi.";
+    return;
+  }
+  state.baitInventory=result.inventory;
+  state.coins=result.coins;
+  $("shopFeedback").textContent="✓ Đã mua "+quantity+" "+BAITS[id].name+" với "+result.cost+" xu. Còn "+state.coins+" xu.";
+  saveProgress();
+  renderBaitAdvice();renderShop();updateHUD();
+}
+function renderShop(){
+  const list=$("baitShopList");
+  const focused=document.activeElement;
+  const oldId=focused?.dataset?.shopId,oldQty=focused?.dataset?.shopQty;
+  list.replaceChildren();
+  for(const [id,bait] of Object.entries(BAITS)){
+    const odds=fishEncounterOdds(FISH,id,$("rodSelect").value).rarityOdds;
+    const card=document.createElement("div");card.className="bait-shop-card";
+    const head=document.createElement("div");head.className="bait-shop-card-head";
+    const name=document.createElement("strong");name.textContent=bait.emoji+" "+bait.name;
+    const owned=document.createElement("span");owned.className="bait-shop-owned";
+    owned.textContent="Có "+(state.baitInventory[id]??0);
+    head.append(name,owned);
+    const rate=document.createElement("div");rate.className="bait-shop-rate";
+    rate.textContent="Hiếm "+rarityPercent(odds.rare)+" · Cực hiếm "+rarityPercent(odds.epic);
+    const favorite=document.createElement("div");favorite.className="bait-shop-favourites";
+    favorite.textContent="Ưu tiên: "+bait.favorites.map(fid=>FISH.find(f=>f.id===fid)?.name??fid).join(", ");
+    const buttons=document.createElement("div");buttons.className="bait-shop-buttons";
+    for(const qty of [1,5]){
+      const total=qty*BAIT_PRICES[id];
+      const button=document.createElement("button");
+      button.type="button";button.dataset.shopId=id;button.dataset.shopQty=String(qty);
+      button.textContent="MUA "+qty+" · "+total+" XU";
+      button.disabled=state.coins<total;
+      button.setAttribute("aria-label","Mua "+qty+" "+bait.name+" giá "+total+" xu");
+      button.addEventListener("click",()=>purchaseShopBait(id,qty));
+      buttons.append(button);
+    }
+    card.append(head,rate,favorite,buttons);
+    list.append(card);
+  }
+  if(oldId&&oldQty){
+    const matching=[...list.querySelectorAll("button")].find(b=>b.dataset.shopId===oldId&&b.dataset.shopQty===oldQty);
+    if(matching&&!matching.disabled)matching.focus({preventScroll:true});
+  }
+}
+$("baitSelect").addEventListener("change",()=>{renderBaitAdvice();updateHUD()});
+$("rodSelect").addEventListener("change",()=>{renderBaitAdvice();renderShop()});
 function canFish(){return state.spot!==null&&(state.freeRemaining>0||state.paidRemaining>0)}
 function planNextTake(now){
   state.currentFish=chooseFish();
@@ -773,4 +830,4 @@ function frame(t){
   if(t-lastSaveTick>2000&&state.screen==="game"&&state.spot!==null){saveProgress();lastSaveTick=t}
   requestAnimationFrame(frame);
 }
-drawFishList();renderBaitAdvice();loadLakes();createBackground();createFloatBackground();updateHUD();renderMapTransform();requestAnimationFrame(frame);
+saveProgress();drawFishList();renderBaitAdvice();renderShop();loadLakes();createBackground();createFloatBackground();updateHUD();renderMapTransform();requestAnimationFrame(frame);
