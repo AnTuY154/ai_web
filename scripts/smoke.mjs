@@ -26,6 +26,7 @@ try{
     ["/fishing-engine.mjs","text/javascript","makeFight"],
     ["/float-behavior.mjs","text/javascript","planFloatCast"],
     ["/bait-engine.mjs","text/javascript","chooseFishByBait"],
+    ["/bait-store.mjs","text/javascript","starterProgress"],
     ["/styles.css","text/css","map-frame"],
     ["/data/hanoi-lakes.json","application/json","bay-mau"]
   ];

@@ -11,6 +11,7 @@ const allowed = new Map([
   ["/fishing-engine.mjs",["fishing-engine.mjs","text/javascript; charset=utf-8"]],
   ["/float-behavior.mjs",["float-behavior.mjs","text/javascript; charset=utf-8"]],
   ["/bait-engine.mjs",["bait-engine.mjs","text/javascript; charset=utf-8"]],
+  ["/bait-store.mjs",["bait-store.mjs","text/javascript; charset=utf-8"]],
   ["/data/hanoi-lakes.json",["data/hanoi-lakes.json","application/json; charset=utf-8"]]
 ]);
 const FISH_IDS=["ro-phi","ro-dong","diec","troi","me-trang","chep","tram-co","tre","tram-den","ca-qua"];

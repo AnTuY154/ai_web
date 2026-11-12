@@ -52,6 +52,21 @@ assert.match(js,/chooseFishByBait\(FISH,\$\("baitSelect"\)\.value,\$\("rodSelect
 assert.match(js,/const locked=state\.fishing!=="idle";/,"bait and rod should lock during cast");
 assert.match(js,/renderBaitAdvice\(\)/,"bait selection must show contextual guide");
 
+for(const id of ["baitShop","baitTotal","baitShopList","shopFeedback","baitOwned","baitRates"]){
+  assert.ok(html.includes('id="'+id+'"'),"bait shop missing UI id: "+id);
+}
+assert.match(js,/from "\.\/bait-store\.mjs"/,"game must import persistent bait store");
+assert.match(js,/window\.localStorage\.getItem\(BAIT_SAVE_KEY\)/,"game must load saved inventory");
+assert.match(js,/window\.localStorage\.setItem\(BAIT_SAVE_KEY/,"game must persist inventory");
+assert.match(js,/spendBait\(state\.baitInventory,id\)/,"every cast must use one bait");
+assert.match(js,/state\.baitInventory=paid\.inventory/,"spent bait must update live inventory");
+assert.match(js,/buyBait\(state\.baitInventory,state\.coins,id,quantity\)/,"shop purchases must use game wallet");
+assert.match(js,/renderShop\(\)/,"shop must render purchase options");
+assert.match(html,/Mỗi lần thả câu trừ 1 mồi/,"show bait-consumption rule");
+assert.match(html,/50 lượt mồi miễn phí/,"explain free starter pack");
+
+
+
 assert.ok(js.includes("strikeFight("),"Space press must score moving marker");
 
 assert.ok(!html.includes('id="fightElapsed"')&&!html.includes('id="fightElapsedText"'),"hide redundant time progress bar in fight");
@@ -62,6 +77,7 @@ assert.ok(html.includes('id="fightClock"'),"retain countdown as a failure limit,
 assert.ok(js.includes('if(state.fishing==="reeling")syncFightMeter();'),"cursor animation should update every frame");
 assert.ok(!js.includes("state.held"),"old hold/release model must be removed");
 const css=await readFile(new URL("../styles.css",import.meta.url),"utf8");
+assert.match(css,/\.bait-shop\{/, "shop needs a distinct responsive layout");
 assert.doesNotMatch(css,/\.bite-banner|bite-flash/,"no dormant bite alarm CSS");
 assert.match(css,/\#fightPanel\s*\{[^}]*position:fixed;top:50%;left:50%/,"meter must be fixed in center of screen");
 assert.match(css,/translate\(-50%,-50%\)/,"meter must be centered in both axes");
