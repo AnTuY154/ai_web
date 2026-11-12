@@ -48,7 +48,7 @@ assert.ok(baitSelectHtml,"bait choice control is missing");
 const baitOptions=[...baitSelectHtml.matchAll(/<option value="([^"]+)"/g)].map(x=>x[1]);
 assert.deepEqual(baitOptions.sort(),["worm","flour","corn","greens","shrimp","snail","lure"].sort(),"all 7 bait types must be selectable");
 assert.match(js,/from "\.\/bait-engine\.mjs"/,"app must import bait encounter engine");
-assert.match(js,/chooseFishByBait\(FISH,\$\("baitSelect"\)\.value,\$\("rodSelect"\)\.value\)/,"bait and rod must affect fish choice");
+assert.match(js,/chooseFishByBait\(FISH,\$\("baitSelect"\)\.value,state\.selectedRod\)/,"bait and owned rod must affect fish choice");
 assert.match(js,/const locked=state\.fishing!=="idle";/,"bait and rod should lock during cast");
 assert.match(js,/renderBaitAdvice\(\)/,"bait selection must show contextual guide");
 
