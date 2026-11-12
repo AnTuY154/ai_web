@@ -683,3 +683,286 @@ body.fishing-fullscreen{overflow:hidden}
 @media(prefers-reduced-motion:reduce){
   .play-action-bar .action-stack button{transition:none}
 }
+
+
+/* ─── Immersive full-width Hanoi map and lake lobby ──────────────────
+   Initial world map and seated-fishing approaches are all viewport-sized.
+   Secondary long content goes in internally scrollable dialogs.
+   Keep the original 900×540 game canvas undistorted for accurate tap hitboxes.
+*/
+body.map-fullscreen,body.lobby-fullscreen{overflow:hidden}
+body.map-fullscreen> #app > footer,
+body.lobby-fullscreen> #app > footer{display:none}
+body.map-fullscreen .topbar{
+  position:fixed;left:0;right:0;top:0;z-index:48;
+  height:62px;min-height:0;padding:6px clamp(10px,2.4vw,38px);
+  background:#081f2ce8;border-bottom:2px solid #568b79;
+  box-shadow:0 4px 14px #06182099;
+}
+body.map-fullscreen .brand-icon{width:36px;height:36px;font-size:21px}
+body.map-fullscreen .brand strong{font-size:16px}
+body.map-fullscreen .brand small{font-size:8px}
+body.map-fullscreen .proto-badge{font-size:9px;padding:6px 9px}
+body.map-fullscreen .wallet{padding:6px 10px}
+body.map-fullscreen .main-shell{
+  position:fixed;inset:62px 0 0 0;z-index:30;
+  display:block;max-width:none;width:100vw;height:calc(100dvh - 62px);
+  min-height:0;padding:0;margin:0;overflow:hidden;
+  background:#9ec58e;
+}
+body.map-fullscreen .map-section{
+  position:absolute;inset:0;display:block;margin:0;min-width:0;
+}
+body.map-fullscreen .map-frame{
+  position:absolute;inset:0;width:100%;height:100%;
+  border:0;box-shadow:none;overflow:hidden;background:#a5ca91;
+  touch-action:none;
+}
+body.map-fullscreen .map-world{will-change:transform}
+body.map-fullscreen .map-heading{
+  position:absolute;left:clamp(9px,1.8vw,24px);top:clamp(10px,1.8vw,22px);
+  right:clamp(9px,1.8vw,24px);z-index:20;
+  padding:0;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  pointer-events:none;
+}
+body.map-fullscreen .map-heading>*{pointer-events:auto}
+body.map-fullscreen .map-heading-title{
+  color:#ffedc8;flex:1;min-width:0;max-width:420px;
+  padding:8px 12px;background:#092f3bcf;border:2px solid #638e7e;
+  text-align:center;
+}
+body.map-fullscreen .map-heading-title h2{font-size:clamp(13px,1.8vw,23px);line-height:1.15}
+body.map-fullscreen .map-heading-title .eyebrow{font-size:9px;margin-bottom:4px}
+.map-discover-btn{
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:center;
+  gap:3px;max-width:250px;min-height:49px;
+  background:#0d3541;border:2px solid #91bb9c;
+  color:#ffe4a4;font:800 12px 'Space Mono',monospace;
+  padding:8px 13px;box-shadow:4px 4px #052028;
+  cursor:pointer;touch-action:manipulation;
+}
+.map-discover-btn small{
+  max-width:100%;font:700 11px 'Chakra Petch',sans-serif;
+  color:#c2e9c1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.map-discover-btn:focus-visible{outline:3px solid #fff0ba;outline-offset:2px}
+body.map-fullscreen .map-controls{
+  flex:none;display:flex;align-items:center;gap:4px;
+  background:#0e3542f0;border:2px solid #668f83;
+  padding:6px;box-shadow:3px 3px #051e28;
+}
+body.map-fullscreen .map-controls button{
+  width:41px;height:39px;color:#ffe6ab;font-size:23px;
+}
+body.map-fullscreen .map-controls span{font-size:10px;color:#e0e9d8}
+body.map-fullscreen .lake-preview{
+  position:absolute;z-index:20;bottom:clamp(9px,1.8vw,23px);
+  left:50%;transform:translateX(-50%);
+  width:min(850px,calc(100vw - 22px));
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;margin:0;padding:13px 16px;
+  background:#0e303de9;border:3px solid #6c9b87;
+  box-shadow:5px 5px #061e28;
+}
+body.map-fullscreen .lake-preview h3{
+  font-size:clamp(15px,2.2vw,22px);line-height:1.15;
+  color:#fff0c0;margin:3px 0 2px;
+}
+body.map-fullscreen .lake-preview p{font-size:11px;line-height:1.3}
+body.map-fullscreen .lake-preview .eyebrow{font-size:9px;margin:0}
+body.map-fullscreen .lake-preview .slots-note{font-size:10px;margin-bottom:7px}
+body.map-fullscreen #enterLake{min-height:43px;font-size:11px;padding:10px 13px}
+body.map-fullscreen .map-legend{
+  bottom:118px;left:12px;padding:7px 9px;
+  border:1px solid #658a7b;font-size:9px;gap:9px;
+}
+.map-directory-backdrop,.lobby-fish-backdrop{
+  position:fixed;inset:0;background:#061925c7;
+  backdrop-filter:blur(3px);
+}
+body.map-fullscreen .map-directory-backdrop{z-index:32}
+body.map-fullscreen .map-sidebar{
+  display:none;position:fixed;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  z-index:33;width:min(510px,calc(100vw - 22px));
+  max-height:calc(100dvh - 90px);min-height:0;
+  background:#123742;border:4px solid #83aa95;
+  box-shadow:8px 8px #061a24;
+  padding:0 15px 14px;overflow-y:auto;overscroll-behavior:contain;
+}
+body.map-fullscreen .map-sidebar.is-open{display:flex}
+.directory-header,.lobby-fish-head{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:10px;position:sticky;top:0;z-index:5;
+  margin:0 -15px 16px;padding:11px 13px;
+  background:#1a4953;border-bottom:2px solid #538779;
+  color:#ffdfa5;font:800 12px 'Space Mono',monospace;
+}
+.directory-header button,.lobby-fish-head button{
+  font-size:11px;min-height:41px;padding:9px 12px;
+}
+body.map-fullscreen .map-sidebar h1{font-size:24px;line-height:1.2;margin:3px 0 7px}
+body.map-fullscreen .map-sidebar .intro{font-size:12px;margin-bottom:15px}
+body.map-fullscreen .map-sidebar .lake-list{max-height:none;overflow:visible}
+body.map-fullscreen .map-sidebar .data-note{font-size:10px;line-height:1.4}
+body.map-fullscreen .search-wrap{margin-bottom:10px}
+
+/* Main Bảy Mẫu lobby (before sitting down). */
+body.lobby-fullscreen .topbar{display:none}
+body.lobby-fullscreen .game-shell{
+  position:fixed;inset:0;z-index:34;max-width:none;
+  width:100vw;height:100vh;height:100dvh;
+  padding:0;margin:0;overflow:hidden;background:#285c55;
+}
+body.lobby-fullscreen .game-top{
+  position:absolute;top:0;left:0;right:0;z-index:15;
+  display:flex;justify-content:space-between;align-items:center;
+  gap:9px;min-height:70px;margin:0;padding:9px clamp(10px,2vw,26px);
+  background:linear-gradient(#0b2738ed,#102c39d0);
+  border-bottom:3px solid #568977;
+}
+.lobby-head-left{display:flex;align-items:center;gap:14px;min-width:0}
+body.lobby-fullscreen .game-top .text-btn{
+  margin:0;min-height:42px;padding:9px 13px;
+  border:2px solid #79a997;background:#153f49;
+  color:#ffe3a7;font-size:11px;
+  box-shadow:3px 3px #061c26;
+}
+body.lobby-fullscreen .game-top .eyebrow{font-size:9px;margin:0 0 3px}
+body.lobby-fullscreen .game-top h1{
+  font-size:clamp(16px,2.1vw,26px);line-height:1.12;
+  white-space:nowrap;margin:0;
+}
+.lobby-title{min-width:0}
+.lobby-fish-button{
+  display:flex;align-items:center;gap:8px;justify-content:center;
+  min-height:42px;padding:8px 12px;
+  color:#ffdf9a;background:#153b4a;border:2px solid #7ea69c;
+  font:800 11px 'Space Mono',monospace;
+}
+.lobby-fish-button small{color:#b8ddb0;white-space:nowrap}
+body.lobby-fullscreen .room-stats{gap:6px}
+body.lobby-fullscreen .room-stats>div{min-width:78px;padding:5px 7px;border-width:1px}
+body.lobby-fullscreen .room-stats strong{font-size:15px;margin-top:2px}
+body.lobby-fullscreen .room-stats small{font-size:8px}
+body.lobby-fullscreen .game-layout{
+  display:block;position:absolute;inset:0;min-width:0;
+}
+body.lobby-fullscreen .playfield-card{
+  position:absolute;inset:0;
+  border:0;box-shadow:none;
+  background:radial-gradient(ellipse at center,#9bc18a 0%,#78b18a 52%,#3b857a 100%);
+}
+body.lobby-fullscreen .playfield-card canvas{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  /* Never stretch or clip numbered seats; all 15 remain reachable on mobile. */
+  width:min(100vw,calc(100dvh * 1.6666667));height:auto;
+  aspect-ratio:5/3;max-height:100dvh;
+  background:#8cbe8a;image-rendering:pixelated;touch-action:manipulation;
+}
+body.lobby-fullscreen .scene-status{display:none}
+body.lobby-fullscreen .scene-footer{
+  position:absolute;left:50%;transform:translateX(-50%);
+  bottom:clamp(10px,2.1vw,23px);
+  z-index:12;display:flex;align-items:center;justify-content:space-between;gap:9px;
+  width:min(860px,calc(100vw - 22px));
+  margin:0;padding:10px 14px;
+  background:#0c303bcc;border:2px solid #709b83;
+  color:#ecf0ce;box-shadow:3px 3px #09232b;
+}
+body.lobby-fullscreen .scene-footer span:first-child{
+  color:#edf2d8;font-size:11px;line-height:1.35;
+}
+body.lobby-fullscreen .scene-footer .lobby-scene-label{
+  flex:none;color:#ffe1a2;font-size:9px;
+}
+body.lobby-fullscreen .mobile-controls{
+  position:absolute;right:12px;bottom:81px;z-index:12;
+  display:none;gap:6px;padding:7px;
+  background:#0d303dd9;border:2px solid #74a08c;
+}
+body.lobby-fullscreen .mobile-controls button{
+  width:44px;height:44px;touch-action:none;
+}
+body.lobby-fullscreen .lobby-fish-backdrop{z-index:21}
+body.lobby-fullscreen .game-sidebar{
+  display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+  z-index:22;width:min(570px,calc(100vw - 22px));
+  max-height:calc(100dvh - 24px);min-height:0;
+  overflow-y:auto;overscroll-behavior:contain;
+  grid-template-columns:none;gap:14px;padding:0 14px 15px;
+  background:#123640;border:4px solid #8aab93;box-shadow:7px 7px #061923;
+}
+body.lobby-fullscreen .game-sidebar.is-open{display:flex;flex-direction:column}
+body.lobby-fullscreen .game-sidebar>.pixel-panel{box-shadow:none}
+body.lobby-fullscreen .game-sidebar .fish-list{max-height:none}
+body.lobby-fullscreen .game-sidebar .small-note{grid-column:auto}
+body.lobby-fullscreen .lobby-fish-head{margin:0 -14px 0}
+
+@media(max-width:800px){
+  body.map-fullscreen .map-heading-title{display:none}
+  body.map-fullscreen .map-heading{gap:6px;top:9px;left:9px;right:9px}
+  body.map-fullscreen .map-controls{gap:3px;padding:4px}
+  body.map-fullscreen .map-controls button{width:36px;height:36px}
+  body.map-fullscreen .map-controls span{min-width:45px;font-size:9px}
+  body.map-fullscreen .lake-preview{flex-direction:row;gap:8px;padding:9px 10px}
+  body.map-fullscreen .lake-preview h3{font-size:15px}
+  body.map-fullscreen .lake-preview p{font-size:10px}
+  body.map-fullscreen .lake-preview .slots-note{display:none}
+  body.map-fullscreen .lake-preview #enterLake{font-size:10px;padding:9px 10px;min-height:43px}
+  body.map-fullscreen .map-legend{bottom:95px}
+  body.lobby-fullscreen .game-top{min-height:56px;padding:6px 9px}
+  body.lobby-fullscreen .lobby-title{display:none}
+  body.lobby-fullscreen .game-top .text-btn{font-size:9px;padding:6px 8px;min-height:39px}
+  body.lobby-fullscreen .room-stats>div{min-width:57px;padding:4px}
+  body.lobby-fullscreen .room-stats small{font-size:7px}
+  body.lobby-fullscreen .room-stats strong{font-size:13px}
+  body.lobby-fullscreen .lobby-fish-button{font-size:9px;gap:4px;padding:6px;min-height:39px}
+  body.lobby-fullscreen .mobile-controls{display:flex}
+  body.lobby-fullscreen .scene-footer{bottom:8px;padding:7px 9px}
+  body.lobby-fullscreen .scene-footer span:first-child{font-size:10px}
+  body.lobby-fullscreen .scene-footer .lobby-scene-label{display:none}
+}
+@media(max-width:480px){
+  body.map-fullscreen .topbar{height:51px;padding:5px 9px}
+  body.map-fullscreen .brand{gap:6px}
+  body.map-fullscreen .brand-icon{width:28px;height:28px;font-size:17px}
+  body.map-fullscreen .brand strong{font-size:12px;letter-spacing:-.4px}
+  body.map-fullscreen .brand small{font-size:7px;letter-spacing:0}
+  body.map-fullscreen .proto-badge{display:none}
+  body.map-fullscreen .wallet{font-size:10px;padding:6px}
+  body.map-fullscreen .main-shell{top:51px;height:calc(100dvh - 51px)}
+  body.map-fullscreen .map-discover-btn{padding:5px 7px;min-height:43px;font-size:10px;max-width:175px}
+  body.map-fullscreen .map-discover-btn small{font-size:9px}
+  body.map-fullscreen .map-controls{padding:3px}
+  body.map-fullscreen .map-controls button{width:32px;height:34px;font-size:18px}
+  body.map-fullscreen .map-controls span{font-size:8px;min-width:38px}
+  body.map-fullscreen .lake-preview{
+    align-items:center;bottom:max(7px,env(safe-area-inset-bottom));
+    width:calc(100vw - 14px);gap:7px;
+  }
+  body.map-fullscreen .lake-preview>div:first-child{min-width:0;flex:1}
+  body.map-fullscreen .lake-preview h3{font-size:13px}
+  body.map-fullscreen .lake-preview p{font-size:9px}
+  body.map-fullscreen .lake-preview .eyebrow{font-size:7px}
+  body.map-fullscreen .lake-preview #enterLake{font-size:9px;padding:8px;white-space:normal;max-width:128px}
+  body.map-fullscreen .map-legend{left:8px;bottom:87px;gap:6px;font-size:8px;padding:5px 6px}
+  body.map-fullscreen .map-sidebar{max-height:calc(100dvh - 24px)}
+  body.lobby-fullscreen .game-top{gap:3px}
+  body.lobby-fullscreen .room-stats>div:nth-child(2),
+  body.lobby-fullscreen .room-stats>div:nth-child(3){display:none}
+  body.lobby-fullscreen .scene-footer{max-width:calc(100vw - 14px)}
+  body.lobby-fullscreen .scene-footer span:first-child{font-size:9px}
+  body.lobby-fullscreen .mobile-controls{
+    right:7px;bottom:69px;display:grid;
+    grid-template-columns:repeat(2,34px);gap:4px;padding:4px;
+  }
+  body.lobby-fullscreen .mobile-controls button{width:34px;height:34px;font-size:14px}
+}
+@media(max-height:480px){
+  body.map-fullscreen .map-legend{display:none}
+  body.map-fullscreen .lake-preview p{display:none}
+  body.lobby-fullscreen .scene-footer{bottom:4px}
+  body.lobby-fullscreen .scene-footer .lobby-scene-label{display:none}
+  body.lobby-fullscreen .mobile-controls{bottom:58px}
+}
