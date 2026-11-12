@@ -90,3 +90,15 @@ Trong **Fishing Station**, menu mồi có **7 loại**: giun, bột ngũ cốc, 
 Mồi thay đổi **xác suất gặp cá theo loài và độ hiếm** (không bảo đảm sẽ câu được), kết hợp với cần và kỹ năng phản xạ. Khi đã thả câu, mồi/cần được khóa cho đến lượt sau, tránh đổi đồ giữa chừng. Bản demo **không trừ mồi và không dùng tiền thật**.
 
 Tỷ lệ thiết kế, bảng 10 × 7 và nguồn hướng dẫn câu cá: [Bait Mechanics](docs/BAIT_MECHANICS.md). Game vẫn giữ nguyên **phao không báo cá cắn**, minigame canh Space ở giữa màn hình và popup hình cá sau khi câu thành công.
+
+## Đọc phao theo tín hiệu ngoài đời (bản nâng cấp)
+
+Dựa trên bản tóm tắt reel câu phao mà người dùng cung cấp, mô phỏng phân biệt rõ **7 tình huống**: rung lăn tăn, nhấp nông liên tục do cá nhỏ, chìm rồi nổi lại (cắn giả), chìm hẳn, chạy ngang, trồi lên và nghiêng, hoặc im lâu.
+
+- **Chỉ một phần nhỏ chóp đỏ lộ trên mặt nước**, thân phao chìm dưới nước nhờ kỹ thuật clipping trong Canvas, giống một phao cân chì đúng hơn.
+- **Chìm rồi nổi lại là tín hiệu giả**, không được xem là cá đã ngậm chắc. Nhấp nông liên tục có thể xảy ra thường hơn với giun/bột/tép; mồi dạng to như ngô/ốc giảm những lần rỉa nhỏ.
+- **Chìm rõ và duy trì / đi ngang / nổi cao nghiêng** mới là cửa sổ giật có thể mắc cá. Người chơi vẫn phải bấm Space bằng mắt; **không báo trước cá cắn**.
+- Có nút **THU PHAO / ĐỔI MỒI** khi đang quan sát, để thử lại khi chờ quá lâu hoặc muốn dùng mồi khác mà không bị tính giật hụt.
+- **SỔ TAY ĐỌC PHAO** là nội dung tĩnh mở theo ý người chơi, không phải tín hiệu thời gian thực.
+
+Trò chơi **chưa cho điều chỉnh cỡ phao, chì hoặc độ sâu theo tay**; phao được cân sẵn cho chế độ demo. Chi tiết: [Float Fishing Mechanics](docs/FLOAT_FISHING_MECHANICS.md).
