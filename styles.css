@@ -462,3 +462,224 @@ body.utility-overlay-active{overflow:hidden}
   .utility-ticker{display:none}
   .fishing-view{padding-bottom:142px}
 }
+
+
+/* ── Full-viewport fishing mode, November 2026 ────────────────────────
+   Gameplay canvas occupies the full available width. Actions and timer
+   remain visible on the play surface; gear is a separate accessible dialog.
+   Four existing quick links remain pinned at the bottom (two rows on phones).
+*/
+body.fishing-fullscreen{overflow:hidden}
+.fishing-view{
+  position:fixed;inset:0;z-index:50;isolation:isolate;
+  width:100vw;height:100vh;height:100dvh;
+  padding:0;margin:0;overflow:hidden;background:#123e4a;
+  max-width:none;
+}
+.fishing-view .fishing-layout{display:block;position:absolute;inset:0;min-width:0}
+.fishing-view .fishing-lake-frame{
+  position:absolute;inset:0;min-width:0;
+  border:0;box-shadow:none;background:#236b79;
+}
+.fishing-view .fishing-toolbar,.fishing-view .fish-scene-bottom{display:none}
+.fishing-view .float-scene{position:absolute;inset:0;background:#438c9d}
+.fishing-view .float-scene canvas{
+  display:block;width:100%;height:100%;
+  min-height:0;object-fit:cover;object-position:62% 58%;
+  image-rendering:pixelated;image-rendering:crisp-edges;
+}
+.fishing-view .fishing-side{display:contents}
+.fishing-view .fishing-head{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  position:absolute;top:0;left:0;right:0;z-index:81;
+  min-height:72px;margin:0;padding:8px 14px;
+  background:linear-gradient(180deg,rgba(6,29,38,.93),rgba(6,29,38,.73));
+  border-bottom:2px solid #4c817b;
+}
+.play-head-left,.play-head-right{display:flex;align-items:center;min-width:0;gap:10px}
+.play-head-title{min-width:0}
+.fishing-view .play-head-title h2{font:800 17px 'Chakra Petch',sans-serif;margin:1px 0 0}
+.fishing-view .play-head-title .eyebrow{font-size:9px;color:#add3c4}
+.fishing-view .play-head-title h2 span{color:#ffdea1}
+.play-leave-btn,.play-gear-btn{
+  border:2px solid #7ca9a0;background:#16414c;color:#ffe7af;
+  font:800 11px 'Space Mono',monospace;
+  padding:9px 11px;min-height:44px;
+  box-shadow:3px 3px 0 #051b24;white-space:nowrap;
+}
+.play-leave-btn:hover,.play-gear-btn:hover{background:#205e69}
+.play-leave-btn:focus-visible,.play-gear-btn:focus-visible{outline:3px solid #ffe6a0;outline-offset:3px}
+.play-gear-btn{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:2px;max-width:230px}
+.play-gear-btn small{
+  display:block;max-width:200px;overflow:hidden;text-overflow:ellipsis;
+  color:#c9e7b9;font:700 10px 'Chakra Petch',sans-serif;
+}
+.play-wallet{
+  white-space:nowrap;background:#14343e;padding:9px 11px;
+  border:2px solid #6b9785;color:#ffd388;
+  font:800 12px 'Space Mono',monospace;
+}
+.play-wallet b{color:#fff3ca}
+.fishing-view .play-clock{
+  margin:0;min-width:147px;max-width:200px;padding:7px 10px;
+  border:2px solid #86ad96;background:#0b2c35;
+  box-shadow:3px 3px 0 #051821;
+}
+.fishing-view .play-clock>div:first-child{gap:7px;justify-content:space-between}
+.fishing-view .play-clock small{font:800 9px 'Space Mono',monospace;color:#d7e0b7}
+.fishing-view .play-clock strong{font-size:21px;color:#ffe098;font-variant-numeric:tabular-nums}
+.fishing-view .play-clock .time-meter{height:4px;margin:5px 0 0}
+.fishing-view .play-clock #rentHint{display:none}
+.fishing-view .scene-buoy-caption{
+  top:91px;left:14px;background:#0e3542c9;
+  font-size:10px;padding:7px 9px;max-width:calc(100vw - 30px);
+}
+.fishing-view .float-instructions{
+  position:absolute;top:137px;left:14px;z-index:3;
+  display:flex;flex-direction:column;align-items:flex-start;gap:7px;
+  padding:8px 10px;background:#0b2e3bbd;
+  border:2px solid #6e9a8b;max-width:min(420px,calc(100vw - 28px));
+  font-size:11px;box-shadow:3px 3px 0 #08212a;
+}
+.fishing-view .key-hint{font-size:11px;gap:7px;line-height:1.4}
+.fishing-view .float-instructions #floatStage{font-size:9px}
+.fishing-view .float-instructions kbd{font-size:9px;padding:4px 6px}
+.play-action-bar{
+  position:fixed;z-index:79;
+  bottom:112px;left:50%;transform:translateX(-50%);
+  width:min(560px,calc(100vw - 22px));
+  padding:7px;border:2px solid #659788;
+  background:#0a2b35df;box-shadow:4px 4px 0 #061f28;
+  backdrop-filter:blur(3px);
+}
+.play-action-bar .fishing-status{
+  min-height:0;margin:0 0 6px;padding:5px 9px;
+  background:#16444dbb;color:#dcebcf;border-left:3px solid #ecd08c;
+  font-size:11px;line-height:1.25;text-align:center;
+  max-height:34px;overflow:hidden;
+}
+.play-action-bar .action-stack{
+  display:flex;align-items:stretch;justify-content:center;gap:8px;
+}
+.play-action-bar .action-stack button{
+  width:100%;min-width:0;min-height:48px;
+  padding:8px 10px;font:800 13px 'Chakra Petch',sans-serif;
+  letter-spacing:.03em;touch-action:manipulation;
+}
+.play-action-bar .action-stack #retrieveBtn{max-width:185px;font-size:11px}
+.play-action-bar .action-stack #reelBtn{
+  background:#ffe0a2!important;color:#173a40!important;
+  border-color:#d6b16f;
+}
+.fishing-view .utility-launcher{
+  position:fixed;top:auto;left:50%;right:auto;bottom:8px;
+  transform:translateX(-50%);z-index:78;
+  width:min(830px,calc(100vw - 20px));
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:7px;padding:7px;
+  background:#0d2a34ed;box-shadow:0 4px 18px #021720bb;
+}
+.fishing-view .utility-tile{
+  min-height:63px;grid-template-columns:26px minmax(0,1fr);
+  padding:7px 6px;gap:5px;
+}
+.fishing-view .utility-tile-icon{font-size:20px;width:26px;height:30px}
+.fishing-view .utility-tile-copy{gap:3px}
+.fishing-view .utility-tile-copy strong{font-size:10px}
+.fishing-view .utility-tile-copy small{font-size:9px}
+.fishing-view .utility-ticker{display:none}
+.fishing-view .gear-settings-backdrop{
+  position:fixed;inset:0;z-index:132;
+  background:#061b27dc;backdrop-filter:blur(3px);
+}
+.fishing-view .gear-settings-modal{
+  position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+  z-index:133;display:flex;flex-direction:column;
+  width:min(520px,calc(100vw - 24px));
+  max-height:calc(100dvh - 24px);margin:0;padding:0;
+  background:#143945;border:4px solid #8ab5a0;
+  box-shadow:8px 8px 0 #051924,0 0 0 3px #255a5b;
+  overflow:hidden;
+}
+.fishing-view .gear-settings-head{
+  flex:none;display:flex;align-items:center;justify-content:space-between;
+  gap:9px;padding:12px 14px;margin:0;
+  border-bottom:3px solid #497c71;background:#1b4a51;
+}
+.fishing-view .gear-settings-head h3{margin:0;color:#ffe2a5;font-size:18px}
+.fishing-view .gear-settings-head span{color:#b6dcb4;font:700 10px 'Space Mono',monospace}
+.fishing-view .gear-settings-head #closeGearSettings{
+  flex:none;min-height:42px;padding:8px 11px;
+  font:800 11px 'Space Mono',monospace;
+}
+.fishing-view .gear-settings-content{
+  flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;
+  padding:14px 16px 18px;
+}
+.fishing-view .gear-settings-content label{font-weight:800;font-size:11px}
+.fishing-view .gear-settings-content .control-help{margin-top:9px}
+.fishing-view .gear-settings-content .panel-footnote{margin-top:14px}
+@media(max-width:850px){
+  .fishing-view .utility-launcher{
+    position:fixed;bottom:max(5px,env(safe-area-inset-bottom));
+    width:min(520px,calc(100vw - 12px));
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:5px;padding:5px;top:auto;
+  }
+  .fishing-view .utility-tile{min-height:53px}
+  .fishing-view .float-scene{bottom:125px}
+  .fishing-view .float-scene canvas{
+    width:100%;height:100%;min-height:0;
+    object-fit:cover;object-position:68% 50%;
+  }
+  .fishing-view .play-action-bar{bottom:calc(136px + env(safe-area-inset-bottom))}
+  .fishing-view .fishing-head{min-height:60px;padding:6px 9px;gap:4px}
+  .fishing-view .play-head-left,.fishing-view .play-head-right{gap:5px}
+  .fishing-view .play-head-title .eyebrow{font-size:8px}
+  .fishing-view .play-head-title h2{font-size:13px}
+  .fishing-view .play-wallet{font-size:9px;padding:6px 5px}
+  .fishing-view .play-gear-btn{max-width:116px;padding:5px 7px;min-height:42px;font-size:9px}
+  .fishing-view .play-gear-btn small{max-width:96px;font-size:9px}
+  .fishing-view .play-leave-btn{padding:5px 6px;min-height:42px;font-size:9px}
+  .fishing-view .play-clock{min-width:93px;max-width:118px;padding:4px 6px}
+  .fishing-view .play-clock small{font-size:7px}
+  .fishing-view .play-clock strong{font-size:17px}
+  .fishing-view .scene-buoy-caption{top:73px;left:9px;padding:5px 7px;font-size:9px}
+  .fishing-view .float-instructions{top:111px;left:9px;padding:5px 7px;max-width:245px}
+  .fishing-view .key-hint{font-size:10px}
+  .play-action-bar .fishing-status{font-size:10px;padding:4px 7px}
+  .play-action-bar .action-stack button{min-height:44px;font-size:12px}
+  .play-action-bar .action-stack #retrieveBtn{font-size:10px}
+}
+@media(max-width:460px){
+  .fishing-view .play-head-title{display:none}
+  .fishing-view .play-wallet{font-size:9px}
+  .fishing-view .play-gear-btn small{font-size:8px}
+  .fishing-view .utility-tile{min-height:51px}
+  .fishing-view .utility-tile-copy strong{font-size:9px}
+  .fishing-view .utility-tile-copy small{font-size:8px}
+  .fishing-view .float-scene{bottom:122px}
+  .fishing-view .play-action-bar{bottom:calc(130px + env(safe-area-inset-bottom))}
+}
+@media(max-height:570px){
+  .fishing-view .fishing-head{min-height:46px}
+  .fishing-view .scene-buoy-caption{top:57px}
+  .fishing-view .float-instructions{top:95px}
+  .fishing-view .utility-tile{min-height:43px}
+  .play-action-bar .fishing-status{display:none}
+  .play-action-bar .action-stack button{min-height:40px}
+  .fishing-view .play-action-bar{bottom:calc(112px + env(safe-area-inset-bottom))}
+  .fishing-view .float-scene{bottom:111px}
+}
+@media(max-width:850px) and (max-height:430px){
+  .fishing-view .utility-launcher{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .fishing-view .utility-tile{min-height:42px;grid-template-columns:18px minmax(0,1fr)}
+  .fishing-view .utility-tile-icon{width:18px;height:22px;font-size:16px}
+  .fishing-view .utility-tile-copy strong{font-size:8px}
+  .fishing-view .utility-tile-copy small{font-size:7px}
+  .fishing-view .play-action-bar{bottom:calc(66px + env(safe-area-inset-bottom))}
+  .fishing-view .float-scene{bottom:65px}
+}
+@media(prefers-reduced-motion:reduce){
+  .play-action-bar .action-stack button{transition:none}
+}

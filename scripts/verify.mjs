@@ -75,10 +75,37 @@ assert.match(html,/id="utilityBackdrop" class="utility-backdrop hidden"/,"modal 
 assert.match(html,/id="utilityTicker"/,"latest catch visible in launcher");
 assert.match(html,/id="achievementsPanel"[^>]*role="dialog"/,"achievements must be a modal, not full-page accordion");
 assert.match(js,/function showUtilityPanel\(id\)/,"tile must open matching panel");
+
+const fishingMarkup=html.slice(html.indexOf('<section id="fishingView"'),html.indexOf('<div id="catchSuccessModal"'));
+assert.ok(fishingMarkup.includes('id="playActionBar"'),"play actions must be immediately available in the lake view");
+assert.ok(fishingMarkup.includes('id="openGearSettings"')&&fishingMarkup.includes('id="gearSettingsBackdrop"'),"gear settings must open separately");
+assert.match(fishingMarkup,/id="gearSettingsPanel"[^>]*role="dialog"[^>]*aria-modal="true"/,"gear settings should use accessible modal semantics");
+assert.match(fishingMarkup,/id="openGearSettings"[^>]*aria-controls="gearSettingsPanel"[^>]*aria-expanded="false"/,"gear trigger should announce its expanded state");
+assert.match(fishingMarkup,/id="freeClock" role="timer"/,"session clock should always be visible in play HUD");
+const onScreenActions=fishingMarkup.slice(fishingMarkup.indexOf('<div class="float-scene">'),fishingMarkup.indexOf('<div class="float-instructions">'));
+for(const id of ["castBtn","reelBtn","retrieveBtn","rentBtn","fishingStatus"]){
+  assert.ok(onScreenActions.includes('id="'+id+'"'),id+" must be visible within the play scene, not inside gear settings");
+}
+const headSection=fishingMarkup.slice(fishingMarkup.indexOf('<div class="fishing-head">'),fishingMarkup.indexOf('<div class="fishing-layout">'));
+assert.ok(headSection.includes('id="freeClock"'),"session clock must live in the game screen corner");
+const gearSection=fishingMarkup.slice(fishingMarkup.indexOf('id="gearSettingsPanel"'),fishingMarkup.indexOf('id="baitShop"'));
+for(const id of ["rodSelect","baitSelect","baitAdvice","closeGearSettings"]){
+  assert.ok(gearSection.includes('id="'+id+'"'),"gear settings must retain "+id);
+}
+assert.ok(!gearSection.includes('id="castBtn"'),"cast button must not be hidden inside gear modal");
+assert.match(js,/function openGearSettings\(\)/,"gear modal opener missing");
+assert.match(js,/function closeGearSettings\(restoreFocus=true\)/,"gear modal close and focus restoration missing");
+assert.match(js,/function handleGearSettingsKeyboard\(e\)/,"gear modal needs keyboard isolation");
+assert.match(js,/if\(handleGearSettingsKeyboard\(e\)\)return;/,"Space must not cast while adjusting gear");
+assert.match(js,/document\.body\.classList\.add\("fishing-fullscreen"\)/,"entering a fishing seat must activate full viewport layout");
+assert.match(js,/document\.body\.classList\.remove\("fishing-fullscreen"\)/,"leaving seat must restore page scrolling");
+assert.match(js,/if\(activeUtilityPanel\|\|gearSettingsOpen\)return;/,"opening gear menu should pause fishing gameplay");
+assert.match(js,/delayFishingBiteSchedule\(elapsed\)/,"closing gear must not silently skip a bite");
+
 assert.match(js,/function hideUtilityPanel\(restoreFocus=true\)/,"utility needs a close action");
 assert.match(js,/function handleUtilityKeyboard\(e\)/,"modal should manage keyboard input");
 assert.match(js,/if\(handleUtilityKeyboard\(e\)\)return;/,"prevent Space from triggering fishing while viewing a panel");
-assert.match(js,/if\(activeUtilityPanel\)return; \/\/ Suspend fishing motion/,"shopping must pause active fishing");
+assert.match(js,/if\(activeUtilityPanel\|\|gearSettingsOpen\)return; \/\/ Pause cast and timer during menus/,"all menus must pause active fishing");
 assert.match(js,/showUtilityPanel\("baitShop"\)/,"out-of-bait should open shop overlay");
 
 
@@ -122,6 +149,16 @@ assert.match(css,/\.fishing-side \.utility-panel\[open\]\{\s*display:block;\s*po
   "long shop and inventory content should open as centered overlay");
 assert.match(css,/max-height:calc\(100dvh - 24px\)/,
   "overlay content must scroll internally within mobile viewport");
+assert.match(css,/\.fishing-view\{\s*position:fixed;inset:0;z-index:50;/,
+  "fishing game must fill the viewport without a side column");
+assert.match(css,/\.fishing-view \.float-scene canvas\{\s*display:block;width:100%;height:100%/,
+  "float canvas must fill almost all available screen width");
+assert.match(css,/\.play-action-bar\{\s*position:fixed;/,
+  "cast and strike action buttons must float on the play screen");
+assert.match(css,/\.fishing-view \.play-clock\{/,
+  "play time should be in the fixed upper corner");
+assert.match(css,/\.fishing-view \.gear-settings-modal\{\s*position:fixed;/,
+  "gear selector must be in a viewport-sized dialog");
 assert.match(css,/body\.utility-overlay-active\{overflow:hidden\}/,
   "page scrolling must be locked while modal is open");
 assert.doesNotMatch(css,/\.bite-banner|bite-flash/,"no dormant bite alarm CSS");

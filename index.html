@@ -68,8 +68,19 @@
 
       <section id="fishingView" class="fishing-view hidden" tabindex="-1" aria-label="Màn hình câu cá cận cảnh">
         <div class="fishing-head">
-          <div><div class="eyebrow">PIXEL FLOAT FISHING / HỒ BẢY MẪU</div><h2>Ngồi câu bên hồ <span id="seatNumber">#01</span></h2><p>Quan sát nhịp phao so với sóng nước. Không phải cú nhấp nào cũng do cá; hãy tự chọn thời điểm nhấc cần.</p></div>
-          <button id="leaveSpot" class="secondary-btn">← RỜI GHẾ CÂU</button>
+          <div class="play-head-left">
+            <button id="leaveSpot" class="play-leave-btn" type="button" aria-label="Rời ghế câu, về hồ">← RỜI GHẾ</button>
+            <div class="play-head-title"><div class="eyebrow">HỒ BẢY MẪU · PIXEL FISHING</div><h2>Đang câu <span id="seatNumber">#01</span></h2></div>
+          </div>
+          <div class="play-head-right">
+            <button id="openGearSettings" class="play-gear-btn" type="button" aria-haspopup="dialog" aria-controls="gearSettingsPanel" aria-expanded="false">⚙ BỘ ĐỒ CÂU <small id="playGearSummary">Cần tay · Giun đất</small></button>
+            <div class="play-wallet">✦ <b id="playCoins">50</b> XU</div>
+            <div class="timer-block play-clock" aria-label="Đồng hồ thời gian câu luôn hiển thị">
+              <div><small>THỜI GIAN CÒN</small><strong id="freeClock" role="timer">05:00</strong></div>
+              <div class="time-meter"><div id="timeFill"></div></div>
+              <small id="rentHint">5 phút đầu miễn phí · phí sau đó là giả lập.</small>
+            </div>
+          </div>
         </div>
         <div class="fishing-layout">
           <section class="fishing-lake-frame">
@@ -77,7 +88,15 @@
             <div class="float-scene">
               <canvas id="floatCanvas" width="960" height="520" role="img" aria-label="Cận cảnh phao đỏ trắng trên hồ, theo dõi chuyển động phao để chọn thời điểm nhấc cần"></canvas>
               <div class="scene-buoy-caption"><span class="buoy-dot">◉</span><span id="floatLabel">PHAO CHƯA THẢ</span></div>
-              
+              <div class="play-action-bar" id="playActionBar">
+              <p id="fishingStatus" class="fishing-status" aria-live="polite">Chọn cần, mồi rồi thả câu. Phần còn lại do bạn quan sát.</p>
+              <div class="action-stack">
+                <button id="castBtn" class="primary-btn" type="button">🎣 THẢ CÂU · SPACE</button>
+                <button id="reelBtn" class="primary-btn reel-control hidden" type="button">⚡ NHẤC CẦN · SPACE</button>
+                <button id="retrieveBtn" class="secondary-btn hidden" type="button">↶ THU PHAO / ĐỔI MỒI</button>
+                <button id="rentBtn" class="gold-btn hidden" type="button">THUÊ 5 PHÚT · 20 XU (DEMO)</button>
+              </div>
+              </div>
             </div>
             <div class="float-instructions">
               <div class="key-hint"><kbd>SPACE</kbd><span id="keyGuide">Thả câu để bắt đầu quan sát phao</span></div>
@@ -127,9 +146,10 @@
               </button>
               <p id="utilityTicker" class="utility-ticker" role="status" aria-live="polite">🎣 Quan sát phao, bắt cá và làm đầy kho đồ!</p>
             </nav>
-            <section class="pixel-panel fishing-control-panel">
-              <div class="panel-header"><h3>🎣 Bộ đồ câu</h3><span id="spotLabel">VỊ TRÍ #1</span></div>
-              <div class="timer-block"><div><small>THỜI GIAN CÂU CÒN</small><strong id="freeClock">05:00</strong></div><div class="time-meter"><div id="timeFill"></div></div><small id="rentHint">5 phút đầu miễn phí · phí sau đó là giả lập.</small></div>
+            <section id="gearSettingsPanel" class="pixel-panel fishing-control-panel gear-settings-modal hidden" role="dialog" aria-modal="true" aria-labelledby="gearSettingsTitle">
+              <div class="panel-header gear-settings-head"><div><h3 id="gearSettingsTitle">⚙ BỘ ĐỒ CÂU</h3><span id="spotLabel">VỊ TRÍ #1</span></div><button id="closeGearSettings" class="secondary-btn" type="button">ĐÓNG ✕</button></div>
+              <div class="gear-settings-content">
+              
               <label for="rodSelect">LOẠI CẦN</label>
               <select id="rodSelect" aria-describedby="rodOwnedHint">
                 <option value="hand">Cần tay · Vùng lực rộng</option>
@@ -157,13 +177,7 @@
                   <span id="baitRates">Hiếm 23,5% · Cực hiếm 4,0%</span>
                 </div>
               </div>
-              <p id="fishingStatus" class="fishing-status" aria-live="polite">Chọn cần, mồi rồi thả câu. Phần còn lại do bạn quan sát.</p>
-              <div class="action-stack">
-                <button id="castBtn" class="primary-btn">THẢ CÂU · SPACE</button>
-                <button id="reelBtn" class="primary-btn reel-control hidden" type="button">NHẤC CẦN · SPACE</button>
-                <button id="retrieveBtn" class="secondary-btn hidden" type="button">↶ THU PHAO / ĐỔI MỒI</button>
-                <button id="rentBtn" class="gold-btn hidden">THUÊ 5 PHÚT · 20 XU (DEMO)</button>
-              </div>
+
               <div class="control-help"><b>HƯỚNG DẪN</b><p>Chỉ quan sát phần <strong>chóp phao nhô khỏi mặt nước</strong>. <kbd>SPACE</kbd> khi phao chìm dứt khoát, trượt ngang hoặc nổi cao và nghiêng. Khi kéo cá, bấm Space từng nhịp lúc kim chạy vào vùng xanh.</p><p>Trên điện thoại, dùng các nút điều khiển tương ứng.</p></div>
               <details class="float-field-guide">
                 <summary>📖 SỔ TAY ĐỌC PHAO (MỞ XEM)</summary>
@@ -177,6 +191,7 @@
                 </div>
               </details>
               <p class="panel-footnote">Xu và mồi là vật phẩm ảo. Kho được lưu trong trình duyệt này; không có thanh toán thật.</p>
+              </div>
             </section>
             <details id="baitShop" role="dialog" aria-modal="true" aria-label="Cửa hàng mồi" class="pixel-panel bait-shop utility-panel">
               <summary>🏪 CỬA HÀNG MỒI <span>TÚI: <b id="baitTotal">50</b> MỒI</span></summary>
@@ -209,6 +224,7 @@
           </aside>
         </div>
         <div id="utilityBackdrop" class="utility-backdrop hidden" aria-hidden="true"></div>
+        <div id="gearSettingsBackdrop" class="gear-settings-backdrop hidden" aria-hidden="true"></div>
       </section>
     </main>
     <div id="catchSuccessModal" class="catch-success-modal hidden" role="dialog" aria-modal="true" aria-labelledby="catchSuccessTitle" aria-describedby="catchSuccessName">
