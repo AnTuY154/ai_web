@@ -104,6 +104,29 @@
             <div class="fish-scene-bottom"><span>① PHÁT HIỆN TÍN HIỆU</span><span>② GIẬT ĐÚNG LÚC</span><span>③ CANH SPACE THEO NHỊP 5–10 GIÂY</span></div>
           </section>
           <aside class="fishing-side">
+            <nav id="utilityLauncher" class="utility-launcher" aria-label="Bốn chức năng nhanh">
+              <button id="quickBaitShop" class="utility-tile" type="button" aria-controls="baitShop" aria-expanded="false">
+                <span class="utility-tile-icon" aria-hidden="true">🏪</span>
+                <span class="utility-tile-copy"><strong>CỬA HÀNG MỒI</strong><small>TÚI: <b id="shortcutBaitTotal">50</b> MỒI</small></span>
+                <span class="utility-tile-plus" aria-hidden="true">＋</span>
+              </button>
+              <button id="quickRodShop" class="utility-tile" type="button" aria-controls="rodShop" aria-expanded="false">
+                <span class="utility-tile-icon" aria-hidden="true">🎣</span>
+                <span class="utility-tile-copy"><strong>CỬA HÀNG CẦN</strong><small><b id="shortcutRodTotal">1</b>/3 CẦN</small></span>
+                <span class="utility-tile-plus" aria-hidden="true">＋</span>
+              </button>
+              <button id="quickFishInventory" class="utility-tile" type="button" aria-controls="fishInventory" aria-expanded="false">
+                <span class="utility-tile-icon" aria-hidden="true">🐟</span>
+                <span class="utility-tile-copy"><strong>KHO CÁ CỦA TÔI</strong><small><b id="shortcutFishTotal">0</b> CON</small></span>
+                <span class="utility-tile-plus" aria-hidden="true">＋</span>
+              </button>
+              <button id="quickAchievements" class="utility-tile" type="button" aria-controls="achievementsPanel" aria-expanded="false">
+                <span class="utility-tile-icon" aria-hidden="true">🏆</span>
+                <span class="utility-tile-copy"><strong>THÀNH QUẢ</strong><small><b id="shortcutCatchTotal">0</b> CÁ · <b id="shortcutScore">0</b> ĐIỂM</small></span>
+                <span class="utility-tile-plus" aria-hidden="true">＋</span>
+              </button>
+              <p id="utilityTicker" class="utility-ticker" role="status" aria-live="polite">🎣 Quan sát phao, bắt cá và làm đầy kho đồ!</p>
+            </nav>
             <section class="pixel-panel fishing-control-panel">
               <div class="panel-header"><h3>🎣 Bộ đồ câu</h3><span id="spotLabel">VỊ TRÍ #1</span></div>
               <div class="timer-block"><div><small>THỜI GIAN CÂU CÒN</small><strong id="freeClock">05:00</strong></div><div class="time-meter"><div id="timeFill"></div></div><small id="rentHint">5 phút đầu miễn phí · phí sau đó là giả lập.</small></div>
@@ -155,7 +178,7 @@
               </details>
               <p class="panel-footnote">Xu và mồi là vật phẩm ảo. Kho được lưu trong trình duyệt này; không có thanh toán thật.</p>
             </section>
-            <details id="baitShop" class="pixel-panel bait-shop">
+            <details id="baitShop" role="dialog" aria-modal="true" aria-label="Cửa hàng mồi" class="pixel-panel bait-shop utility-panel">
               <summary>🏪 CỬA HÀNG MỒI <span>TÚI: <b id="baitTotal">50</b> MỒI</span></summary>
               <div class="bait-shop-inner">
                 <p>🎁 Người chơi mới được <strong>50 lượt mồi miễn phí</strong> gồm đủ 7 loại. <strong>Mỗi lần thả câu trừ 1 mồi</strong>, dù sau đó giật hụt hoặc thu phao. Mồi giả dùng 1 lượt sử dụng trong game.</p>
@@ -165,7 +188,7 @@
                 <small>Kho lưu trong trình duyệt hiện tại, chưa có tài khoản hoặc thanh toán tiền thật.</small>
               </div>
             </details>
-            <details id="rodShop" class="pixel-panel bait-shop equipment-shop">
+            <details id="rodShop" role="dialog" aria-modal="true" aria-label="Cửa hàng cần câu" class="pixel-panel bait-shop equipment-shop utility-panel">
               <summary>🎣 CỬA HÀNG CẦN CÂU <span><b id="rodOwnedCount">1</b>/3 CẦN</span></summary>
               <div class="bait-shop-inner">
                 <p>Mỗi cần mua <strong>một lần</strong>, dùng vĩnh viễn trong kho lưu trên máy. <strong>Cần tay miễn phí</strong> khi bắt đầu; bán cá để tích xu mua cần máy hoặc cần lure.</p>
@@ -173,7 +196,7 @@
                 <p id="rodShopFeedback" class="bait-shop-feedback" role="status" aria-live="polite">Chọn MUA CẦN để mở khóa và trang bị.</p>
               </div>
             </details>
-            <details id="fishInventory" class="pixel-panel bait-shop fish-inventory">
+            <details id="fishInventory" role="dialog" aria-modal="true" aria-label="Kho cá của tôi" class="pixel-panel bait-shop fish-inventory utility-panel">
               <summary>🐟 KHO CÁ CỦA TÔI <span><b id="fishInventoryTotal">0</b> CON</span></summary>
               <div class="bait-shop-inner">
                 <p>Cá vừa câu sẽ vào kho. <strong>Bán 1 con hoặc bán tất cả từng loài</strong> để nhận xu ảo dùng mua mồi và cần câu. Cá đã bán không còn trong kho nhưng lịch sử câu vẫn giữ nguyên.</p>
@@ -182,9 +205,10 @@
                 <small>Chỉ cá bắt được sau bản cập nhật kho đồ mới có thể bán. Cá cũ đã nhận xu thưởng trực tiếp nên không thể bán thêm lần nữa.</small>
               </div>
             </details>
-            <section class="pixel-panel catch-panel"><div class="panel-header"><h3>🐟 Thành quả</h3><span id="catchTier">ĐANG CHỜ</span></div><div id="lastCatch" class="last-catch" aria-live="polite">Chờ phao nhấp nhô và bắt đầu chuyến câu của bạn.</div><div class="caught-count"><strong id="sessionCatch">0</strong><span>cá đã câu · <b id="sessionScore">0</b> điểm</span></div></section>
+            <details id="achievementsPanel" class="pixel-panel catch-panel utility-panel" role="dialog" aria-modal="true" aria-label="Thành quả câu cá"><summary>🏆 THÀNH QUẢ <span>XEM LỊCH SỬ</span></summary><div class="achievement-body"><div class="panel-header"><h3>🐟 Thành quả gần nhất</h3><span id="catchTier">ĐANG CHỜ</span></div><div id="lastCatch" class="last-catch" aria-live="polite">Chờ phao nhấp nhô và bắt đầu chuyến câu của bạn.</div><div class="caught-count"><strong id="sessionCatch">0</strong><span>cá đã câu · <b id="sessionScore">0</b> điểm</span></div><p class="achievement-footnote">Cá bán đi vẫn được tính vào thành quả. Vào Kho cá để xem cá đang có.</p></div></details>
           </aside>
         </div>
+        <div id="utilityBackdrop" class="utility-backdrop hidden" aria-hidden="true"></div>
       </section>
     </main>
     <div id="catchSuccessModal" class="catch-success-modal hidden" role="dialog" aria-modal="true" aria-labelledby="catchSuccessTitle" aria-describedby="catchSuccessName">
