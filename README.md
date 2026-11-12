@@ -87,7 +87,7 @@ Trong **Fishing Station**, menu mồi có **7 loại**: giun, bột ngũ cốc, 
 - **Tép:** trê, rô đồng, cá quả; **ốc:** thiên về trắm đen.
 - **Mồi giả:** thiên về cá săn mồi như cá quả.
 
-Mồi thay đổi **xác suất gặp cá theo loài và độ hiếm** (không bảo đảm sẽ câu được), kết hợp với cần và kỹ năng phản xạ. Khi đã thả câu, mồi/cần được khóa cho đến lượt sau, tránh đổi đồ giữa chừng. Bản demo **không trừ mồi và không dùng tiền thật**.
+Mồi thay đổi **xác suất gặp cá theo loài và độ hiếm** (không bảo đảm sẽ câu được), kết hợp với cần và kỹ năng phản xạ. **Mỗi lần thả câu tốn 1 mồi**, kể cả khi thu phao hoặc giật hụt. Khi đang thả, mồi/cần bị khóa cho đến lượt sau. Có **cửa hàng dùng xu ảo**, không có thanh toán tiền thật.
 
 Tỷ lệ thiết kế, bảng 10 × 7 và nguồn hướng dẫn câu cá: [Bait Mechanics](docs/BAIT_MECHANICS.md). Game vẫn giữ nguyên **phao không báo cá cắn**, minigame canh Space ở giữa màn hình và popup hình cá sau khi câu thành công.
 
@@ -102,3 +102,13 @@ Dựa trên bản tóm tắt reel câu phao mà người dùng cung cấp, mô p
 - **SỔ TAY ĐỌC PHAO** là nội dung tĩnh mở theo ý người chơi, không phải tín hiệu thời gian thực.
 
 Trò chơi **chưa cho điều chỉnh cỡ phao, chì hoặc độ sâu theo tay**; phao được cân sẵn cho chế độ demo. Chi tiết: [Float Fishing Mechanics](docs/FLOAT_FISHING_MECHANICS.md).
+
+## 🎁 Quà khởi đầu và cửa hàng mồi
+
+**Người chơi mới có 50 mồi sử dụng miễn phí**: 16 giun, 10 bột, 8 ngô, 6 rau, 5 tép, 3 ốc và 2 mồi giả. Đây là **tổng 50**, không phải 50 mồi mỗi loại. Số xu khởi đầu vẫn là **50 xu game**.
+
+Trong màn Fishing Station, bạn có thể mở **🏪 CỬA HÀNG MỒI** để xem mỗi loại mồi đang có bao nhiêu, giá mua theo đơn vị, hai tỷ lệ gặp **cá hiếm/cực hiếm**, và mua nhanh 1 hoặc 5 mồi. Giá 1 lượt từ 1 xu (giun) tới 8 xu (mồi giả). Xu thu được khi câu thành công dùng để mua thêm mồi.
+
+**Không có mồi**: nút thả câu của loại đang chọn bị khóa; đổi sang mồi đang có hoặc mua thêm ở cửa hàng. **Đổi mồi sau khi thu phao không hoàn lại lượt mồi đã dùng.** Nếu phao đang chờ cá và có nhiều lần cá cắn thì đó vẫn chỉ là một lần thả nên không trừ thêm.
+
+Kho mồi, xu và lịch sử bắt cá được **lưu trên trình duyệt**, tải lại trang không tự phát thêm 50 mồi. Bản demo **chưa có tài khoản máy chủ**: chưa thể kiểm soát quà tân thủ trên nhiều thiết bị hoặc khi người chơi xóa dữ liệu duyệt web. Các tỷ lệ là thông số thiết kế game, không phải tỷ lệ câu thật. Xem [Bait Mechanics](docs/BAIT_MECHANICS.md).
