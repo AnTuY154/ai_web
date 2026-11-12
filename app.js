@@ -51,6 +51,62 @@ const utilityTargets=Object.freeze({
   fishInventory:"quickFishInventory",achievementsPanel:"quickAchievements"
 });
 let activeUtilityPanel=null,utilityOpenedAt=0;
+
+let gearSettingsOpen=false,gearOpenedAt=0;
+function delayFishingBiteSchedule(paused){
+  if((state.fishing!=="waiting"&&state.fishing!=="bite")||paused<=0)return;
+  state.biteAt+=paused;
+  if(state.biteStartedAt)state.biteStartedAt+=paused;
+  if(state.biteExpires)state.biteExpires+=paused;
+  if(state.floatSequence){
+    state.floatSequence.biteAt+=paused;
+    for(const touch of state.floatSequence.touches)touch.at+=paused;
+  }
+}
+function closeGearSettings(restoreFocus=true){
+  if(!gearSettingsOpen)return;
+  gearSettingsOpen=false;
+  const elapsed=Math.max(0,performance.now()-gearOpenedAt);
+  gearOpenedAt=0;
+  $("gearSettingsPanel").classList.add("hidden");
+  $("gearSettingsBackdrop").classList.add("hidden");
+  $("openGearSettings").setAttribute("aria-expanded","false");
+  delayFishingBiteSchedule(elapsed);
+  if(restoreFocus)$("openGearSettings").focus({preventScroll:true});
+}
+function openGearSettings(){
+  if(state.screen!=="game"||state.spot===null||state.catchModalOpen||
+    state.fishing==="reeling")return;
+  if(activeUtilityPanel)hideUtilityPanel(false);
+  if(gearSettingsOpen)return;
+  gearSettingsOpen=true;gearOpenedAt=performance.now();
+  $("gearSettingsPanel").classList.remove("hidden");
+  $("gearSettingsBackdrop").classList.remove("hidden");
+  $("openGearSettings").setAttribute("aria-expanded","true");
+  $("closeGearSettings").focus({preventScroll:true});
+}
+$("openGearSettings").addEventListener("click",openGearSettings);
+$("closeGearSettings").addEventListener("click",()=>closeGearSettings());
+$("gearSettingsBackdrop").addEventListener("click",()=>closeGearSettings());
+function handleGearSettingsKeyboard(e){
+  if(!gearSettingsOpen)return false;
+  if(e.key==="Escape"){e.preventDefault();closeGearSettings();return true}
+  if(e.key==="Tab"){
+    const panel=$("gearSettingsPanel");
+    const controls=[...panel.querySelectorAll("button:not(:disabled),select:not(:disabled),summary,[tabindex]:not([tabindex='-1'])")]
+      .filter(el=>el.getClientRects().length>0);
+    if(controls.length){
+      const first=controls[0],last=controls[controls.length-1];
+      if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus({preventScroll:true})}
+      else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus({preventScroll:true})}
+      else if(!panel.contains(document.activeElement)){e.preventDefault();first.focus({preventScroll:true})}
+    }
+  }
+  if((e.code==="Space"||e.key===" ")&&!e.target.closest?.("button,summary,select"))
+    e.preventDefault();
+  return true;
+}
+
 function hideUtilityPanel(restoreFocus=true){
   if(!activeUtilityPanel)return;
   const id=activeUtilityPanel,openTime=utilityOpenedAt;
@@ -59,18 +115,7 @@ function hideUtilityPanel(restoreFocus=true){
   $("utilityBackdrop").classList.add("hidden");
   document.body.classList.remove("utility-overlay-active");
   $(utilityTargets[id]).setAttribute("aria-expanded","false");
-  // A player inspecting equipment or sales should not silently lose a bite.
-  // Delay the cast's preplanned events by precisely the modal's open time.
-  const paused=Math.max(0,performance.now()-openTime);
-  if(state.fishing==="waiting"||state.fishing==="bite"){
-    state.biteAt+=paused;
-    if(state.biteStartedAt)state.biteStartedAt+=paused;
-    if(state.biteExpires)state.biteExpires+=paused;
-    if(state.floatSequence){
-      state.floatSequence.biteAt+=paused;
-      for(const touch of state.floatSequence.touches)touch.at+=paused;
-    }
-  }
+  delayFishingBiteSchedule(Math.max(0,performance.now()-openTime));
   if(restoreFocus)$(utilityTargets[id]).focus({preventScroll:true});
 }
 function showUtilityPanel(id){
@@ -78,6 +123,7 @@ function showUtilityPanel(id){
     state.spot===null||state.catchModalOpen||state.fishing==="reeling")return;
   if(activeUtilityPanel===id){hideUtilityPanel();return}
   if(activeUtilityPanel)hideUtilityPanel(false);
+  if(gearSettingsOpen)closeGearSettings(false);
   const panel=$(id);
   activeUtilityPanel=id;utilityOpenedAt=performance.now();
   panel.open=true;
@@ -246,6 +292,7 @@ $("enterLake").addEventListener("click",()=>{if(state.selected!==LAKE_FOCUS)retu
 $("backMap").addEventListener("click",closeGame);
 function openGame(){
   state.screen="game";$("mapScreen").classList.add("hidden");$("gameScreen").classList.remove("hidden");
+  document.body.classList.toggle("fishing-fullscreen",state.spot!==null);
   $("fishingView").classList.toggle("hidden",state.spot===null);
   $("gameLayout").classList.toggle("hidden",state.spot!==null);
   window.scrollTo(0,0);$("gameCanvas").focus();displayStatus();
@@ -278,13 +325,16 @@ function occupySpot(n){
   $("seatNumber").textContent="#"+String(n).padStart(2,"0");
   $("gameLayout").classList.add("hidden");
   $("fishingView").classList.remove("hidden");
+  document.body.classList.add("fishing-fullscreen");
   displayStatus("Đã tới chỗ ngồi. Thả câu rồi quan sát đầu phao. Space đúng lúc phao cắn!");
   setHint("Bạn đang câu tại vị trí #"+n+".");
   window.scrollTo(0,0);
   updateHUD();
 }
 function releaseSpot(){
+  closeGearSettings(false);
   hideUtilityPanel(false);
+  document.body.classList.remove("fishing-fullscreen");
   closeCatchSuccess(false);
   state.gotoSpot=null;state.spot=null;state.fishing="idle";state.currentFish=null;
   state.fight=null;state.floatSequence=null;
@@ -622,12 +672,12 @@ reelControl.addEventListener("pointerdown",e=>{
   if(state.fishing==="waiting"||state.fishing==="bite")attemptStrike();
 });
 reelControl.addEventListener("keydown",e=>{
-  if(e.key==="Enter"){e.preventDefault();if(!e.repeat)attemptStrike()}
+  if(e.key==="Enter"||e.code==="Space"){e.preventDefault();if(!e.repeat)attemptStrike()}
 });
 const fightHitButton=$("fightHitBtn");
 fightHitButton.addEventListener("pointerdown",e=>{e.preventDefault();attemptMeterHit()});
 fightHitButton.addEventListener("keydown",e=>{
-  if(e.key==="Enter"){e.preventDefault();if(!e.repeat)attemptMeterHit()}
+  if(e.key==="Enter"||e.code==="Space"){e.preventDefault();if(!e.repeat)attemptMeterHit()}
 });
 $("rentBtn").addEventListener("click",()=>{
   if(state.spot===null||state.freeRemaining>0||state.paidRemaining>0)return;
@@ -648,6 +698,8 @@ function syncFightMeter(){
 }
 function updateHUD(){
   $("coins").textContent=state.coins;
+  $("playCoins").textContent=state.coins;
+  $("playGearSummary").textContent=(RODS[state.selectedRod]?.name??"Cần tay")+" · "+getBaitInfo($("baitSelect").value).name;
   $("anglerCount").textContent=state.spot===null?0:1;
   $("spectatorCount").textContent=state.spot===null?1:0;
   $("spotLabel").textContent=state.spot===null?"CHƯA CHỌN":"VỊ TRÍ #"+state.spot;
@@ -711,8 +763,12 @@ document.addEventListener("keydown",e=>{
     else if(e.code==="Space"||e.key===" "){e.preventDefault()}
     return;
   }
+  if(handleGearSettingsKeyboard(e))return;
   if(handleUtilityKeyboard(e))return;
   if(state.screen!=="game")return;
+  // Focused interface buttons use their native Space activation; do not
+  // mistakenly interpret Space on a settings, shop or exit button as a cast.
+  if(e.target.closest?.("button,summary,a"))return;
   // Space/Enter on a utility shortcut must activate that button, never cast.
   if(e.target.closest?.(".utility-launcher"))return;
   if(["INPUT","SELECT","TEXTAREA"].includes(document.activeElement.tagName))return;
@@ -973,7 +1029,7 @@ function drawGame(now){
   ctx.fillStyle="#f6eccb";ctx.textAlign="center";ctx.font="bold 10px monospace";ctx.fillText("BẠN",state.avatar.x,state.avatar.y-41);
 }
 function update(delta){
-  if(activeUtilityPanel)return; // Suspend fishing motion and session clock while shopping.
+  if(activeUtilityPanel||gearSettingsOpen)return; // Pause cast and timer during menus.
   if(state.screen!=="game")return;
   const speed=165*delta;
   if(state.spot===null){
