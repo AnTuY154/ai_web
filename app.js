@@ -1,7 +1,7 @@
 import { makeFight, stepFight, strikeFight, biteConfig, clamp } from "./fishing-engine.mjs";
 import { planFloatCast, floatPose } from "./float-behavior.mjs";
 import { BAITS, getBaitInfo, chooseFishByBait, fishEncounterOdds } from "./bait-engine.mjs";
-import { BAIT_SAVE_KEY, BAIT_PRICES, countBaits, starterProgress, restoreProgress, makeSave, spendBait, buyBait } from "./bait-store.mjs";
+import { BAIT_SAVE_KEY, BAIT_PRICES, FISH_VALUES, ROD_PRICES, countBaits, countFish, starterProgress, restoreProgress, makeSave, spendBait, buyBait, addCaughtFish, sellFish, buyRod } from "./bait-store.mjs";
 const $ = (id) => document.getElementById(id);
 const LAKE_FOCUS = "bay-mau";
 const FISH = [
@@ -34,6 +34,7 @@ const MAX_ANGLERS=15, MAX_SPECTATORS=30;
 const FREE_SECONDS=300, DEMO_RENT_COINS=20, RENT_SECONDS=300;
 const state={
   lakes:[], selected:LAKE_FOCUS, screen:"map", coins:savedProgress.coins, baitInventory:savedProgress.inventory,
+  fishInventory:savedProgress.fishInventory,ownedRods:[...savedProgress.ownedRods],selectedRod:savedProgress.selectedRod,
   avatar:{x:456,y:479}, pressed:new Set(), gotoSpot:null, gotoPoint:null, spot:null,
   freeRemaining:savedProgress.freeRemaining, paidRemaining:savedProgress.paidRemaining, freeUsed:savedProgress.freeUsed,
   fishing:"idle", biteAt:0, biteStartedAt:0, biteExpires:0, floatSequence:null,
@@ -212,13 +213,13 @@ function releaseSpot(){
   state.avatar.x=456;state.avatar.y=478;
   displayStatus("Đã trả vị trí. Bạn có thể di chuyển hoặc chọn chỗ khác.");
   setHint("Bạn trở lại khu chờ. 5 phút miễn phí không tự làm mới khi đổi chỗ.");
-  updateHUD();
+  renderRodShop();updateHUD();
 }
 $("leaveSpot").addEventListener("click",releaseSpot);
 function chooseFish(){
   // Gameplay odds depend on bait affinities, base rarity and rod type.
   // Selecting a preferred bait never guarantees a fish, and never auto-hooks it.
-  return chooseFishByBait(FISH,$("baitSelect").value,$("rodSelect").value);
+  return chooseFishByBait(FISH,$("baitSelect").value,state.selectedRod);
 }
 function rarityPercent(value){
   return (100*value).toFixed(1).replace(".",",")+"%";
@@ -228,7 +229,7 @@ function renderBaitAdvice(){
   $("baitGroup").textContent=bait.group.toUpperCase();
   $("baitDescription").textContent=bait.description;
   $("baitFavorites").textContent=bait.favorites.map(fid=>FISH.find(f=>f.id===fid)?.name??fid).join(" · ");
-  const rate=fishEncounterOdds(FISH,id,$("rodSelect").value).rarityOdds;
+  const rate=fishEncounterOdds(FISH,id,state.selectedRod).rarityOdds;
   $("baitRates").textContent="Hiếm "+rarityPercent(rate.rare)+" · Cực hiếm "+rarityPercent(rate.epic);
   $("baitOwned").textContent=state.baitInventory[id]??0;
 }
@@ -252,7 +253,7 @@ function renderShop(){
   const oldId=focused?.dataset?.shopId,oldQty=focused?.dataset?.shopQty;
   list.replaceChildren();
   for(const [id,bait] of Object.entries(BAITS)){
-    const odds=fishEncounterOdds(FISH,id,$("rodSelect").value).rarityOdds;
+    const odds=fishEncounterOdds(FISH,id,state.selectedRod).rarityOdds;
     const card=document.createElement("div");card.className="bait-shop-card";
     const head=document.createElement("div");head.className="bait-shop-card-head";
     const name=document.createElement("strong");name.textContent=bait.emoji+" "+bait.name;
@@ -282,8 +283,133 @@ function renderShop(){
     if(matching&&!matching.disabled)matching.focus({preventScroll:true});
   }
 }
+// Rod ownership is permanent in this browser save; only owned rods can be equipped.
+function renderRodOptions(){
+  const select=$("rodSelect");
+  for(const option of select.options)option.disabled=!state.ownedRods.includes(option.value);
+  if(!state.ownedRods.includes(select.value))select.value=state.selectedRod;
+  const rod=RODS[select.value]??RODS.hand;
+  $("rodOwnedHint").textContent="Đang dùng "+rod.name+" · Đã mở "+state.ownedRods.length+"/3 cần. Mua cần khác trong cửa hàng.";
+  $("rodOwnedCount").textContent=state.ownedRods.length;
+}
+function buyShopRod(rodId){
+  const result=buyRod(state.ownedRods,state.coins,rodId);
+  if(!result.ok){
+    $("rodShopFeedback").textContent=result.reason==="not-enough-coins"
+      ?"Chưa đủ "+result.cost+" xu để mua "+RODS[rodId].name+". Hãy bán cá để kiếm thêm xu."
+      :"Bạn đã sở hữu cần này hoặc giao dịch không hợp lệ.";
+    return;
+  }
+  state.coins=result.coins;state.ownedRods=result.ownedRods;
+  if(state.fishing==="idle"){
+    state.selectedRod=rodId;$("rodSelect").value=rodId;
+  }
+  $("rodShopFeedback").textContent="✓ Đã mua "+RODS[rodId].name+" với "+result.cost+
+    " xu."+(state.fishing==="idle"?" Đã trang bị.":" Thu phao để trang bị.");
+  saveProgress();renderRodOptions();renderRodShop();renderBaitAdvice();renderShop();updateHUD();
+}
+function equipRod(rodId){
+  if(state.catchModalOpen||state.fishing!=="idle"||!state.ownedRods.includes(rodId)){
+    $("rodShopFeedback").textContent="Hãy thu phao trước khi thay cần câu.";
+    return;
+  }
+  state.selectedRod=rodId;$("rodSelect").value=rodId;
+  $("rodShopFeedback").textContent="✓ Đã trang bị "+RODS[rodId].name+".";
+  saveProgress();renderRodOptions();renderRodShop();renderBaitAdvice();renderShop();updateHUD();
+}
+function renderRodShop(){
+  const list=$("rodShopList");list.replaceChildren();
+  $("rodOwnedCount").textContent=state.ownedRods.length;
+  const descriptions={
+    hand:"Miễn phí. Vùng xanh rộng hơn, dễ canh Space.",
+    reel:"Kim chạy chậm hơn khi kéo cá; tăng nhẹ cơ hội gặp nhóm hiếm.",
+    lure:"Kim nhanh hơn, vùng xanh hẹp hơn; cộng hưởng nhẹ với mồi giả."
+  };
+  for(const [id,rod] of Object.entries(RODS)){
+    const owned=state.ownedRods.includes(id),equipped=state.selectedRod===id;
+    const card=document.createElement("div");card.className="bait-shop-card rod-shop-card";
+    const header=document.createElement("div");header.className="bait-shop-card-head";
+    const name=document.createElement("strong");name.textContent="🎣 "+rod.name;
+    const badge=document.createElement("span");badge.className="rod-shop-owned";
+    badge.textContent=equipped?"ĐANG DÙNG":owned?"ĐÃ SỞ HỮU":ROD_PRICES[id]+" XU";
+    header.append(name,badge);
+    const description=document.createElement("p");description.className="rod-shop-description";
+    description.textContent=descriptions[id];
+    const actions=document.createElement("div");actions.className="bait-shop-buttons";
+    const button=document.createElement("button");button.type="button";
+    if(owned){
+      button.textContent=equipped?"✓ ĐÃ TRANG BỊ":"TRANG BỊ";
+      button.disabled=equipped||state.fishing!=="idle"||state.catchModalOpen;
+      button.addEventListener("click",()=>equipRod(id));
+    }else{
+      button.textContent="MUA CẦN · "+ROD_PRICES[id]+" XU";
+      button.disabled=state.coins<ROD_PRICES[id];
+      button.addEventListener("click",()=>buyShopRod(id));
+    }
+    button.setAttribute("aria-label",(owned?"Trang bị ":"Mua ")+rod.name);
+    actions.append(button);card.append(header,description,actions);list.append(card);
+  }
+}
+function sellInventoryFish(fishId,qty){
+  const result=sellFish(state.fishInventory,state.coins,fishId,qty);
+  if(!result.ok){
+    $("fishInventoryFeedback").textContent="Không thể bán: cá trong kho không đủ hoặc ví xu đã đầy.";
+    return;
+  }
+  state.fishInventory=result.fishInventory;state.coins=result.coins;
+  const fish=FISH.find(f=>f.id===fishId);
+  $("fishInventoryFeedback").textContent="✓ Đã bán "+result.quantity+" "+fish.name+
+    ", nhận +"+result.revenue+" xu. Tổng ví: "+state.coins+" xu.";
+  saveProgress();renderFishInventory();renderShop();renderRodShop();updateHUD();
+}
+function renderFishInventory(){
+  const list=$("fishInventoryList");
+  list.replaceChildren();
+  $("fishInventoryTotal").textContent=countFish(state.fishInventory);
+  let hasFish=false;
+  for(const fish of FISH){
+    const amount=state.fishInventory[fish.id]??0;
+    if(amount<1)continue;
+    hasFish=true;
+    const card=document.createElement("div");card.className="fish-inventory-card";
+    card.dataset.rarity=fish.rarity;
+    const img=document.createElement("img");img.className="fish-inventory-sprite";
+    img.src=FISH_SPRITES[fish.id];img.alt="Cá "+fish.name+" pixel-art";
+    img.loading="lazy";img.width=80;img.height=80;
+    const info=document.createElement("div");info.className="fish-inventory-info";
+    const name=document.createElement("div");name.className="fish-inventory-name";
+    const title=document.createElement("strong");title.textContent=fish.name;
+    const count=document.createElement("span");count.textContent="×"+amount;
+    name.append(title,count);
+    const price=document.createElement("p");price.className="fish-inventory-price";
+    price.textContent=rarityLabel(fish.rarity)+" · Giá bán: "+FISH_VALUES[fish.id]+" xu/con";
+    const actions=document.createElement("div");actions.className="fish-inventory-actions";
+    for(const qty of [1,amount]){
+      // Do not show two identical actions when only a single fish remains.
+      if(qty===amount&&qty===1&&actions.children.length)continue;
+      const button=document.createElement("button");button.type="button";
+      button.textContent=qty===1?"BÁN 1 · +"+FISH_VALUES[fish.id]+" XU":
+        "BÁN HẾT · +"+(qty*FISH_VALUES[fish.id])+" XU";
+      button.addEventListener("click",()=>sellInventoryFish(fish.id,qty));
+      actions.append(button);
+    }
+    info.append(name,price,actions);card.append(img,info);list.append(card);
+  }
+  if(!hasFish){
+    const empty=document.createElement("div");empty.className="fish-inventory-empty";
+    empty.textContent="🎣 Kho cá đang trống. Câu thành công để có cá mang đi bán.";
+    list.append(empty);
+  }
+}
 $("baitSelect").addEventListener("change",()=>{renderBaitAdvice();updateHUD()});
-$("rodSelect").addEventListener("change",()=>{renderBaitAdvice();renderShop()});
+$("rodSelect").addEventListener("change",()=>{
+  if(state.fishing!=="idle"||!state.ownedRods.includes($("rodSelect").value)){
+    $("rodSelect").value=state.selectedRod;
+    return;
+  }
+  state.selectedRod=$("rodSelect").value;
+  saveProgress();renderRodOptions();renderRodShop();renderBaitAdvice();renderShop();updateHUD();
+});
 function canFish(){return state.spot!==null&&(state.freeRemaining>0||state.paidRemaining>0)}
 function planNextTake(now){
   state.currentFish=chooseFish();
@@ -293,6 +419,7 @@ function planNextTake(now){
 }
 function castLine(){
   if(state.catchModalOpen||state.fishing!=="idle"||!canFish())return;
+  if(!state.ownedRods.includes(state.selectedRod))return;
   // Every CAST uses one bait, including casts later retrieved or missed.
   // Multiple fish investigating the same cast do not cost extra bait.
   const id=$("baitSelect").value;
@@ -308,28 +435,31 @@ function castLine(){
   state.fight=null;
   planNextTake(performance.now());
   displayStatus("Đã dùng 1 "+getBaitInfo(id).name+". Hãy quan sát phao và tự chọn lúc nhấc cần.");
-  renderBaitAdvice();renderShop();updateHUD();
+  renderBaitAdvice();renderShop();renderRodShop();updateHUD();
 }
 function missFish(text){
   state.fishing="idle";state.currentFish=null;state.fight=null;
   displayStatus(text||"Cá đã thoát. Bạn có thể thả câu lại!");
   $("lastCatch").textContent=text||"Cá đã thoát. Hãy thử lại.";
   $("catchTier").textContent="TRƯỢT CÁ";
-  updateHUD();
+  renderRodShop();updateHUD();
 }
 function landFish(){
   const fish=state.currentFish;
   if(!fish||state.fishing!=="reeling")return;
-  state.coins+=fish.reward;state.caught++;state.score+=fish.reward*10;
+  const added=addCaughtFish(state.fishInventory,fish.id);
+  if(!added.ok){missFish("Kho cá đã đầy, chưa thể lưu thêm cá. Hãy bán bớt cá trước.");return}
+  state.fishInventory=added.fishInventory;
+  state.caught++;state.score+=fish.reward*10;
   state.fishCounts[fish.id]++;
   state.lastCatch=fish;
   state.fishing="idle";state.currentFish=null;state.fight=null;
   const tier=fish.rarity==="epic"?"CỰC HIẾM":fish.rarity==="rare"?"HIẾM":"PHỔ BIẾN";
-  const message="Đã câu được "+fish.name+" · "+tier+" · +"+fish.reward+" xu demo!";
-  displayStatus("🎉 "+message+" Tiếp tục thả câu nhé.");
+  const message="Đã câu được "+fish.name+" · "+tier+" · +1 cá trong kho!";
+  displayStatus("🎉 "+message+" Bán ở KHO CÁ để lấy "+fish.reward+" xu.");
   $("lastCatch").textContent="🎉 "+message;
   $("catchTier").textContent=tier;
-  saveProgress();renderShop();drawFishList();updateHUD();
+  saveProgress();renderShop();renderFishInventory();renderRodShop();drawFishList();updateHUD();
   showCatchSuccess(fish);
 }
 function rarityLabel(rarity){
@@ -344,7 +474,7 @@ function showCatchSuccess(fish){
   $("catchSuccessImage").alt="Hình cá pixel-art: "+fishName;
   $("catchSuccessName").textContent=fishName;
   $("catchSuccessRarity").textContent=rarityLabel(fish.rarity);
-  $("catchSuccessCoins").textContent="+"+fish.reward+" xu";
+  $("catchSuccessCoins").textContent="+1 con";
   $("catchSuccessPoints").textContent="+"+(fish.reward*10)+" điểm";
   state.catchModalOpen=true;
   $("catchSuccessModal").classList.remove("hidden");
@@ -373,7 +503,7 @@ function attemptStrike(){
   }
   if(state.fishing==="bite"){
     if(performance.now()>state.biteExpires){missFish("Nhấc cần nhưng không mắc cá. Thử lại nhé.");return}
-    state.fight=makeFight(state.currentFish.id,$("rodSelect").value);
+    state.fight=makeFight(state.currentFish.id,state.selectedRod);
     state.fishing="reeling";
     $("fightFeedback").textContent="Kim tự chạy! Bấm Space từng nhịp đúng lúc kim nằm trong vùng xanh.";
     displayStatus("Cá đã mắc! Canh SPACE khi kim chạy vào vùng xanh 5–10 giây.");
@@ -388,7 +518,7 @@ function retrieveLine(){
   state.fishing="idle";state.currentFish=null;state.fight=null;
   state.floatSequence=null;state.biteStartedAt=0;state.biteExpires=0;
   displayStatus("Đã thu phao. Bạn có thể đổi mồi hoặc cần, rồi thả lại.");
-  updateHUD();
+  renderRodShop();updateHUD();
 }
 $("castBtn").addEventListener("click",castLine);
 $("retrieveBtn").addEventListener("click",retrieveLine);
@@ -671,7 +801,7 @@ function drawFloatScene(now){
     floatCtx.fillText("THẢ CÂU ĐỂ ĐẶT PHAO LÊN MẶT NƯỚC",580,345);
     return;
   }
-  const pattern=state.currentFish?biteConfig(state.currentFish.id,$("rodSelect").value).pattern:"dive";
+  const pattern=state.currentFish?biteConfig(state.currentFish.id,state.selectedRod).pattern:"dive";
   const pose=floatPose(now,state.floatSequence,mode,pattern,state.biteStartedAt,state.biteExpires);
   // A correctly weighted waggler exposes only its narrow colored tip.
   const x=596+pose.dx,y=373+pose.dy;
@@ -830,4 +960,8 @@ function frame(t){
   if(t-lastSaveTick>2000&&state.screen==="game"&&state.spot!==null){saveProgress();lastSaveTick=t}
   requestAnimationFrame(frame);
 }
-saveProgress();drawFishList();renderBaitAdvice();renderShop();loadLakes();createBackground();createFloatBackground();updateHUD();renderMapTransform();requestAnimationFrame(frame);
+saveProgress();$("rodSelect").value=state.selectedRod;
+renderRodOptions();
+drawFishList();renderBaitAdvice();renderShop();renderRodShop();renderFishInventory();
+loadLakes();createBackground();createFloatBackground();updateHUD();
+renderMapTransform();saveProgress();requestAnimationFrame(frame);

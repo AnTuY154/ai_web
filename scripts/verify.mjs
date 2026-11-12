@@ -48,7 +48,7 @@ assert.ok(baitSelectHtml,"bait choice control is missing");
 const baitOptions=[...baitSelectHtml.matchAll(/<option value="([^"]+)"/g)].map(x=>x[1]);
 assert.deepEqual(baitOptions.sort(),["worm","flour","corn","greens","shrimp","snail","lure"].sort(),"all 7 bait types must be selectable");
 assert.match(js,/from "\.\/bait-engine\.mjs"/,"app must import bait encounter engine");
-assert.match(js,/chooseFishByBait\(FISH,\$\("baitSelect"\)\.value,\$\("rodSelect"\)\.value\)/,"bait and rod must affect fish choice");
+assert.match(js,/chooseFishByBait\(FISH,\$\("baitSelect"\)\.value,state\.selectedRod\)/,"bait and owned rod must affect fish choice");
 assert.match(js,/const locked=state\.fishing!=="idle";/,"bait and rod should lock during cast");
 assert.match(js,/renderBaitAdvice\(\)/,"bait selection must show contextual guide");
 
@@ -62,6 +62,22 @@ assert.match(js,/spendBait\(state\.baitInventory,id\)/,"every cast must use one 
 assert.match(js,/state\.baitInventory=paid\.inventory/,"spent bait must update live inventory");
 assert.match(js,/buyBait\(state\.baitInventory,state\.coins,id,quantity\)/,"shop purchases must use game wallet");
 assert.match(js,/renderShop\(\)/,"shop must render purchase options");
+
+for(const id of ["rodShop","rodShopList","rodShopFeedback","rodOwnedCount","rodOwnedHint",
+                 "fishInventory","fishInventoryList","fishInventoryFeedback","fishInventoryTotal"]){
+  assert.ok(html.includes('id="'+id+'"'),"missing fish/rod inventory UI: "+id);
+}
+assert.match(js,/addCaughtFish\(state\.fishInventory,fish\.id\)/,"new catches must enter saleable inventory");
+assert.doesNotMatch(js,/state\.coins\+=fish\.reward/,"a caught fish must not pay coins before selling");
+assert.match(js,/sellFish\(state\.fishInventory,state\.coins,fishId,qty\)/,"selling must use inventory economy");
+assert.match(js,/buyRod\(state\.ownedRods,state\.coins,rodId\)/,"rod purchases must use saved coin wallet");
+assert.match(js,/!state\.ownedRods\.includes\(state\.selectedRod\)/,"unowned rods cannot be used to cast");
+assert.match(js,/if\(!state\.ownedRods\.includes\(select\.value\)\)/,"unowned rod selection must be blocked");
+assert.match(js,/selectedRod:savedProgress\.selectedRod/,"equipped rod must be persisted");
+assert.match(html,/CÁ THÊM VÀO KHO/,"catch success must award fish, not duplicate cash");
+assert.match(html,/BÁN 1 CON|Bán 1 con/,"fish sale option must be explained");
+
+
 assert.match(html,/Mỗi lần thả câu trừ 1 mồi/,"show bait-consumption rule");
 assert.match(html,/50 lượt mồi miễn phí/,"explain free starter pack");
 
@@ -77,6 +93,7 @@ assert.ok(html.includes('id="fightClock"'),"retain countdown as a failure limit,
 assert.ok(js.includes('if(state.fishing==="reeling")syncFightMeter();'),"cursor animation should update every frame");
 assert.ok(!js.includes("state.held"),"old hold/release model must be removed");
 const css=await readFile(new URL("../styles.css",import.meta.url),"utf8");
+assert.match(css,/\.fish-inventory-card\s*\{/,"fish inventory needs sprite card styling");
 assert.match(css,/\.bait-shop\{/, "shop needs a distinct responsive layout");
 assert.doesNotMatch(css,/\.bite-banner|bite-flash/,"no dormant bite alarm CSS");
 assert.match(css,/\#fightPanel\s*\{[^}]*position:fixed;top:50%;left:50%/,"meter must be fixed in center of screen");

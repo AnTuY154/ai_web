@@ -69,14 +69,14 @@ Tài liệu chi tiết, tham khảo thực tế và cân bằng game: [Float Fis
 
 ## Kết quả câu cá thành công
 
-Khi hoàn tất minigame kim Space, game hiện **popup "🎉 CÂU THÀNH CÔNG!"** cố định giữa màn hình, với **hình pixel art đúng loài cá**, tên, nhãn độ hiếm, xu và điểm được cộng. Bộ ảnh có **10 SVG pixel-art khác nhau** tại `assets/fish/`. Ảnh là minh hoạ game được vẽ riêng, không phải ảnh chụp sinh vật ngoài đời.
+Khi hoàn tất minigame kim Space, game hiện **popup "🎉 CÂU THÀNH CÔNG!"** cố định giữa màn hình, với **hình pixel art đúng loài cá**, tên, nhãn độ hiếm, **+1 cá vào kho** và điểm câu được cộng. Bộ ảnh có **10 SVG pixel-art khác nhau** tại `assets/fish/`. Ảnh là minh hoạ game được vẽ riêng, không phải ảnh chụp sinh vật ngoài đời.
 
 - Thường: viền xanh lá. Hiếm: vàng. Cực hiếm: tím.
 - Nút **CÂU TIẾP** đóng kết quả và tự thả câu lượt tiếp theo nếu vẫn còn thời gian; khi hết giờ hiển thị hướng dẫn gia hạn xu ảo.
 - **Esc** đóng popup mà chưa thả câu; **Enter** kích hoạt nút CÂU TIẾP; khi popup đang mở thì Space không được phép vô tình khởi tạo lượt câu mới.
 - Trình duyệt và Vercel phục vụ file SVG độc lập; `npm run build` kiểm tra đủ 10 hình ảnh, đúng MIME trên HTTP server.
 
-Bản demo vẫn chưa có tài khoản, lưu lịch sử, multiplayer hay thanh toán tiền thật.
+Bản demo đã lưu kho cá và lịch sử bằng localStorage, nhưng chưa có tài khoản đăng nhập, multiplayer hay thanh toán tiền thật.
 
 ## Mồi câu ảnh hưởng đến loài cá xuất hiện
 
@@ -107,8 +107,24 @@ Trò chơi **chưa cho điều chỉnh cỡ phao, chì hoặc độ sâu theo ta
 
 **Người chơi mới có 50 mồi sử dụng miễn phí**: 16 giun, 10 bột, 8 ngô, 6 rau, 5 tép, 3 ốc và 2 mồi giả. Đây là **tổng 50**, không phải 50 mồi mỗi loại. Số xu khởi đầu vẫn là **50 xu game**.
 
-Trong màn Fishing Station, bạn có thể mở **🏪 CỬA HÀNG MỒI** để xem mỗi loại mồi đang có bao nhiêu, giá mua theo đơn vị, hai tỷ lệ gặp **cá hiếm/cực hiếm**, và mua nhanh 1 hoặc 5 mồi. Giá 1 lượt từ 1 xu (giun) tới 8 xu (mồi giả). Xu thu được khi câu thành công dùng để mua thêm mồi.
+Trong màn Fishing Station, bạn có thể mở **🏪 CỬA HÀNG MỒI** để xem mỗi loại mồi đang có bao nhiêu, giá mua theo đơn vị, hai tỷ lệ gặp **cá hiếm/cực hiếm**, và mua nhanh 1 hoặc 5 mồi. Giá 1 lượt từ 1 xu (giun) tới 8 xu (mồi giả). Cá câu thành công được đưa vào **KHO CÁ**, bán cá để có xu dùng mua mồi.
 
 **Không có mồi**: nút thả câu của loại đang chọn bị khóa; đổi sang mồi đang có hoặc mua thêm ở cửa hàng. **Đổi mồi sau khi thu phao không hoàn lại lượt mồi đã dùng.** Nếu phao đang chờ cá và có nhiều lần cá cắn thì đó vẫn chỉ là một lần thả nên không trừ thêm.
 
 Kho mồi, xu và lịch sử bắt cá được **lưu trên trình duyệt**, tải lại trang không tự phát thêm 50 mồi. Bản demo **chưa có tài khoản máy chủ**: chưa thể kiểm soát quà tân thủ trên nhiều thiết bị hoặc khi người chơi xóa dữ liệu duyệt web. Các tỷ lệ là thông số thiết kế game, không phải tỷ lệ câu thật. Xem [Bait Mechanics](docs/BAIT_MECHANICS.md).
+
+## 🐟 Kho cá cá nhân, bán cá và cửa hàng cần
+
+Khi thắng minigame, mỗi con cá được đưa vào **🐟 KHO CÁ CỦA TÔI** thay vì cộng xu ngay. Kho hiển thị ảnh pixel-art, tên loài, số lượng còn trong kho và giá bán. Người chơi chọn **BÁN 1** hoặc **BÁN HẾT** từng loài để cộng xu vào ví; không thể bán lại cá đã bán. Điểm và số cá từng câu là thống kê lịch sử, không mất khi bán.
+
+| Loài | Giá bán / con |
+|---|---:|
+| Rô phi, Rô đồng, Diếc, Trôi, Mè trắng | 6 / 7 / 8 / 9 / 10 xu |
+| Chép, Trắm cỏ, Trê | 19 / 22 / 23 xu |
+| Trắm đen, Cá quả | 48 / 55 xu |
+
+**🎣 CỬA HÀNG CẦN CÂU**: có sẵn **cần tay** miễn phí; **cần máy giá 90 xu** (kim kéo cá chậm hơn), **cần lure giá 160 xu** (khó hơn nhưng có cộng hưởng với mồi giả). Mua cần một lần, sau đó **TRANG BỊ** giữa các lượt câu; loại chưa mua không thể sử dụng. Xu mua cần lấy từ việc bán cá (hoặc từ số xu đang có).
+
+**Nâng cấp dữ liệu cũ:** tệp lưu v1 trước đây đã cộng xu ngay khi câu được cá. Khi tự nâng lên v2, game **giữ nguyên xu, mồi, tổng số cá, điểm và thời gian**, nhưng kho cá bán được bắt đầu từ 0; nếu đưa cá cũ vào kho thì sẽ trả xu **hai lần**. Các lượt bắt cá từ sau bản cập nhật mới đi vào kho đồ.
+
+Mọi thông tin được lưu bằng **localStorage của trình duyệt hiện tại**, không có đồng bộ liên thiết bị hay bảo vệ chống sửa dữ liệu. Điều này đại diện cho **một người chơi trên một hồ sơ trình duyệt**, không phải nhiều tài khoản dùng chung một thiết bị. Xóa dữ liệu trình duyệt có thể làm mất tiến trình.

@@ -108,7 +108,12 @@
               <div class="panel-header"><h3>🎣 Bộ đồ câu</h3><span id="spotLabel">VỊ TRÍ #1</span></div>
               <div class="timer-block"><div><small>THỜI GIAN CÂU CÒN</small><strong id="freeClock">05:00</strong></div><div class="time-meter"><div id="timeFill"></div></div><small id="rentHint">5 phút đầu miễn phí · phí sau đó là giả lập.</small></div>
               <label for="rodSelect">LOẠI CẦN</label>
-              <select id="rodSelect"><option value="hand">Cần tay · Vùng lực rộng</option><option value="reel">Cần máy · Kim chạy chậm hơn</option><option value="lure">Cần lure · Thử thách</option></select>
+              <select id="rodSelect" aria-describedby="rodOwnedHint">
+                <option value="hand">Cần tay · Vùng lực rộng</option>
+                <option value="reel">Cần máy · Kim chạy chậm hơn</option>
+                <option value="lure">Cần lure · Thử thách</option>
+              </select>
+              <p id="rodOwnedHint" class="rod-owned-hint">Đã sở hữu cần tay · Mở cửa hàng cần để mua thêm.</p>
               <label for="baitSelect">LOẠI MỒI</label>
               <select id="baitSelect" aria-describedby="baitAdvice">
                 <option value="worm">🪱 Giun đất · đa dụng</option>
@@ -154,10 +159,27 @@
               <summary>🏪 CỬA HÀNG MỒI <span>TÚI: <b id="baitTotal">50</b> MỒI</span></summary>
               <div class="bait-shop-inner">
                 <p>🎁 Người chơi mới được <strong>50 lượt mồi miễn phí</strong> gồm đủ 7 loại. <strong>Mỗi lần thả câu trừ 1 mồi</strong>, dù sau đó giật hụt hoặc thu phao. Mồi giả dùng 1 lượt sử dụng trong game.</p>
-                <p class="bait-shop-headnote">Dùng xu nhận từ cá để mua thêm. Các tỷ lệ bên dưới là xác suất <strong>gặp</strong> nhóm cá khi dùng cần đang chọn, không phải tỷ lệ chắc chắn bắt được.</p>
+                <p class="bait-shop-headnote">Bán cá trong KHO CÁ để nhận xu mua thêm mồi. Các tỷ lệ bên dưới là xác suất <strong>gặp</strong> nhóm cá khi dùng cần đang chọn, không phải tỷ lệ chắc chắn bắt được.</p>
                 <div id="baitShopList" class="bait-shop-list" aria-label="Danh sách các loại mồi có thể mua"></div>
-                <p id="shopFeedback" class="bait-shop-feedback" role="status" aria-live="polite">Chọn MUA 1 hoặc MUA 5 để bổ sung mồi vào túi.</p>
+                <p id="shopFeedback" class="bait-shop-feedback" role="status" aria-live="polite">Bán cá trong kho để lấy xu mua 1 hoặc 5 mồi.</p>
                 <small>Kho lưu trong trình duyệt hiện tại, chưa có tài khoản hoặc thanh toán tiền thật.</small>
+              </div>
+            </details>
+            <details id="rodShop" class="pixel-panel bait-shop equipment-shop">
+              <summary>🎣 CỬA HÀNG CẦN CÂU <span><b id="rodOwnedCount">1</b>/3 CẦN</span></summary>
+              <div class="bait-shop-inner">
+                <p>Mỗi cần mua <strong>một lần</strong>, dùng vĩnh viễn trong kho lưu trên máy. <strong>Cần tay miễn phí</strong> khi bắt đầu; bán cá để tích xu mua cần máy hoặc cần lure.</p>
+                <div id="rodShopList" class="bait-shop-list" aria-label="Danh sách cần câu và giá mua"></div>
+                <p id="rodShopFeedback" class="bait-shop-feedback" role="status" aria-live="polite">Chọn MUA CẦN để mở khóa và trang bị.</p>
+              </div>
+            </details>
+            <details id="fishInventory" class="pixel-panel bait-shop fish-inventory">
+              <summary>🐟 KHO CÁ CỦA TÔI <span><b id="fishInventoryTotal">0</b> CON</span></summary>
+              <div class="bait-shop-inner">
+                <p>Cá vừa câu sẽ vào kho. <strong>Bán 1 con hoặc bán tất cả từng loài</strong> để nhận xu ảo dùng mua mồi và cần câu. Cá đã bán không còn trong kho nhưng lịch sử câu vẫn giữ nguyên.</p>
+                <div id="fishInventoryList" class="fish-inventory-list" aria-label="Danh sách cá đang sở hữu"></div>
+                <p id="fishInventoryFeedback" class="bait-shop-feedback" role="status" aria-live="polite">Câu được cá rồi mở kho để bán khi cần.</p>
+                <small>Chỉ cá bắt được sau bản cập nhật kho đồ mới có thể bán. Cá cũ đã nhận xu thưởng trực tiếp nên không thể bán thêm lần nữa.</small>
               </div>
             </details>
             <section class="pixel-panel catch-panel"><div class="panel-header"><h3>🐟 Thành quả</h3><span id="catchTier">ĐANG CHỜ</span></div><div id="lastCatch" class="last-catch" aria-live="polite">Chờ phao nhấp nhô và bắt đầu chuyến câu của bạn.</div><div class="caught-count"><strong id="sessionCatch">0</strong><span>cá đã câu · <b id="sessionScore">0</b> điểm</span></div></section>
@@ -181,10 +203,10 @@
           <span id="catchSuccessRarity" class="catch-rarity-badge">PHỔ BIẾN</span>
         </div>
         <div class="catch-rewards">
-          <div><small>THƯỞNG XU GAME</small><strong id="catchSuccessCoins">+6 xu</strong></div>
+          <div><small>CÁ THÊM VÀO KHO</small><strong id="catchSuccessCoins">+1 con</strong></div>
           <div><small>ĐIỂM CÂU</small><strong id="catchSuccessPoints">+60 điểm</strong></div>
         </div>
-        <p class="catch-success-note">Cá đã được thêm vào sổ cá của bạn. Đây là xu ảo trong bản demo.</p>
+        <p class="catch-success-note">Cá đã vào kho đồ. Mở KHO CÁ để bán lấy xu ảo mua mồi và cần câu.</p>
         <button id="catchSuccessClose" class="primary-btn catch-continue-btn" type="button">🎣 CÂU TIẾP</button>
         <p class="catch-success-shortcut">Nhấn Enter để câu tiếp · Esc để đóng</p>
       </div>
