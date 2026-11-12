@@ -18,6 +18,32 @@ for(const id of ["mapScreen","mapFrame","gameScreen","gameCanvas","gameLayout","
   assert.ok(html.includes('id="'+id+'"'),"missing frontend id "+id);
 }
 const js=await readFile(new URL("../app.js",import.meta.url),"utf8");
+
+// Immersive main screens: full-viewport map + in-lake lobby, secondary content in dialogs.
+for(const id of ["lakeDirectory","openLakeDirectory","closeLakeDirectory","lakeDirectoryBackdrop",
+                 "mapSelectedLake","lobbyFishPanel","openFishGuide","closeFishGuide","lobbyFishBackdrop","lobbyFishCount"]){
+  assert.ok(html.includes('id="'+id+'"'),"fullscreen home/lobby control missing "+id);
+}
+assert.match(html,/<body class="map-fullscreen">/,"map should start with full-screen body layout");
+assert.match(html,/id="lakeDirectory"[^>]*role="dialog"[^>]*aria-modal="true"/,"lake directory must be an accessible dialog");
+assert.match(html,/id="lobbyFishPanel"[^>]*role="dialog"[^>]*aria-modal="true"/,"fish ledger must be a dialog");
+assert.match(html,/id="openLakeDirectory"[^>]*aria-controls="lakeDirectory"[^>]*aria-expanded="false"/,"lake finder button must announce state");
+assert.match(html,/id="openFishGuide"[^>]*aria-controls="lobbyFishPanel"[^>]*aria-expanded="false"/,"fish ledger button must announce state");
+assert.match(js,/function openLakeDirectory\(\)/,"map lake directory must be openable");
+assert.match(js,/function closeLakeDirectory\(restoreFocus=true\)/,"map lake directory must close");
+assert.match(js,/function openLobbyFish\(\)/,"lobby fish ledger must be openable");
+assert.match(js,/function closeLobbyFish\(restoreFocus=true\)/,"lobby ledger must close");
+assert.match(js,/function handleHomeDialogKeys\(e\)/,"home modal keyboard isolation missing");
+assert.match(js,/if\(handleHomeDialogKeys\(e\)\)return;/,"home dialogs must intercept keyboard");
+assert.match(js,/document\.body\.classList\.toggle\("lobby-fullscreen",state\.spot===null\)/,"lobby must fill screen upon entering lake");
+assert.match(js,/document\.body\.classList\.add\("map-fullscreen"\)/,"return to home map restores full-viewport layout");
+assert.match(js,/document\.body\.classList\.remove\("lobby-fullscreen"\)/,"sitting at a seat should release lobby before full-screen fishing");
+assert.match(js,/document\.body\.classList\.add\("lobby-fullscreen"\)/,"leaving a seat should restore immersive lobby");
+assert.match(js,/frame\.clientWidth/,"map viewport scaling must be responsive");
+assert.match(js,/window\.addEventListener\("resize",renderMapTransform\)/,"map should refit after resizing/orientation changes");
+assert.match(js,/document\.body\.classList\.add\("map-fullscreen"\)/,"map mode should be restored after leaving lake");
+assert.match(js,/\$\("lobbyFishCount"\)\.textContent=state\.caught/,"lobby fish count should be live data");
+
 assert.ok(js.includes("MAX_ANGLERS=15"),"15-spot rule");
 assert.ok(js.includes("MAX_SPECTATORS=30"),"30-spectator rule");
 assert.ok(js.includes("FREE_SECONDS=300"),"5-minute free rule");
@@ -140,6 +166,28 @@ assert.ok(js.includes('if(state.fishing==="reeling")syncFightMeter();'),"cursor 
 assert.ok(!js.includes("state.held"),"old hold/release model must be removed");
 const css=await readFile(new URL("../styles.css",import.meta.url),"utf8");
 assert.match(css,/\.fish-inventory-card\s*\{/,"fish inventory needs sprite card styling");
+
+assert.match(css,/body\.map-fullscreen \.main-shell\{\s*position:fixed;inset:62px 0 0 0;/,
+  "Hanoi map must occupy viewport under compact top bar");
+assert.match(css,/body\.map-fullscreen \.map-frame\{\s*position:absolute;inset:0;/,
+  "map canvas must cover main home viewing area");
+assert.match(css,/body\.map-fullscreen \.map-sidebar\{\s*display:none;position:fixed;/,
+  "long lake directory should not occupy map width");
+assert.match(css,/body\.map-fullscreen \.map-sidebar\.is-open\{display:flex\}/,
+  "lake directory should be a visible modal when selected");
+assert.match(css,/body\.map-fullscreen \.lake-preview\{\s*position:absolute;/,
+  "enter lake CTA must be visible without page scroll");
+assert.match(css,/body\.lobby-fullscreen \.game-shell\{\s*position:fixed;inset:0;/,
+  "in-lake lobby must fill full viewport");
+assert.match(css,/body\.lobby-fullscreen \.playfield-card\{\s*position:absolute;inset:0;/,
+  "lobby view should not have a narrow permanent side column");
+assert.match(css,/body\.lobby-fullscreen \.playfield-card canvas\{\s*position:absolute;/,
+  "lake map canvas should be visible in same play screen");
+assert.match(css,/body\.lobby-fullscreen \.game-sidebar\{\s*display:none;position:fixed;/,
+  "fish ledger should be a separate modal");
+assert.match(css,/body\.map-fullscreen,body\.lobby-fullscreen\{overflow:hidden\}/,
+  "home screens must not require page scrolling");
+
 assert.match(css,/\.bait-shop\{/, "shop needs a distinct responsive layout");
 assert.match(css,/\.utility-launcher\{\s*display:grid;grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/,
   "four shortcuts must use compact two-column grid");
