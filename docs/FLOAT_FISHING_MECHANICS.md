@@ -14,16 +14,23 @@
 
 **Mô phỏng Hồ Bảy Mẫu:**
 
-| Quan sát trực tiếp | Hành vi mô phỏng | Có thể mắc cá? |
+| Quan sát phao trong video được người chơi mô tả | Ý nghĩa và xử lý | Mô phỏng trong game |
 |---|---|---|
-| Sóng gợn đều | Hai nhịp sóng nhỏ và trôi ngang nhẹ | Không |
-| Phao nhấp vài cái rồi yên | Cá thử mồi (peck), kéo 0,32–0,83 giây | Không |
-| Phao dạt nhẹ rồi bật về | Va vào dây (liner) hoặc gió, không giữ hướng | Không |
-| Phao chìm dần, **đầu đỏ mất dưới nước** | Dive: phao thực sự được che bởi mặt nước Canvas | Có |
-| Phao lướt ngang rõ rệt và liên tục | Slide: kéo ngang lớn hơn các chuyển động giả | Có |
-| Phao **nổi cao**, thân nghiêng | Lift: cá nâng mồi và chì trong cấu hình câu phù hợp | Có |
+| Rung lăn tăn | Cá thăm dò, gió hoặc sóng; **chờ** | Phao dao động nhỏ theo sóng, có lúc bị va nhẹ |
+| Nhấp **nhanh, liên tục nhưng nông** | Có thể cá nhỏ rỉa mồi; thử mồi to | Các nhịp *nibble* nhanh và nông; mồi giun/bột/tép có thể có nhiều hơn mồi to như ngô/ốc |
+| **Chìm xuống rồi nổi lại** | Cá chưa ngậm chắc; **chờ** | *Dip-return* giả: chóp phao hạ sâu trong chốc lát rồi trở về |
+| **Chìm dứt khoát và duy trì** | Có thể cá ngậm mồi; **nhấc cần** | *Dive* thật: đầu phao chìm khuất dưới mặt nước |
+| **Chạy ngang có hướng, liên tục** | Cá mang mồi đi; **nhấc cần** | *Slide* thật: phao dịch chuyển xa, không bật về ngay |
+| **Trồi cao, nằm nghiêng** | Cá có thể nâng mồi/chì; **nhấc cần** | *Lift* thật: phao nhô cao, thân nghiêng về một phía |
+| **Đứng im rất lâu** | Có thể thiếu cá hoặc sai độ sâu; kiểm tra lại | Thỉnh thoảng có quãng chờ dài; có nút **THU PHAO / ĐỔI MỒI** không bị tính là giật hụt |
 
-**Thời gian chỉ để cân bằng game:** một cú cắn xảy ra ngẫu nhiên sau khoảng 6,5–14,5 giây; chuyển động nhỏ trước đó cũng không cố định, số lần va mồi thay đổi. Khung giật khoảng 1,5–1,8 giây, đủ nhìn và phản xạ; không ám chỉ thời gian mắc cá thực tế. Nếu không giật, phao sẽ yên lại trong im lặng, rồi tiếp tục chờ cơ hội mới trong cùng lượt thả. Chỉ khi nhấc cần, game mới xác nhận có mắc cá hoặc giật hụt.
+### Cân chỉnh phao và chì
+
+Theo ví dụ người dùng tóm tắt từ video, phao quá to hoặc chì quá nhẹ có thể làm tín hiệu khó quan sát. Bản demo mặc định dùng **phao được cân nổi thấp**, phần thân nằm dưới mặt nước, chỉ một phần chóp màu nhô lên. Canvas **che phần phao ở dưới mặt nước**: những cú nhấp nông, chìm giả rồi hồi lên, chìm thật, nổi cao đều có khác biệt trực quan.
+
+**Giới hạn hiện tại:** chưa có thanh điều chỉnh cỡ phao, lượng chì hoặc độ sâu riêng trong UI. Nút thu phao cho phép đổi mồi/cần, rồi thả lại; khuyến nghị về chì/độ sâu trong sổ tay là kiến thức câu thật.
+
+**Thời gian chỉ để cân bằng game:** một cú cắn thường xuất hiện sau khoảng 6,2–15,2 giây, đôi khi chậm hơn khoảng 8 giây nữa; chuyển động nhỏ trước đó cũng không cố định, số lần va mồi thay đổi. Khung giật khoảng 1,5–1,8 giây, đủ nhìn và phản xạ; không ám chỉ thời gian mắc cá thực tế. Nếu không giật, phao sẽ yên lại trong im lặng, rồi tiếp tục chờ cơ hội mới trong cùng lượt thả. Chỉ khi nhấc cần, game mới xác nhận có mắc cá hoặc giật hụt.
 
 **Hạn chế mô phỏng:** dấu hiệu phao thực tế còn phụ thuộc loại phao, chì, độ sâu, gió và loài cá. Game mô phỏng nguyên tắc quan sát, không khẳng định 100% hình thái cắn của một loài cá cụ thể.
 
@@ -57,7 +64,7 @@ Phiên bản được chủ dự án xác nhận sử dụng **cơ chế bấm S
 
 - World map và khu chờ hồ vẫn có 15 spot; click một spot mở riêng **Fishing Station** với khung nhìn phao lớn, tên hồ, số spot, thời gian miễn phí còn lại, chọn cần/mồi, nút câu và bảng lực.
 - Trên desktop bấm **Space từng nhịp**; trên mobile chạm nút lớn **BẤM ĐÚNG NHỊP**. Thanh lực luôn ở **giữa viewport**, cả trên mobile.
-- Cảnh báo chuyển động phao và thanh lực có chữ rõ ràng, không chỉ phân biệt bằng màu.
+- **Không có chữ cảnh báo chuyển động phao lúc cá cắn**. Chỉ phần thanh lực hiện ra khi đã giật đúng và mắc cá; sổ tay tĩnh có thể mở khi muốn học.
 - Bỏ ghế đưa trở lại bản đồ hồ, hủy pha câu hiện tại; đồng hồ miễn phí không reset.
 
 ## 4. Cấu trúc và xác nhận
