@@ -43,6 +43,85 @@ const state={
   fishCounts:Object.fromEntries(FISH.map(f=>[f.id,savedProgress.fishCounts[f.id]??0])),
   mapZoom:1, mapDX:0, mapDY:0, mapDragging:false, lastTime:0
 };
+
+// Quick access grid: the four actions stay visible, while details open as
+// a viewport-contained overlay rather than pushing the fishing page downward.
+const utilityTargets=Object.freeze({
+  baitShop:"quickBaitShop",rodShop:"quickRodShop",
+  fishInventory:"quickFishInventory",achievementsPanel:"quickAchievements"
+});
+let activeUtilityPanel=null,utilityOpenedAt=0;
+function hideUtilityPanel(restoreFocus=true){
+  if(!activeUtilityPanel)return;
+  const id=activeUtilityPanel,openTime=utilityOpenedAt;
+  activeUtilityPanel=null;utilityOpenedAt=0;
+  $(id).open=false;
+  $("utilityBackdrop").classList.add("hidden");
+  document.body.classList.remove("utility-overlay-active");
+  $(utilityTargets[id]).setAttribute("aria-expanded","false");
+  // A player inspecting equipment or sales should not silently lose a bite.
+  // Delay the cast's preplanned events by precisely the modal's open time.
+  const paused=Math.max(0,performance.now()-openTime);
+  if(state.fishing==="waiting"||state.fishing==="bite"){
+    state.biteAt+=paused;
+    if(state.biteStartedAt)state.biteStartedAt+=paused;
+    if(state.biteExpires)state.biteExpires+=paused;
+    if(state.floatSequence){
+      state.floatSequence.biteAt+=paused;
+      for(const touch of state.floatSequence.touches)touch.at+=paused;
+    }
+  }
+  if(restoreFocus)$(utilityTargets[id]).focus({preventScroll:true});
+}
+function showUtilityPanel(id){
+  if(!Object.hasOwn(utilityTargets,id)||state.screen!=="game"||
+    state.spot===null||state.catchModalOpen||state.fishing==="reeling")return;
+  if(activeUtilityPanel===id){hideUtilityPanel();return}
+  if(activeUtilityPanel)hideUtilityPanel(false);
+  const panel=$(id);
+  activeUtilityPanel=id;utilityOpenedAt=performance.now();
+  panel.open=true;
+  $("utilityBackdrop").classList.remove("hidden");
+  document.body.classList.add("utility-overlay-active");
+  $(utilityTargets[id]).setAttribute("aria-expanded","true");
+  panel.scrollTop=0;
+  panel.querySelector("summary").focus({preventScroll:true});
+}
+for(const [id,launcherId] of Object.entries(utilityTargets)){
+  $(launcherId).addEventListener("click",()=>showUtilityPanel(id));
+  const panel=$(id);
+  // Click on the native summary acts as an easily discoverable close action.
+  panel.querySelector("summary").addEventListener("click",e=>{
+    if(panel.open){e.preventDefault();hideUtilityPanel()}
+  });
+  panel.addEventListener("toggle",()=>{
+    if(!panel.open&&activeUtilityPanel===id)hideUtilityPanel();
+  });
+}
+$("utilityBackdrop").addEventListener("click",()=>hideUtilityPanel());
+function handleUtilityKeyboard(e){
+  if(!activeUtilityPanel)return false;
+  if(e.key==="Escape"){e.preventDefault();hideUtilityPanel();return true}
+  const panel=$(activeUtilityPanel);
+  if(e.key==="Tab"){
+    const controls=[...panel.querySelectorAll("summary,button:not(:disabled),input:not(:disabled),select:not(:disabled),[tabindex]:not([tabindex='-1'])")]
+      .filter(el=>el.getClientRects().length>0);
+    if(controls.length){
+      const first=controls[0],last=controls[controls.length-1];
+      if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus({preventScroll:true})}
+      else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus({preventScroll:true})}
+      else if(!panel.contains(document.activeElement)){e.preventDefault();first.focus({preventScroll:true})}
+    }
+    return true;
+  }
+  // Do not route Space to fishing when a dialog is up. Keep normal Space
+  // activation on buttons and summary available to keyboard users.
+  if(e.code==="Space"||e.key===" "){
+    if(!e.target.closest?.("button,summary"))e.preventDefault();
+  }
+  return true;
+}
+
 function saveProgress(){
   try{
     window.localStorage.setItem(BAIT_SAVE_KEY,JSON.stringify(makeSave({
@@ -205,6 +284,7 @@ function occupySpot(n){
   updateHUD();
 }
 function releaseSpot(){
+  hideUtilityPanel(false);
   closeCatchSuccess(false);
   state.gotoSpot=null;state.spot=null;state.fishing="idle";state.currentFish=null;
   state.fight=null;state.floatSequence=null;
@@ -425,7 +505,7 @@ function castLine(){
   const id=$("baitSelect").value;
   const paid=spendBait(state.baitInventory,id);
   if(!paid.ok){
-    $("baitShop").open=true;
+    showUtilityPanel("baitShop");
     $("shopFeedback").textContent="Hết "+getBaitInfo(id).name+"! Chọn mồi khác hoặc mua thêm bằng xu.";
     displayStatus("Hết mồi đã chọn. Mở cửa hàng để mua thêm.");
     updateHUD();return;
@@ -442,6 +522,7 @@ function missFish(text){
   displayStatus(text||"Cá đã thoát. Bạn có thể thả câu lại!");
   $("lastCatch").textContent=text||"Cá đã thoát. Hãy thử lại.";
   $("catchTier").textContent="TRƯỢT CÁ";
+  $("utilityTicker").textContent="🎣 Giật hụt! Thử quan sát phao và câu lại.";
   renderRodShop();updateHUD();
 }
 function landFish(){
@@ -459,6 +540,7 @@ function landFish(){
   displayStatus("🎉 "+message+" Bán ở KHO CÁ để lấy "+fish.reward+" xu.");
   $("lastCatch").textContent="🎉 "+message;
   $("catchTier").textContent=tier;
+  $("utilityTicker").textContent="🎉 "+fish.name+" · "+tier+" · +1 con vào kho!";
   saveProgress();renderShop();renderFishInventory();renderRodShop();drawFishList();updateHUD();
   showCatchSuccess(fish);
 }
@@ -490,7 +572,7 @@ function closeCatchSuccess(continueFishing=false){
   if(state.screen==="game"&&state.spot!==null){
     if(continueFishing&&canFish())castLine();
     else if(continueFishing)displayStatus("Hết thời gian câu. Bạn có thể thuê thêm bằng xu demo để câu tiếp.");
-    $("fishingView").focus({preventScroll:true});
+    if(!activeUtilityPanel)$("fishingView").focus({preventScroll:true});
   }
 }
 $("catchSuccessClose").addEventListener("click",()=>closeCatchSuccess(true));
@@ -577,6 +659,11 @@ function updateHUD(){
   $("castBtn").disabled=!canFish()||state.fishing!=="idle"||(state.baitInventory[$("baitSelect").value]??0)<1;
   $("baitOwned").textContent=state.baitInventory[$("baitSelect").value]??0;
   $("baitTotal").textContent=countBaits(state.baitInventory);
+  $("shortcutBaitTotal").textContent=countBaits(state.baitInventory);
+  $("shortcutRodTotal").textContent=state.ownedRods.length;
+  $("shortcutFishTotal").textContent=countFish(state.fishInventory);
+  $("shortcutCatchTotal").textContent=state.caught;
+  $("shortcutScore").textContent=state.score;
   // Prevent changing gear after a cast; that encounter was already selected.
   const locked=state.fishing!=="idle";
   $("baitSelect").disabled=locked;
@@ -624,7 +711,10 @@ document.addEventListener("keydown",e=>{
     else if(e.code==="Space"||e.key===" "){e.preventDefault()}
     return;
   }
+  if(handleUtilityKeyboard(e))return;
   if(state.screen!=="game")return;
+  // Space/Enter on a utility shortcut must activate that button, never cast.
+  if(e.target.closest?.(".utility-launcher"))return;
   if(["INPUT","SELECT","TEXTAREA"].includes(document.activeElement.tagName))return;
   if(state.spot!==null){
     if(e.code==="Space"||e.key===" "){
@@ -883,6 +973,7 @@ function drawGame(now){
   ctx.fillStyle="#f6eccb";ctx.textAlign="center";ctx.font="bold 10px monospace";ctx.fillText("BẠN",state.avatar.x,state.avatar.y-41);
 }
 function update(delta){
+  if(activeUtilityPanel)return; // Suspend fishing motion and session clock while shopping.
   if(state.screen!=="game")return;
   const speed=165*delta;
   if(state.spot===null){

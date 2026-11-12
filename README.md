@@ -128,3 +128,15 @@ Khi thắng minigame, mỗi con cá được đưa vào **🐟 KHO CÁ CỦA TÔ
 **Nâng cấp dữ liệu cũ:** tệp lưu v1 trước đây đã cộng xu ngay khi câu được cá. Khi tự nâng lên v2, game **giữ nguyên xu, mồi, tổng số cá, điểm và thời gian**, nhưng kho cá bán được bắt đầu từ 0; nếu đưa cá cũ vào kho thì sẽ trả xu **hai lần**. Các lượt bắt cá từ sau bản cập nhật mới đi vào kho đồ.
 
 Mọi thông tin được lưu bằng **localStorage của trình duyệt hiện tại**, không có đồng bộ liên thiết bị hay bảo vệ chống sửa dữ liệu. Điều này đại diện cho **một người chơi trên một hồ sơ trình duyệt**, không phải nhiều tài khoản dùng chung một thiết bị. Xóa dữ liệu trình duyệt có thể làm mất tiến trình.
+
+## Giao diện menu 4 ô không cần cuộn trang (mobile-first)
+
+Màn hình câu cá có lưới **2×2** truy cập nhanh: **🏪 Cửa hàng mồi**, **🎣 Cửa hàng cần**, **🐟 Kho cá của tôi**, **🏆 Thành quả**. Mỗi ô hiển thị tổng mồi, số cần đã sở hữu, cá còn trong kho hoặc số cá/điểm từng câu, cập nhật tức thời theo dữ liệu `localStorage`.
+
+- **Điện thoại / máy tính bảng (tới 850px):** 4 ô được **ghim ở cuối màn hình**, nên không phải kéo đến tận cuối cột đồ câu để tìm chức năng; hộp thông báo nhỏ bên dưới hiển thị cá vừa câu.
+- **Màn hình rộng:** 4 ô nằm ở đầu cột đồ câu theo lưới 2×2 và bám ở đầu cột khi cuộn.
+- Bấm một ô để mở **cửa sổ chi tiết** có chiều cao tối đa bằng màn hình; cửa hàng nhiều món và kho nhiều cá chỉ cuộn **bên trong cửa sổ**, không kéo dài trang câu.
+- Chọn tiêu đề **ĐÓNG ×**, chạm ngoài cửa sổ hoặc nhấn **Esc** để đóng. Hỗ trợ Tab và không làm Space thả câu/giật cần khi đang mở menu.
+- Thời gian câu và nhịp phao tạm dừng trong lúc mở menu để người chơi không vô tình bỏ lỡ một lần cắn khi đang mua đồ; tiếp tục sau khi đóng.
+
+Bốn chức năng tổng quan luôn được nhìn thấy trong màn câu trên thiết bị di động thông thường. Với các điện thoại có chiều cao quá nhỏ, nội dung *chi tiết* của cửa hàng vẫn cần cuộn bên trong hộp thoại; đây là giới hạn hợp lý để nút bấm và chữ không bị thu quá bé.
