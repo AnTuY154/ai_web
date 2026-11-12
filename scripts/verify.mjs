@@ -76,7 +76,7 @@ assert.match(js,/if\(!state\.ownedRods\.includes\(select\.value\)\)/,"unowned ro
 assert.match(js,/selectedRod:savedProgress\.selectedRod/,"equipped rod must be persisted");
 assert.match(html,/CÁ THÊM VÀO KHO/,"catch success must award fish, not duplicate cash");
 assert.match(html,/BÁN 1 CON|Bán 1 con/,"fish sale option must be explained");
-assert.match(css,/\.fish-inventory-card\s*\{/,"fish inventory needs sprite card styling");
+
 
 assert.match(html,/Mỗi lần thả câu trừ 1 mồi/,"show bait-consumption rule");
 assert.match(html,/50 lượt mồi miễn phí/,"explain free starter pack");
@@ -93,6 +93,7 @@ assert.ok(html.includes('id="fightClock"'),"retain countdown as a failure limit,
 assert.ok(js.includes('if(state.fishing==="reeling")syncFightMeter();'),"cursor animation should update every frame");
 assert.ok(!js.includes("state.held"),"old hold/release model must be removed");
 const css=await readFile(new URL("../styles.css",import.meta.url),"utf8");
+assert.match(css,/\.fish-inventory-card\s*\{/,"fish inventory needs sprite card styling");
 assert.match(css,/\.bait-shop\{/, "shop needs a distinct responsive layout");
 assert.doesNotMatch(css,/\.bite-banner|bite-flash/,"no dormant bite alarm CSS");
 assert.match(css,/\#fightPanel\s*\{[^}]*position:fixed;top:50%;left:50%/,"meter must be fixed in center of screen");
