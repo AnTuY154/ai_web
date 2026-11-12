@@ -105,7 +105,7 @@ assert.match(js,/delayFishingBiteSchedule\(elapsed\)/,"closing gear must not sil
 assert.match(js,/function hideUtilityPanel\(restoreFocus=true\)/,"utility needs a close action");
 assert.match(js,/function handleUtilityKeyboard\(e\)/,"modal should manage keyboard input");
 assert.match(js,/if\(handleUtilityKeyboard\(e\)\)return;/,"prevent Space from triggering fishing while viewing a panel");
-assert.match(js,/if\(activeUtilityPanel\)return; \/\/ Suspend fishing motion/,"shopping must pause active fishing");
+assert.match(js,/if\(activeUtilityPanel\|\|gearSettingsOpen\)return; \/\/ Pause cast and timer during menus/,"all menus must pause active fishing");
 assert.match(js,/showUtilityPanel\("baitShop"\)/,"out-of-bait should open shop overlay");
 
 
