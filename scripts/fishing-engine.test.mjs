@@ -63,7 +63,7 @@ test("no successful Space presses results in fish escape after its timer",()=>{
   assert.equal(f.hits,0);
   assert.ok(f.elapsed>=f.seconds-1e-7);
 });
-test("skilled timed Space presses catch every species at 5–10 seconds",()=>{
+test("skilled Space presses catch all species without waiting for the time limit",()=>{
   for(const id of ids){
     const f=makeFight(id);
     for(let i=0;i<1100&&!f.result;i++){
@@ -73,8 +73,21 @@ test("skilled timed Space presses catch every species at 5–10 seconds",()=>{
     }
     assert.equal(f.result,"caught",id+": winnable with timing");
     assert.equal(f.hits,f.targetHits);
-    assert.ok(f.elapsed>=f.seconds-1e-6);
+    assert.ok(f.elapsed<f.seconds,id+": catch should appear BEFORE countdown expires");
   }
+});
+test("the very last correct Space beat marks catch immediately",()=>{
+  const f=makeFight("ro-phi");
+  while(f.cursor<f.safeLeft)stepFight(f,.01);
+  assert.equal(strikeFight(f),"hit");
+  assert.equal(f.result,null);
+  while(f.pass===f.lastHitPass)stepFight(f,.01);
+  while(f.cursor<f.safeLeft||f.cursor>f.safeRight)stepFight(f,.01);
+  assert.equal(strikeFight(f),"hit");
+  assert.equal(f.hits,f.targetHits);
+  assert.equal(f.result,"caught");
+  assert.ok(f.elapsed<f.seconds,"no mandatory post-success waiting");
+  assert.equal(strikeFight(f),"finished");
 });
 test("after enough hits more input cannot cause extra misses",()=>{
   const f=makeFight("ro-phi");
