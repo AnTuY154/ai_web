@@ -14,7 +14,7 @@ for(const lake of data.lakes){
 }
 assert.ok(ids.has("bay-mau"),"sample lake Bảy Mẫu must exist");
 const html=await readFile(new URL("../index.html",import.meta.url),"utf8");
-for(const id of ["mapScreen","mapFrame","gameScreen","gameCanvas","gameLayout","fishingView","floatCanvas","seatNumber","fightPanel","fightScrim","fightHitBtn","fightMistakes","safeBand","tensionMarker","fightClock","fishingStatus","castBtn","reelBtn","fishList","rentBtn"]){
+for(const id of ["mapScreen","mapFrame","gameScreen","gameCanvas","gameLayout","fishingView","floatCanvas","seatNumber","fightPanel","fightScrim","fightHitBtn","fightMistakes","safeBand","tensionMarker","fightClock","fishingStatus","castBtn","reelBtn","retrieveBtn","fishList","rentBtn"]){
   assert.ok(html.includes('id="'+id+'"'),"missing frontend id "+id);
 }
 const js=await readFile(new URL("../app.js",import.meta.url),"utf8");
@@ -25,6 +25,13 @@ assert.ok(js.includes("makeFight("),"must enter tension mini-game after a strike
 assert.ok(js.includes("drawFloatScene("),"must render float close-up");
 
 assert.ok(js.includes("planFloatCast("),"must randomly schedule natural false movements and real takes");
+
+assert.ok(js.includes('planFloatCast(now,Math.random,$("baitSelect").value)'),"bait size should affect nuisance nibbling");
+assert.match(js,/function retrieveLine\(\)/,"players must be able to reel in and change bait");
+assert.ok(js.includes('const x=596+pose.dx,y=373+pose.dy'),"float must be weighted so only its tip emerges");
+assert.ok(html.includes('class="float-field-guide"'),"reading cues should be available as optional static teaching");
+assert.match(html,/Chìm rồi nổi trở lại/,"false dip-and-return should be explained without live warning");
+
 assert.ok(js.includes("floatPose("),"bobber motion must use pure physical float simulation");
 assert.ok(js.includes("planNextTake(now);"),"missed takes must settle silently and offer another bite");
 assert.ok(js.includes('state.fishing==="bite"'),"real bite still needs a genuine hook window");

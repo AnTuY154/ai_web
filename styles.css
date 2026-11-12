@@ -213,3 +213,21 @@ kbd{font:700 12px 'Space Mono',monospace;padding:5px 8px;background:#f8dca0;bord
 .bait-advice p{font-size:12px;line-height:1.55;color:#d2e0d3;margin:8px 0 7px}
 .bait-advice small{font-size:10px;color:#abc1b7;line-height:1.4;display:block}
 .fishing-control-panel select:disabled{opacity:.7;cursor:not-allowed}
+
+
+/* Optional static tutorial: no real-time bite notifications or spoiler cues. */
+.float-field-guide{
+  margin-top:14px;background:#122e35;border:2px solid #567c74;
+  box-shadow:3px 3px 0 #0c2025;
+  color:#c8d8c8;
+}
+.float-field-guide summary{
+  cursor:pointer;user-select:none;list-style-position:inside;
+  padding:12px 11px;color:#ffdfaa;font:700 11px 'Space Mono',monospace;
+}
+.float-field-guide summary:focus-visible{outline:3px solid #ffdc91;outline-offset:2px}
+.float-guide-body{padding:0 12px 12px;font-size:12px;line-height:1.55}
+.float-guide-body p{margin:7px 0}
+.float-guide-body strong{color:#e6efc9}
+.float-guide-body small{display:block;color:#a5c4bb;margin-top:12px}
+#retrieveBtn{width:100%;font-size:12px;min-height:42px;touch-action:manipulation}

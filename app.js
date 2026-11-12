@@ -207,7 +207,7 @@ $("baitSelect").addEventListener("change",renderBaitAdvice);
 function canFish(){return state.spot!==null&&(state.freeRemaining>0||state.paidRemaining>0)}
 function planNextTake(now){
   state.currentFish=chooseFish();
-  state.floatSequence=planFloatCast(now);
+  state.floatSequence=planFloatCast(now,Math.random,$("baitSelect").value);
   state.biteAt=state.floatSequence.biteAt;
   state.biteStartedAt=0;state.biteExpires=0;state.fishing="waiting";
 }
@@ -289,7 +289,17 @@ function attemptStrike(){
     updateHUD();
   }
 }
+// Recast without a false hook, so players can respond to prolonged stillness
+// or fast shallow nibbles by changing bait or checking the float.
+function retrieveLine(){
+  if(state.fishing!=="waiting"&&state.fishing!=="bite")return;
+  state.fishing="idle";state.currentFish=null;state.fight=null;
+  state.floatSequence=null;state.biteStartedAt=0;state.biteExpires=0;
+  displayStatus("Đã thu phao. Bạn có thể đổi mồi hoặc cần, rồi thả lại.");
+  updateHUD();
+}
 $("castBtn").addEventListener("click",castLine);
+$("retrieveBtn").addEventListener("click",retrieveLine);
 function attemptMeterHit(){
   if(state.screen!=="game"||state.spot===null||state.fishing!=="reeling"||!state.fight)return;
   const f=state.fight;
@@ -346,6 +356,7 @@ function updateHUD(){
   $("baitSelect").disabled=locked;
   $("rodSelect").disabled=locked;
   $("reelBtn").classList.toggle("hidden",state.fishing==="idle"||state.fishing==="reeling");
+  $("retrieveBtn").classList.toggle("hidden",state.fishing!=="waiting"&&state.fishing!=="bite");
   $("reelBtn").textContent="NHẤC CẦN · SPACE";
   $("rentBtn").classList.toggle("hidden",state.spot===null||state.freeRemaining>0||state.paidRemaining>0);
   $("leaveSpot").disabled=state.spot===null;
@@ -568,7 +579,8 @@ function drawFloatScene(now){
   }
   const pattern=state.currentFish?biteConfig(state.currentFish.id,$("rodSelect").value).pattern:"dive";
   const pose=floatPose(now,state.floatSequence,mode,pattern,state.biteStartedAt,state.biteExpires);
-  const x=596+pose.dx,y=320+pose.dy;
+  // A correctly weighted waggler exposes only its narrow colored tip.
+  const x=596+pose.dx,y=373+pose.dy;
   const surfaceY=323+Math.sin(time*2.1+(state.floatSequence?.seed??0))*.6;
   // Movement should be seen by comparing the float with surrounding water:
   // no special colored rings, sound, text or flashing particles reveal a take.
@@ -580,7 +592,7 @@ function drawFloatScene(now){
     floatCtx.beginPath();floatCtx.ellipse(x,surfaceY+2,radius,radius*.18,0,0,Math.PI*2);floatCtx.stroke();
   }
   floatCtx.beginPath();floatCtx.moveTo(260,192);
-  floatCtx.quadraticCurveTo(385,191+Math.sin(time*.9)*13,x,y-51);
+  floatCtx.quadraticCurveTo(385,191+Math.sin(time*.9)*13,x,y-53*1.48);
   floatCtx.strokeStyle="#e5dbc4";floatCtx.lineWidth=1.35;floatCtx.stroke();
 
   // Pixel-art bobber is clipped by the water surface. A proper dive submerges
@@ -588,14 +600,14 @@ function drawFloatScene(now){
   floatCtx.save();
   floatCtx.beginPath();floatCtx.rect(0,0,960,surfaceY+1);floatCtx.clip();
   floatCtx.translate(x,y);floatCtx.rotate(pose.rotation);floatCtx.scale(1.48,1.48);
-  fpx(floatCtx,-3,-49,6,23,"#283e4b");
-  fpx(floatCtx,-5,-43,10,12,"#f1d194");
-  fpx(floatCtx,-6,-32,12,9,"#e16463");
-  fpx(floatCtx,-9,-23,18,29,"#f8edcf");
-  fpx(floatCtx,-9,-23,18,10,"#d94f56");
+  fpx(floatCtx,-3,-53,6,6,"#293e49");
+  fpx(floatCtx,-4,-47,8,22,"#f0e2be");
+  fpx(floatCtx,-5,-44,10,15,"#e26059");
+  fpx(floatCtx,-5,-29,10,8,"#ffdea8");
+  fpx(floatCtx,-9,-22,18,29,"#f8edcf");
+  fpx(floatCtx,-9,-22,18,9,"#d94f56");
   fpx(floatCtx,-7,-6,14,13,"#efc9a1");
   fpx(floatCtx,-3,7,6,14,"#8aa59d");
-  fpx(floatCtx,-5,-34,10,4,"#fae6ad");
   floatCtx.restore();
 
   // A weak reflection stays below the tip, without hiding water movement.
