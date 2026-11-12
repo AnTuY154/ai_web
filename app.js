@@ -1,7 +1,7 @@
 import { makeFight, stepFight, strikeFight, biteConfig, clamp } from "./fishing-engine.mjs";
 import { planFloatCast, floatPose } from "./float-behavior.mjs";
 import { BAITS, getBaitInfo, chooseFishByBait, fishEncounterOdds } from "./bait-engine.mjs";
-import { BAIT_SAVE_KEY, BAIT_PRICES, countBaits, starterProgress, restoreProgress, makeSave, spendBait, buyBait } from "./bait-store.mjs";
+import { BAIT_SAVE_KEY, BAIT_PRICES, FISH_VALUES, ROD_PRICES, countBaits, countFish, starterProgress, restoreProgress, makeSave, spendBait, buyBait, addCaughtFish, sellFish, buyRod } from "./bait-store.mjs";
 const $ = (id) => document.getElementById(id);
 const LAKE_FOCUS = "bay-mau";
 const FISH = [
@@ -34,6 +34,7 @@ const MAX_ANGLERS=15, MAX_SPECTATORS=30;
 const FREE_SECONDS=300, DEMO_RENT_COINS=20, RENT_SECONDS=300;
 const state={
   lakes:[], selected:LAKE_FOCUS, screen:"map", coins:savedProgress.coins, baitInventory:savedProgress.inventory,
+  fishInventory:savedProgress.fishInventory,ownedRods:[...savedProgress.ownedRods],selectedRod:savedProgress.selectedRod,
   avatar:{x:456,y:479}, pressed:new Set(), gotoSpot:null, gotoPoint:null, spot:null,
   freeRemaining:savedProgress.freeRemaining, paidRemaining:savedProgress.paidRemaining, freeUsed:savedProgress.freeUsed,
   fishing:"idle", biteAt:0, biteStartedAt:0, biteExpires:0, floatSequence:null,
@@ -320,16 +321,19 @@ function missFish(text){
 function landFish(){
   const fish=state.currentFish;
   if(!fish||state.fishing!=="reeling")return;
-  state.coins+=fish.reward;state.caught++;state.score+=fish.reward*10;
+  const added=addCaughtFish(state.fishInventory,fish.id);
+  if(!added.ok){missFish("Kho cá đã đầy, chưa thể lưu thêm cá. Hãy bán bớt cá trước.");return}
+  state.fishInventory=added.fishInventory;
+  state.caught++;state.score+=fish.reward*10;
   state.fishCounts[fish.id]++;
   state.lastCatch=fish;
   state.fishing="idle";state.currentFish=null;state.fight=null;
   const tier=fish.rarity==="epic"?"CỰC HIẾM":fish.rarity==="rare"?"HIẾM":"PHỔ BIẾN";
-  const message="Đã câu được "+fish.name+" · "+tier+" · +"+fish.reward+" xu demo!";
-  displayStatus("🎉 "+message+" Tiếp tục thả câu nhé.");
+  const message="Đã câu được "+fish.name+" · "+tier+" · +1 cá trong kho!";
+  displayStatus("🎉 "+message+" Bán ở KHO CÁ để lấy "+fish.reward+" xu.");
   $("lastCatch").textContent="🎉 "+message;
   $("catchTier").textContent=tier;
-  saveProgress();renderShop();drawFishList();updateHUD();
+  saveProgress();renderShop();renderFishInventory();renderRodShop();drawFishList();updateHUD();
   showCatchSuccess(fish);
 }
 function rarityLabel(rarity){
@@ -344,7 +348,7 @@ function showCatchSuccess(fish){
   $("catchSuccessImage").alt="Hình cá pixel-art: "+fishName;
   $("catchSuccessName").textContent=fishName;
   $("catchSuccessRarity").textContent=rarityLabel(fish.rarity);
-  $("catchSuccessCoins").textContent="+"+fish.reward+" xu";
+  $("catchSuccessCoins").textContent="+1 con";
   $("catchSuccessPoints").textContent="+"+(fish.reward*10)+" điểm";
   state.catchModalOpen=true;
   $("catchSuccessModal").classList.remove("hidden");
@@ -830,4 +834,8 @@ function frame(t){
   if(t-lastSaveTick>2000&&state.screen==="game"&&state.spot!==null){saveProgress();lastSaveTick=t}
   requestAnimationFrame(frame);
 }
-saveProgress();drawFishList();renderBaitAdvice();renderShop();loadLakes();createBackground();createFloatBackground();updateHUD();renderMapTransform();requestAnimationFrame(frame);
+saveProgress();$("rodSelect").value=state.selectedRod;
+renderRodOptions();
+drawFishList();renderBaitAdvice();renderShop();renderRodShop();renderFishInventory();
+loadLakes();createBackground();createFloatBackground();updateHUD();
+renderMapTransform();saveProgress();requestAnimationFrame(frame);
