@@ -72,7 +72,7 @@ Các tỷ lệ trong bảng được tính từ **hệ số cân bằng game đa
 - Mỗi lượt nhấn **THẢ CÂU** có hiệu lực đều dùng 1 mồi thuộc loại đang chọn, ngay tại thời điểm thả; không trừ thêm trong quá trình chờ cùng một lượt.
 - **Thu phao / Đổi mồi** và **giật hụt** không hoàn lại mồi đã dùng; người chơi phải thả lượt mới.
 - Cửa hàng mua nhanh **1 hoặc 5** mồi, thanh toán bằng xu ảo thu được từ cá. Nếu không đủ xu hoặc mồi hết, nút mua/thả tương ứng sẽ bị vô hiệu hóa.
-- Khi hoàn thành cá, xu thưởng và số cá được ghi vào kho; người chơi có thể dùng xu thưởng mua thêm mồi.
+- Khi hoàn thành cá, **1 con cá** vào kho bán được, số lần câu và điểm vẫn tăng. **Không cộng xu ngay**; người chơi bán cá trong kho mới nhận xu để mua mồi/cần.
 - **Mồi giả** cũng tiêu hao **một lượt sử dụng game** mỗi lần thả cho cân bằng cơ chế. Ngoài đời, đa số mồi giả có thể dùng nhiều lần; đây là quy ước gameplay, không phải khuyến nghị về dụng cụ thực.
 - Số xu, kho mồi, cá đã bắt và thời gian còn lại được lưu vào **localStorage**. Tải lại trang không tự phát thêm quà tân thủ. Đây chưa phải **hệ thống tài khoản thật**: xóa dữ liệu duyệt web, dùng trình duyệt hoặc thiết bị khác, hoặc tự chỉnh localStorage có thể tạo kho mới hoặc thay đổi số liệu. Cần backend và xác thực để thực sự đảm bảo **50 mồi mỗi tài khoản**.
 
@@ -85,3 +85,13 @@ Các tỷ lệ trong bảng được tính từ **hệ số cân bằng game đa
 - [Animal Diversity Web — Channa striata](https://animaldiversity.org/accounts/Channa_striata/): cá quả là loài săn mồi, ăn cá nhỏ, giáp xác và động vật khác.
 
 **Các giá xu, hệ số và tỷ lệ trong game là con số thiết kế phục vụ chơi thử, không phải số liệu xác suất câu cá đo ngoài thực địa.**
+
+## Kho cá và mở khóa cần câu
+
+Kho cá cá nhân lưu số lượng **chưa bán** của đủ 10 loài, độc lập với thống kê lịch sử đã câu. Khi thắng minigame, tăng kho cá của loài đó lên 1 và ghi lại phiên chơi. Người chơi có thể bán **1 con** hoặc **toàn bộ số cá của từng loài**. Giá bán được cố định theo giá trị ban đầu của loài: Rô phi 6, Rô đồng 7, Diếc 8, Trôi 9, Mè trắng 10, Chép 19, Trắm cỏ 22, Trê 23, Trắm đen 48, Cá quả 55 xu.
+
+**Không trả xu hai lần:** trước phiên bản này, mỗi cá bắt được đã cộng xu thưởng ngay. Khi đọc dữ liệu phiên bản v1, hệ thống **giữ xu và số cá lịch sử** nhưng tạo kho cá bán được ban đầu trống. Cá mới sau v2 chỉ được ghi vào kho và cộng điểm; **bán cá mới có xu**. Vẫn có 50 xu khởi đầu cho save mới.
+
+**Cần câu:** cần tay miễn phí, có sẵn; cần máy 90 xu làm chậm chuyển động kim; cần lure 160 xu khó hơn nhưng kết hợp tốt với mồi giả khi săn cá quả. Các cần mua một lần được lưu vào `ownedRods`; `selectedRod` chỉ nhận cần đã sở hữu. Có thể mua bất cứ lúc nào nhưng phải kết thúc lượt đang câu mới trang bị. Mồi vẫn tiêu hao mỗi lần thả câu.
+
+**Lưu trữ:** `bait-store.mjs` sử dụng khóa `hanoi-fishing-world-save-v1` để tương thích trình duyệt đã chơi, nhưng nâng cấu trúc JSON lên `version:2` với `fishInventory`, `ownedRods`, `selectedRod`. Không có backend, bảo mật hoặc đồng bộ giữa người dùng/thiết bị. `scripts/economy.test.mjs` kiểm tra giao dịch, giới hạn số xu, di trú, dữ liệu lỗi và bán hai lần.
