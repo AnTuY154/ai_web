@@ -325,3 +325,140 @@ kbd{font:700 12px 'Space Mono',monospace;padding:5px 8px;background:#f8dca0;bord
   .fish-inventory-actions{grid-template-columns:1fr 1fr}
   .fish-inventory-actions button{font-size:9px}
 }
+
+
+/* ── No-scroll, four-tile utility launcher (refreshed menu) ─────────────
+   On phone/tablet it is a compact FIXED 2×2 dock. On desktop it sticks
+   to the top of the gear column. The detailed inventory/shop content
+   opens in a separate viewport-height overlay, never below the page. */
+.fishing-side .utility-panel:not([open]){display:none!important}
+.utility-launcher{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;padding:10px;
+  background:#102d37;border:3px solid #487b75;
+  box-shadow:5px 5px 0 #061d25;
+  position:sticky;top:12px;z-index:27;
+  min-width:0;
+  order:-1;
+}
+.utility-tile{
+  min-width:0;min-height:88px;
+  display:grid;grid-template-columns:34px minmax(0,1fr);
+  grid-template-rows:1fr;
+  gap:8px;align-items:center;
+  border:3px solid #558e89;background:linear-gradient(145deg,#154652,#0c2d39);
+  box-shadow:3px 3px 0 #061c25;
+  color:#ffe0a0;padding:9px 9px;
+  text-align:left;cursor:pointer;
+  position:relative;touch-action:manipulation;
+}
+.utility-tile:hover{border-color:#83beb1;background:#194c57}
+.utility-tile:focus-visible{outline:3px solid #ffe7a0;outline-offset:3px}
+.utility-tile:active{transform:translateY(2px);box-shadow:1px 1px #061c25}
+.utility-tile[aria-expanded="true"]{border-color:#f0d28c}
+.utility-tile-icon{
+  display:grid;place-items:center;width:34px;height:36px;
+  font-size:24px;line-height:1;filter:drop-shadow(2px 3px 0 #061923);
+  image-rendering:pixelated;
+}
+.utility-tile-copy{min-width:0;display:flex;flex-direction:column;justify-content:center;gap:6px}
+.utility-tile-copy strong{
+  color:#ffda93;font:800 10px/1.3 'Space Mono',monospace;
+  overflow-wrap:break-word;
+}
+.utility-tile-copy small{
+  color:#baf0bb;font:700 9px/1.3 'Space Mono',monospace;
+  white-space:normal;
+}
+.utility-tile-copy small b{font-weight:800;color:#d1f9ca}
+.utility-tile-plus{
+  position:absolute;top:2px;right:3px;
+  color:#a4f2b6;font-size:18px;line-height:1;
+}
+.utility-ticker{
+  grid-column:1/-1;
+  min-width:0;margin:0;padding:6px 7px;
+  color:#dfedce;background:#0c2630;
+  border-left:3px solid #9dd699;
+  font-size:10px;line-height:1.45;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+/* Utilities opened from the tile dock are independent of document scroll. */
+.utility-backdrop{
+  position:fixed;inset:0;z-index:129;
+  background:rgba(3,16,23,.78);backdrop-filter:blur(3px);
+}
+body.utility-overlay-active{overflow:hidden}
+.fishing-side .utility-panel[open]{
+  display:block;
+  position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+  z-index:130;order:0;
+  width:min(520px,calc(100vw - 24px));
+  max-height:calc(100dvh - 24px);
+  overflow-y:auto;overscroll-behavior:contain;
+  border:4px solid #68a99b;background:#153944;
+  box-shadow:8px 8px 0 #051820,0 0 0 3px #315d58;
+  padding:0;
+}
+.fishing-side .utility-panel[open]>summary{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:9px;position:sticky;top:0;z-index:2;
+  padding:15px 14px;
+  background:#174451;border-bottom:3px solid #477d74;
+  color:#ffe1a3;font:800 13px/1.35 'Space Mono',monospace;
+  cursor:pointer;list-style:none;
+}
+.fishing-side .utility-panel[open]>summary::-webkit-details-marker{display:none}
+.fishing-side .utility-panel[open]>summary::before{content:none}
+.fishing-side .utility-panel[open]>summary::after{
+  content:"ĐÓNG ×";order:3;flex:none;
+  color:#fff0c1;background:#255866;
+  border:2px solid #a8c5ac;padding:6px 8px;
+  font:800 10px 'Space Mono',monospace;
+}
+.fishing-side .utility-panel[open]>summary:focus-visible{
+  outline:3px solid #ffe6a7;outline-offset:-5px;
+}
+.fishing-side .utility-panel[open] .bait-shop-inner{padding:3px 15px 16px}
+.fishing-side .utility-panel[open] .bait-shop-list{gap:10px}
+.fishing-side .utility-panel[open] .achievement-body{padding:16px}
+.fishing-side .utility-panel[open] .achievement-footnote{
+  font-size:11px;line-height:1.55;color:#b0cfc0;margin:12px 0 2px;
+}
+.fishing-side .utility-panel[open].catch-panel .caught-count{margin-top:12px}
+@media(min-width:851px){
+  .fishing-side{gap:14px}
+  .fishing-side>.fishing-control-panel{order:1}
+  .fishing-side>.utility-panel{order:2}
+}
+@media(max-width:850px){
+  .utility-launcher{
+    position:fixed;
+    left:50%;right:auto;bottom:max(7px,env(safe-area-inset-bottom));
+    top:auto;transform:translateX(-50%);
+    width:min(520px,calc(100vw - 14px));
+    z-index:80;gap:6px;padding:7px;
+    border-width:2px;box-shadow:0 5px 25px #041a26bb;
+  }
+  .utility-tile{min-height:59px;grid-template-columns:28px minmax(0,1fr);gap:5px;padding:5px 7px;border-width:2px}
+  .utility-tile-icon{width:27px;height:30px;font-size:20px}
+  .utility-tile-copy{gap:3px}
+  .utility-tile-copy strong{font-size:10px;line-height:1.2;padding-right:5px}
+  .utility-tile-copy small{font-size:9px}
+  .utility-tile-plus{font-size:14px;top:1px;right:2px}
+  .utility-ticker{font-size:9px;padding:4px 6px}
+  .fishing-view{padding-bottom:calc(190px + env(safe-area-inset-bottom))}
+}
+@media(max-width:365px){
+  .utility-launcher{gap:4px;padding:5px}
+  .utility-tile{grid-template-columns:22px minmax(0,1fr);gap:4px;min-height:58px;padding:4px}
+  .utility-tile-icon{font-size:17px;width:22px}
+  .utility-tile-copy strong{font-size:9px}
+  .utility-tile-copy small{font-size:8px}
+  .utility-ticker{font-size:8px}
+}
+@media(max-height:620px) and (max-width:850px){
+  .utility-tile{min-height:48px}
+  .utility-ticker{display:none}
+  .fishing-view{padding-bottom:142px}
+}
