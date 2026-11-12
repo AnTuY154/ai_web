@@ -383,6 +383,7 @@ function closeGame(){
   closeLobbyFish(false);
   if(state.spot!==null)releaseSpot();
   document.body.classList.remove("lobby-fullscreen","fishing-fullscreen");
+  state.pressed.clear();
   document.body.classList.add("map-fullscreen");
   state.screen="map";$("gameScreen").classList.add("hidden");$("mapScreen").classList.remove("hidden");
   renderMapTransform();updatePreview();
@@ -423,6 +424,7 @@ function releaseSpot(){
   closeGearSettings(false);
   hideUtilityPanel(false);
   document.body.classList.remove("fishing-fullscreen");
+  if(state.screen==="game")document.body.classList.add("lobby-fullscreen");
   closeCatchSuccess(false);
   state.gotoSpot=null;state.spot=null;state.fishing="idle";state.currentFish=null;
   state.fight=null;state.floatSequence=null;
@@ -814,6 +816,7 @@ function updateHUD(){
   $("rentBtn").classList.toggle("hidden",state.spot===null||state.freeRemaining>0||state.paidRemaining>0);
   $("leaveSpot").disabled=state.spot===null;
   $("caughtCount").textContent=state.caught;$("totalScore").textContent=state.score;
+  $("lobbyFishCount").textContent=state.caught;
   $("sessionCatch").textContent=state.caught;$("sessionScore").textContent=state.score;
   const stage=state.fishing;
   // Identical UI for ordinary drift, false pecks AND a true take.
@@ -851,6 +854,7 @@ document.addEventListener("keydown",e=>{
     else if(e.code==="Space"||e.key===" "){e.preventDefault()}
     return;
   }
+  if(handleHomeDialogKeys(e))return;
   if(handleGearSettingsKeyboard(e))return;
   if(handleUtilityKeyboard(e))return;
   if(state.screen!=="game")return;
