@@ -61,7 +61,7 @@ Sau khi đến một trong 15 vị trí câu, game chuyển sang giao diện **F
 - Bấm **THẢ CÂU** hoặc **Space**. Phao chuyển động bởi sóng nước, cá rỉa mồi hoặc va dây; **không hiện bất kỳ chữ, âm thanh hay hiệu ứng nào báo cá cắn**.
 - Hãy tự nhìn **cú chìm sâu / kéo ngang có hướng / nổi cao và nghiêng**, rồi nhấc cần bằng **Space**. Chỉ khi người chơi nhấc cần mới biết có mắc cá hay không. Bỏ lỡ cắn thật thì phao lặng lẽ ổn định và tiếp tục chờ, không có thông báo bí mật.
 - Bản mô phỏng phân biệt sóng nhẹ, nhấp giả, va dây và ba kiểu cá lấy mồi bằng chuyển động phao; thời điểm xuất hiện được xáo ngẫu nhiên.
-- Một **thanh lực lớn nổi chính giữa màn hình** xuất hiện; **kim tự chạy trái ↔ phải**. Người chơi **bấm Space từng nhịp** khi kim vào **vùng xanh** để lấy đủ số nhịp trong **5–10 giây** tùy loài. Bấm ngoài vùng xanh 4 lần sẽ mất cá; giữ Space liên tục không có tác dụng.
+- Một **thanh lực lớn nổi chính giữa màn hình** xuất hiện; **kim tự chạy trái ↔ phải**. Người chơi **bấm Space từng nhịp** khi kim vào **vùng xanh**; **đủ nhịp là câu thành công ngay**, không phải chờ đồng hồ hết. Bỏ thanh tiến trình thời gian của màn kéo cá, giữ đồng hồ giới hạn **5–10 giây** tùy loài và đồng hồ 5 phút của phiên câu. Bấm ngoài vùng xanh 4 lần sẽ mất cá; giữ Space liên tục không có tác dụng.
 - Trên điện thoại, **chạm từng nhịp** nút CANH SPACE ở giữa màn hình; không cần giữ.
 - Nút **RỜI GHẾ CÂU** quay về bờ hồ và không làm mới 5 phút miễn phí.
 
