@@ -63,6 +63,25 @@ assert.match(js,/state\.baitInventory=paid\.inventory/,"spent bait must update l
 assert.match(js,/buyBait\(state\.baitInventory,state\.coins,id,quantity\)/,"shop purchases must use game wallet");
 assert.match(js,/renderShop\(\)/,"shop must render purchase options");
 
+// Four shortcuts must remain on screen and keyboard-accessible.
+for(const [buttonId,panelId] of [
+  ["quickBaitShop","baitShop"],["quickRodShop","rodShop"],
+  ["quickFishInventory","fishInventory"],["quickAchievements","achievementsPanel"]
+]){
+  assert.match(html,new RegExp('<button id="'+buttonId+'"[^>]+aria-controls="'+panelId+'"[^>]+aria-expanded="false"'),"accessible tile missing: "+panelId);
+}
+assert.match(html,/<nav id="utilityLauncher" class="utility-launcher"/,"quick utility grid must be a nav");
+assert.match(html,/id="utilityBackdrop" class="utility-backdrop hidden"/,"modal backdrop needed");
+assert.match(html,/id="utilityTicker"/,"latest catch visible in launcher");
+assert.match(html,/id="achievementsPanel"[^>]*role="dialog"/,"achievements must be a modal, not full-page accordion");
+assert.match(js,/function showUtilityPanel\(id\)/,"tile must open matching panel");
+assert.match(js,/function hideUtilityPanel\(restoreFocus=true\)/,"utility needs a close action");
+assert.match(js,/function handleUtilityKeyboard\(e\)/,"modal should manage keyboard input");
+assert.match(js,/if\(handleUtilityKeyboard\(e\)\)return;/,"prevent Space from triggering fishing while viewing a panel");
+assert.match(js,/if\(activeUtilityPanel\)return; \/\/ Suspend fishing motion/,"shopping must pause active fishing");
+assert.match(js,/showUtilityPanel\("baitShop"\)/,"out-of-bait should open shop overlay");
+
+
 for(const id of ["rodShop","rodShopList","rodShopFeedback","rodOwnedCount","rodOwnedHint",
                  "fishInventory","fishInventoryList","fishInventoryFeedback","fishInventoryTotal"]){
   assert.ok(html.includes('id="'+id+'"'),"missing fish/rod inventory UI: "+id);
@@ -95,6 +114,16 @@ assert.ok(!js.includes("state.held"),"old hold/release model must be removed");
 const css=await readFile(new URL("../styles.css",import.meta.url),"utf8");
 assert.match(css,/\.fish-inventory-card\s*\{/,"fish inventory needs sprite card styling");
 assert.match(css,/\.bait-shop\{/, "shop needs a distinct responsive layout");
+assert.match(css,/\.utility-launcher\{\s*display:grid;grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/,
+  "four shortcuts must use compact two-column grid");
+assert.match(css,/@media\(max-width:850px\)\{\s*\.utility-launcher\{\s*position:fixed/,
+  "phone utility dock must remain visible without page scroll");
+assert.match(css,/\.fishing-side \.utility-panel\[open\]\{\s*display:block;\s*position:fixed/,
+  "long shop and inventory content should open as centered overlay");
+assert.match(css,/max-height:calc\(100dvh - 24px\)/,
+  "overlay content must scroll internally within mobile viewport");
+assert.match(css,/body\.utility-overlay-active\{overflow:hidden\}/,
+  "page scrolling must be locked while modal is open");
 assert.doesNotMatch(css,/\.bite-banner|bite-flash/,"no dormant bite alarm CSS");
 assert.match(css,/\#fightPanel\s*\{[^}]*position:fixed;top:50%;left:50%/,"meter must be fixed in center of screen");
 assert.match(css,/translate\(-50%,-50%\)/,"meter must be centered in both axes");
