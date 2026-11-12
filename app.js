@@ -295,7 +295,7 @@ function retrieveLine(){
   if(state.fishing!=="waiting"&&state.fishing!=="bite")return;
   state.fishing="idle";state.currentFish=null;state.fight=null;
   state.floatSequence=null;state.biteStartedAt=0;state.biteExpires=0;
-  displayStatus("Đã thu phao. Kiểm tra độ sâu, thử mồi khác hoặc thả lại.");
+  displayStatus("Đã thu phao. Bạn có thể đổi mồi hoặc cần, rồi thả lại.");
   updateHUD();
 }
 $("castBtn").addEventListener("click",castLine);
