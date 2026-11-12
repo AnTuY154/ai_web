@@ -213,7 +213,7 @@ function releaseSpot(){
   state.avatar.x=456;state.avatar.y=478;
   displayStatus("Đã trả vị trí. Bạn có thể di chuyển hoặc chọn chỗ khác.");
   setHint("Bạn trở lại khu chờ. 5 phút miễn phí không tự làm mới khi đổi chỗ.");
-  updateHUD();
+  renderRodShop();updateHUD();
 }
 $("leaveSpot").addEventListener("click",releaseSpot);
 function chooseFish(){
