@@ -168,6 +168,72 @@ function handleUtilityKeyboard(e){
   return true;
 }
 
+
+// Map/lobby shortcuts use accessible dialogs instead of long, scrolling sidebars.
+let lakeDirectoryOpen=false,lobbyFishOpen=false;
+function closeLakeDirectory(restoreFocus=true){
+  if(!lakeDirectoryOpen)return;
+  lakeDirectoryOpen=false;
+  $("lakeDirectory").classList.remove("is-open");
+  $("lakeDirectoryBackdrop").classList.add("hidden");
+  $("openLakeDirectory").setAttribute("aria-expanded","false");
+  if(restoreFocus)$("openLakeDirectory").focus({preventScroll:true});
+}
+function openLakeDirectory(){
+  if(state.screen!=="map"||lakeDirectoryOpen)return;
+  lakeDirectoryOpen=true;
+  $("lakeDirectory").classList.add("is-open");
+  $("lakeDirectoryBackdrop").classList.remove("hidden");
+  $("openLakeDirectory").setAttribute("aria-expanded","true");
+  $("searchLake").focus({preventScroll:true});
+}
+function closeLobbyFish(restoreFocus=true){
+  if(!lobbyFishOpen)return;
+  lobbyFishOpen=false;
+  $("lobbyFishPanel").classList.remove("is-open");
+  $("lobbyFishBackdrop").classList.add("hidden");
+  $("openFishGuide").setAttribute("aria-expanded","false");
+  if(restoreFocus)$("openFishGuide").focus({preventScroll:true});
+}
+function openLobbyFish(){
+  if(state.screen!=="game"||state.spot!==null||lobbyFishOpen)return;
+  lobbyFishOpen=true;
+  $("lobbyFishPanel").classList.add("is-open");
+  $("lobbyFishBackdrop").classList.remove("hidden");
+  $("openFishGuide").setAttribute("aria-expanded","true");
+  $("closeFishGuide").focus({preventScroll:true});
+  state.pressed.clear();
+}
+function handleHomeDialogKeys(e){
+  const dialog=lakeDirectoryOpen?$("lakeDirectory"):lobbyFishOpen?$("lobbyFishPanel"):null;
+  if(!dialog)return false;
+  if(e.key==="Escape"){
+    e.preventDefault();
+    if(lakeDirectoryOpen)closeLakeDirectory();else closeLobbyFish();
+    return true;
+  }
+  if(e.key==="Tab"){
+    const controls=[...dialog.querySelectorAll("button:not(:disabled),input:not(:disabled),select:not(:disabled),[tabindex]:not([tabindex='-1'])")]
+      .filter(el=>el.getClientRects().length>0);
+    if(controls.length){
+      const first=controls[0],last=controls[controls.length-1];
+      if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus({preventScroll:true})}
+      else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus({preventScroll:true})}
+      else if(!dialog.contains(document.activeElement)){e.preventDefault();first.focus({preventScroll:true})}
+    }
+  }
+  // Do not walk the avatar or pan the map when interacting with a dialog.
+  if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key)&&!e.target.closest?.("input,button"))
+    e.preventDefault();
+  return true;
+}
+$("openLakeDirectory").addEventListener("click",openLakeDirectory);
+$("closeLakeDirectory").addEventListener("click",()=>closeLakeDirectory());
+$("lakeDirectoryBackdrop").addEventListener("click",()=>closeLakeDirectory());
+$("openFishGuide").addEventListener("click",openLobbyFish);
+$("closeFishGuide").addEventListener("click",()=>closeLobbyFish());
+$("lobbyFishBackdrop").addEventListener("click",()=>closeLobbyFish());
+
 function saveProgress(){
   try{
     window.localStorage.setItem(BAIT_SAVE_KEY,JSON.stringify(makeSave({
@@ -253,12 +319,19 @@ function drawMap(){
   }
 }
 function chooseLake(id){
-  state.selected=id;drawMap();updatePreview();
+  state.selected=id;
+  $("searchLake").value="";
+  drawMap();updatePreview();
+  if(lakeDirectoryOpen){
+    closeLakeDirectory(false);
+    (id===LAKE_FOCUS?$("enterLake"):$("openLakeDirectory")).focus({preventScroll:true});
+  }
 }
 function updatePreview(){
   const lake=state.lakes.find(x=>x.id===state.selected);
   if(!lake)return;
   $("previewName").textContent=lake.id===LAKE_FOCUS?"Hồ Bảy Mẫu — Công viên Thống Nhất":lake.name;
+  $("mapSelectedLake").textContent=lake.name;
   $("previewInfo").textContent=(lake.area||"Hà Nội")+" · Bối cảnh game câu cá ảo";
   const playable=lake.id===LAKE_FOCUS;
   $("previewSlots").textContent=playable?"15 vị trí câu · 30 khán giả / phòng (dự kiến)":"Địa danh đã nghiên cứu · chưa có cảnh chơi";
@@ -266,10 +339,16 @@ function updatePreview(){
   $("enterLake").textContent=playable?"VÀO HỒ BẢY MẪU ↗":"CẢNH HỒ ĐANG PHÁT TRIỂN";
 }
 function renderMapTransform(){
-  $("mapWorld").style.transform="translate("+state.mapDX+"px,"+state.mapDY+"px) scale("+state.mapZoom+")";
+  const frame=$("mapFrame");
+  // Fill the viewport on landscape and portrait; visitors can drag/zoom
+  // to see farther lakes while the searchable directory stays accessible.
+  const w=Math.max(1,frame.clientWidth),h=Math.max(1,frame.clientHeight);
+  const autoScale=Math.max(.58,Math.min(2.2,Math.max(w/1020,h/720)*.92));
+  $("mapWorld").style.transform="translate("+state.mapDX+"px,"+state.mapDY+"px) scale("+(state.mapZoom*autoScale).toFixed(4)+")";
   $("mapZoom").textContent=Math.round(state.mapZoom*100)+"%";
 }
 function zoom(d){state.mapZoom=Math.max(.66,Math.min(2.3,Math.round((state.mapZoom+d)*100)/100));renderMapTransform();}
+window.addEventListener("resize",renderMapTransform);
 $("searchLake").addEventListener("input",drawMap);
 $("zoomIn").addEventListener("click",()=>zoom(.2));
 $("zoomOut").addEventListener("click",()=>zoom(-.2));
@@ -291,15 +370,23 @@ $("mapFrame").addEventListener("pointercancel",stopDrag);
 $("enterLake").addEventListener("click",()=>{if(state.selected!==LAKE_FOCUS)return;openGame()});
 $("backMap").addEventListener("click",closeGame);
 function openGame(){
+  closeLakeDirectory(false);
   state.screen="game";$("mapScreen").classList.add("hidden");$("gameScreen").classList.remove("hidden");
+  document.body.classList.remove("map-fullscreen");
+  document.body.classList.toggle("lobby-fullscreen",state.spot===null);
   document.body.classList.toggle("fishing-fullscreen",state.spot!==null);
   $("fishingView").classList.toggle("hidden",state.spot===null);
   $("gameLayout").classList.toggle("hidden",state.spot!==null);
   window.scrollTo(0,0);$("gameCanvas").focus();displayStatus();
 }
 function closeGame(){
+  closeLobbyFish(false);
   if(state.spot!==null)releaseSpot();
+  document.body.classList.remove("lobby-fullscreen","fishing-fullscreen");
+  state.pressed.clear();
+  document.body.classList.add("map-fullscreen");
   state.screen="map";$("gameScreen").classList.add("hidden");$("mapScreen").classList.remove("hidden");
+  renderMapTransform();updatePreview();
   window.scrollTo(0,0);updateHUD();
 }
 function isWater(x,y){
@@ -323,8 +410,10 @@ function occupySpot(n){
   state.gotoSpot=null;state.spot=n;
   state.avatar.x=SPOTS[n-1].x;state.avatar.y=SPOTS[n-1].y;
   $("seatNumber").textContent="#"+String(n).padStart(2,"0");
+  closeLobbyFish(false);
   $("gameLayout").classList.add("hidden");
   $("fishingView").classList.remove("hidden");
+  document.body.classList.remove("lobby-fullscreen");
   document.body.classList.add("fishing-fullscreen");
   displayStatus("Đã tới chỗ ngồi. Thả câu rồi quan sát đầu phao. Space đúng lúc phao cắn!");
   setHint("Bạn đang câu tại vị trí #"+n+".");
@@ -335,6 +424,7 @@ function releaseSpot(){
   closeGearSettings(false);
   hideUtilityPanel(false);
   document.body.classList.remove("fishing-fullscreen");
+  if(state.screen==="game")document.body.classList.add("lobby-fullscreen");
   closeCatchSuccess(false);
   state.gotoSpot=null;state.spot=null;state.fishing="idle";state.currentFish=null;
   state.fight=null;state.floatSequence=null;
@@ -726,6 +816,7 @@ function updateHUD(){
   $("rentBtn").classList.toggle("hidden",state.spot===null||state.freeRemaining>0||state.paidRemaining>0);
   $("leaveSpot").disabled=state.spot===null;
   $("caughtCount").textContent=state.caught;$("totalScore").textContent=state.score;
+  $("lobbyFishCount").textContent=state.caught;
   $("sessionCatch").textContent=state.caught;$("sessionScore").textContent=state.score;
   const stage=state.fishing;
   // Identical UI for ordinary drift, false pecks AND a true take.
@@ -763,6 +854,7 @@ document.addEventListener("keydown",e=>{
     else if(e.code==="Space"||e.key===" "){e.preventDefault()}
     return;
   }
+  if(handleHomeDialogKeys(e))return;
   if(handleGearSettingsKeyboard(e))return;
   if(handleUtilityKeyboard(e))return;
   if(state.screen!=="game")return;

@@ -153,3 +153,15 @@ Khi nhân vật đến ghế câu tại Hồ Bảy Mẫu, game mở giao diện 
 - Khi mở menu cửa hàng hoặc bộ đồ câu, game tạm dừng thời gian và tín hiệu cá trong lúc thao tác, rồi tiếp tục sau khi đóng. Popup thành công và thanh lực canh Space vẫn nằm giữa màn hình.
 
 Giao diện ưu tiên **không cuộn trang khi đang câu**; cửa hàng hoặc phần cài đặt dài chỉ cuộn bên trong modal. Các máy rất nhỏ có thể cần xoay ngang để xem phao rộng và đầy đủ hơn.
+
+## Giao diện chính toàn màn hình (bản đồ và khu chờ)
+
+Cả hai màn trước khi ngồi câu được nâng lên bố cục **immersive không cần cuộn trang** như màn câu chính:
+
+- **Bản đồ khám phá Hà Nội:** bản đồ pixel chiếm vùng xem rộng dưới thanh thương hiệu gọn. Nút **🗺 TÌM HỒ** trên góc bản đồ mở một hộp thoại tìm kiếm danh sách hồ; chọn hồ trên bản đồ hoặc trong hộp thoại, thông tin hồ và nút **VÀO HỒ BẢY MẪU** luôn ở góc dưới màn hình. Điều khiển **− / +** vẫn nằm ở góc trên. Danh sách dài cuộn **bên trong hộp thoại**, không chiếm cột 340px nữa.
+- **Màn khu chờ Hồ Bảy Mẫu:** nhân vật, 15 ghế câu và cảnh hồ hiện trong một vùng xem toàn màn hình. Nút **← BẢN ĐỒ** và **🐟 SỔ CÁ** ở trên; hướng dẫn chạm ghế và nút di chuyển trên điện thoại được đặt phủ lên cảnh thay vì xuống dưới trang. Sổ cá mở trong cửa sổ riêng, có nút đóng.
+- **Giữ đúng tỷ lệ hình pixel:** canvas cảnh hồ được căn giữa và không kéo giãn, tránh lệch vị trí các ghế có thể chạm. Trên điện thoại màn dọc sẽ còn nền trống ở trên/dưới cảnh 16:9 để vẫn nhìn đủ 15 ghế, không cắt mất ghế.
+- **Điều khiển:** nhấn Esc, nút **ĐÓNG ✕** hoặc chạm bên ngoài để đóng hộp thoại; hỗ trợ Tab và giữ focus trong modal. Khi chọn hồ từ danh sách, modal đóng để người chơi thấy thông tin hồ và nút vào chơi.
+- **Chuyển cảnh:** Bản đồ Hà Nội → Hồ Bảy Mẫu → ghế câu toàn màn hình → rời ghế về khu chờ → trở lại bản đồ. Mỗi bước đổi lớp bố cục tương ứng mà không tác động dữ liệu `localStorage` hoặc cơ chế câu cá.
+
+Với màn rất hẹp, danh sách địa danh hoặc sổ cá vẫn cuộn **bên trong hộp thoại**, giữ kích thước chữ/nút đủ dùng. Việc kiểm tra trực quan bằng trình duyệt/điện thoại thật vẫn cần được thực hiện sau khi bản deploy tương ứng sẵn sàng.
