@@ -274,3 +274,53 @@ kbd{font:700 12px 'Space Mono',monospace;padding:5px 8px;background:#f8dca0;bord
 .bait-shop-buttons button:not(:disabled):active{transform:translateY(2px)}
 .bait-shop-buttons button:focus-visible{outline:3px solid #fff2ce;outline-offset:2px}
 .bait-shop-feedback{padding:10px;border:1px dashed #658c7c;background:#173942;color:#fff1c9!important}
+
+
+/* Saved fish inventory and owned rod collection. */
+.rod-owned-hint{
+  color:#c5d9c1;font-size:11px;line-height:1.5;
+  margin:7px 0 15px;max-width:100%;
+}
+.fishing-control-panel #rodSelect option:disabled{color:#9caaa8}
+.equipment-shop .bait-shop-inner>p,.fish-inventory .bait-shop-inner>p{color:#cddfcb}
+.rod-shop-card .bait-shop-card-head strong{color:#ffe5ad}
+.rod-shop-description{font-size:11px;color:#bbd0c8;line-height:1.45;margin:8px 0}
+.rod-shop-card .bait-shop-buttons button{width:100%}
+.rod-shop-owned{font-size:11px;color:#bce6bd;font-weight:800}
+.fish-inventory-list{display:grid;gap:10px;margin:12px 0}
+.fish-inventory-empty{
+  padding:20px 12px;text-align:center;background:#0d2b35;
+  border:2px dashed #47796a;color:#c7dbc9;font-size:12px;line-height:1.5;
+}
+.fish-inventory-card{
+  display:grid;grid-template-columns:80px 1fr;gap:10px;
+  align-items:center;padding:10px;background:#0d2b35;border:2px solid #446d64;
+}
+.fish-inventory-card[data-rarity="rare"]{border-color:#c3a774}
+.fish-inventory-card[data-rarity="epic"]{border-color:#c5a0de}
+.fish-inventory-sprite{
+  width:80px;height:80px;object-fit:contain;
+  background:#295f6a;image-rendering:pixelated;border:2px solid #5f9290;
+}
+.fish-inventory-info{min-width:0}
+.fish-inventory-name{
+  display:flex;align-items:center;gap:8px;justify-content:space-between;
+  color:#f6e7c4;font-weight:800;font-size:13px;flex-wrap:wrap
+}
+.fish-inventory-name span{font:700 11px 'Space Mono',monospace;color:#b4e7b8}
+.fish-inventory-price{font:700 11px 'Space Mono',monospace;color:#d2c18d;margin:6px 0 9px}
+.fish-inventory-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.fish-inventory-actions button{
+  border:2px solid #e6d38e;background:#284e53;color:#ffe9aa;
+  min-height:39px;font:700 10px 'Space Mono',monospace;
+  cursor:pointer;touch-action:manipulation;padding:7px 4px;
+}
+.fish-inventory-actions button:focus-visible{outline:3px solid #fff2ce;outline-offset:2px}
+.fish-inventory-actions button:disabled{opacity:.4;cursor:not-allowed}
+.fish-inventory-actions button:not(:disabled):active{transform:translateY(2px)}
+@media(max-width:400px){
+  .fish-inventory-card{grid-template-columns:64px 1fr;gap:7px;padding:8px}
+  .fish-inventory-sprite{width:64px;height:64px}
+  .fish-inventory-actions{grid-template-columns:1fr 1fr}
+  .fish-inventory-actions button{font-size:9px}
+}
