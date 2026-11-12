@@ -219,7 +219,7 @@ $("leaveSpot").addEventListener("click",releaseSpot);
 function chooseFish(){
   // Gameplay odds depend on bait affinities, base rarity and rod type.
   // Selecting a preferred bait never guarantees a fish, and never auto-hooks it.
-  return chooseFishByBait(FISH,$("baitSelect").value,$("rodSelect").value);
+  return chooseFishByBait(FISH,$("baitSelect").value,state.selectedRod);
 }
 function rarityPercent(value){
   return (100*value).toFixed(1).replace(".",",")+"%";
@@ -229,7 +229,7 @@ function renderBaitAdvice(){
   $("baitGroup").textContent=bait.group.toUpperCase();
   $("baitDescription").textContent=bait.description;
   $("baitFavorites").textContent=bait.favorites.map(fid=>FISH.find(f=>f.id===fid)?.name??fid).join(" · ");
-  const rate=fishEncounterOdds(FISH,id,$("rodSelect").value).rarityOdds;
+  const rate=fishEncounterOdds(FISH,id,state.selectedRod).rarityOdds;
   $("baitRates").textContent="Hiếm "+rarityPercent(rate.rare)+" · Cực hiếm "+rarityPercent(rate.epic);
   $("baitOwned").textContent=state.baitInventory[id]??0;
 }
@@ -253,7 +253,7 @@ function renderShop(){
   const oldId=focused?.dataset?.shopId,oldQty=focused?.dataset?.shopQty;
   list.replaceChildren();
   for(const [id,bait] of Object.entries(BAITS)){
-    const odds=fishEncounterOdds(FISH,id,$("rodSelect").value).rarityOdds;
+    const odds=fishEncounterOdds(FISH,id,state.selectedRod).rarityOdds;
     const card=document.createElement("div");card.className="bait-shop-card";
     const head=document.createElement("div");head.className="bait-shop-card-head";
     const name=document.createElement("strong");name.textContent=bait.emoji+" "+bait.name;
@@ -419,6 +419,7 @@ function planNextTake(now){
 }
 function castLine(){
   if(state.catchModalOpen||state.fishing!=="idle"||!canFish())return;
+  if(!state.ownedRods.includes(state.selectedRod))return;
   // Every CAST uses one bait, including casts later retrieved or missed.
   // Multiple fish investigating the same cast do not cost extra bait.
   const id=$("baitSelect").value;
@@ -434,14 +435,14 @@ function castLine(){
   state.fight=null;
   planNextTake(performance.now());
   displayStatus("Đã dùng 1 "+getBaitInfo(id).name+". Hãy quan sát phao và tự chọn lúc nhấc cần.");
-  renderBaitAdvice();renderShop();updateHUD();
+  renderBaitAdvice();renderShop();renderRodShop();updateHUD();
 }
 function missFish(text){
   state.fishing="idle";state.currentFish=null;state.fight=null;
   displayStatus(text||"Cá đã thoát. Bạn có thể thả câu lại!");
   $("lastCatch").textContent=text||"Cá đã thoát. Hãy thử lại.";
   $("catchTier").textContent="TRƯỢT CÁ";
-  updateHUD();
+  renderRodShop();updateHUD();
 }
 function landFish(){
   const fish=state.currentFish;
@@ -502,7 +503,7 @@ function attemptStrike(){
   }
   if(state.fishing==="bite"){
     if(performance.now()>state.biteExpires){missFish("Nhấc cần nhưng không mắc cá. Thử lại nhé.");return}
-    state.fight=makeFight(state.currentFish.id,$("rodSelect").value);
+    state.fight=makeFight(state.currentFish.id,state.selectedRod);
     state.fishing="reeling";
     $("fightFeedback").textContent="Kim tự chạy! Bấm Space từng nhịp đúng lúc kim nằm trong vùng xanh.";
     displayStatus("Cá đã mắc! Canh SPACE khi kim chạy vào vùng xanh 5–10 giây.");
@@ -517,7 +518,7 @@ function retrieveLine(){
   state.fishing="idle";state.currentFish=null;state.fight=null;
   state.floatSequence=null;state.biteStartedAt=0;state.biteExpires=0;
   displayStatus("Đã thu phao. Bạn có thể đổi mồi hoặc cần, rồi thả lại.");
-  updateHUD();
+  renderRodShop();updateHUD();
 }
 $("castBtn").addEventListener("click",castLine);
 $("retrieveBtn").addEventListener("click",retrieveLine);
@@ -800,7 +801,7 @@ function drawFloatScene(now){
     floatCtx.fillText("THẢ CÂU ĐỂ ĐẶT PHAO LÊN MẶT NƯỚC",580,345);
     return;
   }
-  const pattern=state.currentFish?biteConfig(state.currentFish.id,$("rodSelect").value).pattern:"dive";
+  const pattern=state.currentFish?biteConfig(state.currentFish.id,state.selectedRod).pattern:"dive";
   const pose=floatPose(now,state.floatSequence,mode,pattern,state.biteStartedAt,state.biteExpires);
   // A correctly weighted waggler exposes only its narrow colored tip.
   const x=596+pose.dx,y=373+pose.dy;
