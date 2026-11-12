@@ -10,7 +10,7 @@ Mồi làm thay đổi **xác suất** xuất hiện từng loài, không đảm
 - Lúc một con cá có khả năng ghé mồi, game chọn nhóm độ hiếm trước rồi chọn loài theo **độ hợp mồi**.
 - Khi cá thử mồi hoặc cắn, UI **không lộ tên cá hoặc báo cá cắn**; người chơi phải nhìn phao để nhấc cần.
 - Nếu người chơi lỡ một cú cắn, phao tự ổn định, gặp cá tiếp theo cũng được chọn từ mồi hiện tại.
-- Mồi được cấp miễn phí trong bản demo, chưa có kho mồi tiêu hao.
+- Người chơi mới nhận **tổng cộng 50 mồi miễn phí một lần cho mỗi kho lưu trên trình duyệt**, không phải 50 mồi của từng loại. Mỗi lần **thả câu tiêu hao 1 lượt mồi**; thu phao, giật hụt, hoặc cá thoát không hoàn mồi. Nếu chỉ bỏ lỡ cú cắn và chờ cơ hội khác trên cùng lượt thả thì không trừ thêm. Có cửa hàng mua mồi bằng xu ảo.
 
 ## Danh sách 7 mồi
 
@@ -51,3 +51,37 @@ Tập tính còn phụ thuộc thời tiết, mùa, quần thể và cách chế
 - app.js: kết nối mồi với con cá được chọn, khóa thay đổi mồi trong lượt câu và gợi ý trước khi câu.
 - scripts/bait-engine.test.mjs: test tổng xác suất, tương quan hợp mồi, tính ngẫu nhiên và mô phỏng 10.000 lượt.
 - npm run build: kiểm tra, đóng gói module vào dist/ phục vụ bởi Vercel.
+
+## Kho mồi và cửa hàng (bản triển khai)
+
+Mỗi kho trình duyệt nhận một lần **50 mồi khởi đầu**, chia đủ 7 loại, cùng **50 xu demo**. Đó là quà **một lần trên mỗi hồ sơ lưu trình duyệt**, không phải 50 mồi cho *mỗi loại*.
+
+| Mồi | Miễn phí lúc bắt đầu | Giá xu / lượt | Gặp cá hiếm | Gặp cá cực hiếm |
+|---|---:|---:|---:|---:|
+| Giun đất | 16 | 1 | 23,5% | 4,0% |
+| Bột ngũ cốc | 10 | 2 | 28,0% | 2,1% |
+| Ngô ngọt | 8 | 3 | 32,7% | 1,9% |
+| Rau non / cỏ | 6 | 3 | 35,8% | 1,6% |
+| Tép / tôm nhỏ | 5 | 4 | 28,7% | 6,9% |
+| Ốc nhỏ | 3 | 6 | 25,3% | 11,8% |
+| Mồi giả | 2 | 8 | 25,6% | 17,2% |
+| **Tổng** | **50** | | | |
+
+Các tỷ lệ trong bảng được tính từ **hệ số cân bằng game đang chạy, với cần tay**, và là xác suất gặp cả nhóm độ hiếm; ví dụ 11,8% cực hiếm khi dùng ốc gồm các loài cực hiếm đang được đưa vào hồ, không có nghĩa chắc chắn gặp trắm đen. Cần khác có thể làm các tỷ lệ thay đổi nhẹ. Cửa hàng hiển thị tỷ lệ tính trực tiếp từ hàm xác suất nên luôn khớp luật chơi. **Tỷ lệ gặp không phải tỷ lệ bắt được**: người chơi còn cần giật phao và hoàn thành minigame.
+
+- Mỗi lượt nhấn **THẢ CÂU** có hiệu lực đều dùng 1 mồi thuộc loại đang chọn, ngay tại thời điểm thả; không trừ thêm trong quá trình chờ cùng một lượt.
+- **Thu phao / Đổi mồi** và **giật hụt** không hoàn lại mồi đã dùng; người chơi phải thả lượt mới.
+- Cửa hàng mua nhanh **1 hoặc 5** mồi, thanh toán bằng xu ảo thu được từ cá. Nếu không đủ xu hoặc mồi hết, nút mua/thả tương ứng sẽ bị vô hiệu hóa.
+- Khi hoàn thành cá, xu thưởng và số cá được ghi vào kho; người chơi có thể dùng xu thưởng mua thêm mồi.
+- **Mồi giả** cũng tiêu hao **một lượt sử dụng game** mỗi lần thả cho cân bằng cơ chế. Ngoài đời, đa số mồi giả có thể dùng nhiều lần; đây là quy ước gameplay, không phải khuyến nghị về dụng cụ thực.
+- Số xu, kho mồi, cá đã bắt và thời gian còn lại được lưu vào **localStorage**. Tải lại trang không tự phát thêm quà tân thủ. Đây chưa phải **hệ thống tài khoản thật**: xóa dữ liệu duyệt web, dùng trình duyệt hoặc thiết bị khác, hoặc tự chỉnh localStorage có thể tạo kho mới hoặc thay đổi số liệu. Cần backend và xác thực để thực sự đảm bảo **50 mồi mỗi tài khoản**.
+
+## Căn cứ sinh học để lựa chọn loại mồi
+
+- [Missouri Department of Conservation — Bait and Lures](https://mdc.mo.gov/fishing/get-started-fishing/bait-lures): giun phổ dụng, bột hợp các loài cá chép, và mồi giả thường mô phỏng cá nhỏ/động vật săn mồi.
+- [Florida Fish and Wildlife Conservation Commission — Common Carp](https://myfwc.com/wildlifehabitats/profiles/freshwater/common-carp/): cá chép ăn tạp, mồi ngô, bột, bánh mì và giun phù hợp.
+- [Penn State Extension — Grass Carp](https://extension.psu.edu/using-grass-carp-to-control-aquatic-plants): trắm cỏ ưu tiên thức ăn thực vật.
+- [U.S. Fish & Wildlife Service — Black Carp](https://www.fws.gov/species/black-carp-mylopharyngodon-piceus): trắm đen lớn ăn chủ yếu ốc và nhuyễn thể.
+- [Animal Diversity Web — Channa striata](https://animaldiversity.org/accounts/Channa_striata/): cá quả là loài săn mồi, ăn cá nhỏ, giáp xác và động vật khác.
+
+**Các giá xu, hệ số và tỷ lệ trong game là con số thiết kế phục vụ chơi thử, không phải số liệu xác suất câu cá đo ngoài thực địa.**
