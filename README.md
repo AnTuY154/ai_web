@@ -140,3 +140,16 @@ Màn hình câu cá có lưới **2×2** truy cập nhanh: **🏪 Cửa hàng m�
 - Thời gian câu và nhịp phao tạm dừng trong lúc mở menu để người chơi không vô tình bỏ lỡ một lần cắn khi đang mua đồ; tiếp tục sau khi đóng.
 
 Bốn chức năng tổng quan luôn được nhìn thấy trong màn câu trên thiết bị di động thông thường. Với các điện thoại có chiều cao quá nhỏ, nội dung *chi tiết* của cửa hàng vẫn cần cuộn bên trong hộp thoại; đây là giới hạn hợp lý để nút bấm và chữ không bị thu quá bé.
+
+## Giao diện màn câu toàn màn hình
+
+Khi nhân vật đến ghế câu tại Hồ Bảy Mẫu, game mở giao diện **gần như toàn bộ chiều ngang và chiều cao màn hình** thay vì chia mặt hồ và cột bộ đồ câu. Cụ thể:
+
+- **Mặt hồ và phao:** phóng lớn phủ vùng chơi, ưu tiên quan sát các nhịp phao. Trên màn hình đứng, hình nền sẽ cắt bớt hai bên để giữ tỉ lệ hình ảnh, không kéo giãn cá/phao.
+- **Nút thả câu / nhấc cần:** xuất hiện **ngay trên màn câu**, thay đổi theo trạng thái thả và chờ cá. Có nút **Thu phao / Đổi mồi** và nút **Thuê 5 phút** khi cần; không phải cuộn sang cột chức năng.
+- **Đồng hồ câu:** góc trên bên phải, cùng số xu và nút **⚙ BỘ ĐỒ CÂU**. Đồng hồ 5 phút của phiên câu luôn hiển thị, không bị ẩn trong phần cài đặt.
+- **⚙ BỘ ĐỒ CÂU:** cửa sổ modal chọn cần/mồi, xem tỷ lệ cá và mở sổ tay đọc phao; đóng bằng nút **ĐÓNG ✕**, Esc hoặc chạm nền bên ngoài, không làm Space thả câu ngoài ý muốn.
+- **Bốn ô menu nhanh:** Cửa hàng mồi, Cửa hàng cần, Kho cá, Thành quả tiếp tục ghim cuối màn hình; desktop hiển thị hàng ngang bốn ô, mobile hiển thị 2×2.
+- Khi mở menu cửa hàng hoặc bộ đồ câu, game tạm dừng thời gian và tín hiệu cá trong lúc thao tác, rồi tiếp tục sau khi đóng. Popup thành công và thanh lực canh Space vẫn nằm giữa màn hình.
+
+Giao diện ưu tiên **không cuộn trang khi đang câu**; cửa hàng hoặc phần cài đặt dài chỉ cuộn bên trong modal. Các máy rất nhỏ có thể cần xoay ngang để xem phao rộng và đầy đủ hơn.
